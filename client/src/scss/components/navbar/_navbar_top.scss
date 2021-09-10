@@ -1,0 +1,153 @@
+.navbar-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  &__logo {
+    text-align: center;
+    padding: 10px 76px;
+    &-link {
+      color: $white;
+      text-decoration: none;
+      font-size: 1.6rem;
+      line-height: 1.6rem;
+    }
+  }
+
+  &__search {
+    flex: 1;
+    background-color: $white;
+    position: relative;
+    border-radius: 2px;
+    border: none;
+    &-input {
+      width: 100%;
+      outline: none;
+      padding: 8px 58px 8px 16px;
+      border: none;
+      font-size: 1rem;
+      color: #666;
+      border-radius: 2px;
+      border: none;
+    }
+
+    &-icon {
+      position: absolute;
+      top: 1px;
+      right: 1px;
+      width: 52px;
+      height: 96%;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      background: $main-color;
+      color: $white;
+
+      &:hover {
+        background-color: $hover-color;
+        color: $black;
+      }
+    }
+  }
+
+  &__user {
+    display: flex;
+    color: $white;
+    padding-left: 252px;
+
+    &-info {
+      margin-right: 8px;
+      cursor: pointer;
+      position: relative;
+
+      &-box {
+        background-color: rgb(173, 170, 170);
+        position: absolute;
+        top: calc(100% + 5px);
+        right: -8px;
+        width: 180px;
+        border-radius: 2px;
+        box-shadow: 0 3px 5px rgba($color: #3b3b3b, $alpha: 0.5);
+        display: none;
+        transform-origin: calc(100% - 20px) 0;
+        animation: $show linear 0.25s;
+        z-index: 1;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: -10px;
+          right: 10px;
+          border-bottom: 10px solid rgb(173, 170, 170);
+          border-left: 12px solid transparent;
+          border-right: 12px solid transparent;
+        }
+        // CSS cho ul list
+        & .list {
+          list-style: none;
+          width: 100%;
+          & .box-item .link {
+            display: block;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            color: $white;
+            @include text-over;
+          }
+          & .box-item .link:hover {
+            color: $main-color;
+            background-color: $hover-color;
+          }
+        }
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        height: 12px;
+      }
+
+      &:hover &-box {
+        display: block;
+      }
+
+      &--define:hover &-box .list:first-child {
+        display: none;
+      }
+      &--define:hover &-box .list:last-child {
+        display: block;
+      }
+
+      &--undefine:hover &-box .list:first-child {
+        display: block;
+      }
+      &--undefine:hover &-box .list:last-child {
+        display: none;
+      }
+    }
+
+    &-cart {
+      cursor: pointer;
+      position: relative;
+      & .quantity {
+        padding: 0 6px;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        background-color: rgb(167, 167, 61);
+
+        border-radius: 50%;
+      }
+    }
+
+    &-info:hover,
+    &-cart:hover {
+      color: $main-color;
+    }
+  }
+}
