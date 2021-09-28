@@ -15,3 +15,7 @@ body {
   border-radius: 50px;
   border: none;
 }
+.btn--disable {
+  cursor: default !important;
+  opacity: 0.5;
+}

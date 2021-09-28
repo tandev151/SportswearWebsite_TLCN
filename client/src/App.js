@@ -3,6 +3,8 @@ import Auth from "./views/Auth";
 import Home from "./views/Home";
 import Collections from "./views/Collections";
 import "./scss/app.scss";
+import ProductDetails from "./views/ProductDetails";
+import Cart from "./views/Cart";
 
 function App() {
   return (
@@ -10,6 +12,8 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/collections" component={Collections} />
+        <Route exact path="/products" component={ProductDetails} />
+        <Route exact path="/cart" component={Cart} />
         <Route
           exact
           path="/login"
