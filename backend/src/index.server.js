@@ -16,6 +16,8 @@ const orderRoutes = require('./routes/order');
 const initDataRoutes = require('./routes/initData.admin');
 const sizeProductRoutes = require('./routes/sizeProduct');
 const sizeRoutes = require('./routes/size');
+const userRoutes = require('./routes/user');
+
 
 
 
@@ -49,6 +51,7 @@ app.use("/api", orderRoutes);
 app.use("/api", initDataRoutes);
 app.use("/api", sizeProductRoutes);
 app.use("/api", sizeRoutes);
+app.use("/api", userRoutes);
 
 
 app.listen(process.env.PORT, () => {

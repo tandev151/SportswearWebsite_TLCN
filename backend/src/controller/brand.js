@@ -35,6 +35,23 @@ exports.deleteBrands = async (req, res) => {
     }
 };
 
+exports.updateBrands = async (req, res) => {
+    const { brands } = req.body;
+    var count = 0;
+    for (let i = 0; i < brands.length; i++) {
+        await Brand.findOneAndUpdate({
+            _id: brands[i]._id
+        },
+            { name: brands[i].name }
+        );
+        count++
+    }
+    if (count == brands.length) {
+        res.status(202).json({ message: "Brands updated" });
+    } else {
+        res.status(400).json({ message: "Something went wrong" });
+    }
+}
 
 exports.getBrands = (req, res) => {
     Brand.find({}).exec((error, brands) => {
