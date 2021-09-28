@@ -6,7 +6,7 @@ const HotProduct = () => {
     arrows: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 5,
     slidesToScroll: 1,
     adapterHeight: true,
     focusOnSelect: true,
@@ -18,7 +18,7 @@ const HotProduct = () => {
       <Slider {...settings}>
         {HotProductData.map((product) => {
           return (
-            <div className="col-3">
+            <div className="col-2-4">
               <a href="" className="hot-product__item">
                 <div className="hot-product__item-img">
                   <img className="item-img" src={product.image} alt="" />

@@ -1,0 +1,202 @@
+.detail {
+  & .photo-container {
+    width: 100%;
+    & .photos {
+      width: 100%;
+      height: auto;
+    }
+    & .sub-photos {
+      & img {
+        width: 100%;
+        cursor: pointer;
+      }
+
+      .slick-prev {
+        top: 0px;
+
+        &::before {
+          color: #fb1919;
+        }
+      }
+      .slick-next {
+        top: calc(100% + 40px);
+
+        &::before {
+          color: #fb1919;
+        }
+      }
+      .slick-prev,
+      .slick-next {
+        border-radius: 4px;
+        left: 42%;
+
+        transform: rotate(90deg);
+      }
+      & .slick-list {
+        top: 30px;
+        border: 1px solid rgb(226, 220, 220);
+      }
+    }
+  }
+  & .body {
+    width: 100%;
+    &-heading {
+      height: 80px;
+      @include overflow-vertical;
+      -webkit-line-clamp: 2;
+      & h3 {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: $primary-text;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+      }
+    }
+
+    &-price {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      &__old {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-right: 8px;
+        width: 80px;
+        color: $second-text;
+        @include text-over;
+      }
+      &__current {
+        font-size: 2rem;
+        font-weight: 600;
+        color: $main-color;
+        width: 150px;
+        @include text-over;
+      }
+    }
+    &-brand {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      &__label {
+        font-size: 1.2rem;
+        color: $second-text;
+        margin-right: 4px;
+      }
+      &__name {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: $color2;
+        @include text-over;
+        width: 150px;
+      }
+    }
+    &-size {
+      margin-bottom: 20px;
+      &__label {
+        display: flex;
+        & p {
+          font-size: 1.2rem;
+          color: $second-text;
+          margin-right: 4px;
+        }
+        & a {
+          @include remove-a;
+          font-size: 1.2rem;
+          color: $second-text;
+          margin-right: 4px;
+          font-style: italic;
+          &:hover {
+            color: $red-o;
+          }
+        }
+      }
+      &__options {
+        list-style: none;
+
+        display: flex;
+        overflow-x: auto;
+
+        &-item {
+          text-align: center;
+          font-size: 0.9rem;
+          line-height: 36px;
+          padding: 0 8px;
+          min-width: 40px;
+          max-width: 50px;
+          border: 1px solid $second-text;
+          margin-right: 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: 600;
+          &--selected {
+            position: relative;
+            border-color: $red-o;
+            overflow: hidden;
+            &::before {
+              content: "";
+              position: absolute;
+              top: 0;
+              left: 0;
+              border: 8px solid;
+              border-color: $red-o transparent transparent $red-o;
+            }
+          }
+        }
+      }
+    }
+    &-promotion {
+      margin-bottom: 40px;
+      &__title {
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        color: #e6ae47;
+      }
+      &__content {
+        padding-left: 20px;
+        & li {
+          list-style: square;
+          font-size: 1.2rem;
+          font-weight: 600;
+          padding-left: 8px;
+        }
+      }
+    }
+    &-btn {
+      &__buy {
+        background-color: $black;
+        color: $white;
+        font-size: 1.2rem;
+        height: 40px;
+        line-height: 40px;
+        text-transform: uppercase;
+        margin-right: 8px;
+        cursor: pointer;
+        &:hover {
+          background-color: $red-o;
+          color: $primary-text;
+        }
+        &.btn--disable {
+          background-color: $black;
+          color: $white;
+        }
+      }
+      &__add-to-cart {
+        background-color: #0586a7;
+        color: $white;
+        font-size: 1.2rem;
+        height: 40px;
+        line-height: 40px;
+        text-transform: uppercase;
+        cursor: pointer;
+        &:hover {
+          background-color: $hover-link;
+        }
+        &.btn--disable {
+          background-color: #0586a7;
+          color: $white;
+        }
+      }
+    }
+  }
+}
