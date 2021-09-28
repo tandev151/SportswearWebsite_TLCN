@@ -1,15 +1,14 @@
-.table-user {
+.table-order {
     .title {
         display: flex;
         justify-content: space-between;
     }
     .btn-group-payment-status{
         margin-right: 10px;
-        color: green;
     }
     .btn-group-order-status{
-        margin-right: 10px;
         .btn{
+            
             background-color: green;
         }
     }
