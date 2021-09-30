@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const CategoryBanner = () => {
   const CategoryMainBanners = [
@@ -52,7 +53,7 @@ const CategoryBanner = () => {
         {CategoryMainBanners.map((item) => {
           return (
             <div className="col-3 ">
-              <a href="" className="banner-3 mgb-30">
+              <Link to="" className="banner-3 mgb-30">
                 <img className="banner-3__img" src={item.img} alt="" />
                 <div className="banner-3__body">
                   <h4 className="banner-3__body-title">{item.title}</h4>
@@ -60,7 +61,7 @@ const CategoryBanner = () => {
                     {item.description}
                   </span>
                 </div>
-              </a>
+              </Link>
             </div>
           );
         })}
@@ -68,7 +69,7 @@ const CategoryBanner = () => {
       <div className="row">
         {CategoryExtraBanners.map((item) => (
           <div className="col-4">
-            <a href="" className="banner-4 mgb-30">
+            <Link to="" className="banner-4 mgb-30">
               <img src={item.img} alt="" className="banner-4__img" />
               <div className="banner-4__title">
                 <span className="banner-4__title-text">{item.title}</span>
@@ -85,7 +86,7 @@ const CategoryBanner = () => {
                   </svg>
                 </span>
               </div>
-            </a>
+            </Link>
           </div>
         ))}
       </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const BrandBanners = [
   {
@@ -33,7 +34,7 @@ const BrandBanner = () => {
       <div className="row">
         {BrandBanners.map((item) => (
           <div className="col-4">
-            <a href="" className="banner-4 mgb-30">
+            <Link to="" className="banner-4 mgb-30">
               <img src={item.img} alt="" className="banner-4__img" />
               <div className="banner-4__title">
                 <span className="banner-4__title-text">
@@ -52,7 +53,7 @@ const BrandBanner = () => {
                   </svg>
                 </span>
               </div>
-            </a>
+            </Link>
           </div>
         ))}
       </div>

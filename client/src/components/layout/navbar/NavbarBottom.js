@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const categories = [
   {
@@ -40,18 +41,18 @@ const NavbarBottom = () => {
     <div className="navbar-bottom">
       <ul className="navbar-bottom__list">
         <li className="navbar-bottom__list-item">
-          <a
-            href="/"
+          <NavLink
+            to={`/`}
             className="navbar-bottom__list-item-link"
             title="Trang chủ"
           >
             Trang chủ
-          </a>
+          </NavLink>
         </li>
 
         <li className="navbar-bottom__list-item">
-          <a
-            href="/collections"
+          <NavLink
+            to={`/collections`}
             className="navbar-bottom__list-item-link"
             title="Tất cả sản phẩm"
           >
@@ -75,18 +76,21 @@ const NavbarBottom = () => {
               {categories.map((category) => {
                 return (
                   <li className="category__item">
-                    <a href="" className="category__item-link">
+                    <NavLink
+                      to={`/collections`}
+                      className="category__item-link"
+                    >
                       {category.name}
-                    </a>
+                    </NavLink>
                   </li>
                 );
               })}
             </ul>
-          </a>
+          </NavLink>
         </li>
         <li className="navbar-bottom__list-item">
-          <a
-            href=""
+          <NavLink
+            to={`/collections`}
             className="navbar-bottom__list-item-link"
             title="Thương hiệu"
           >
@@ -110,7 +114,10 @@ const NavbarBottom = () => {
               {brands.map((brand) => {
                 return (
                   <li className="category__item">
-                    <a href="" className="category__item-link">
+                    <NavLink
+                      to={`/collections`}
+                      className="category__item-link"
+                    >
                       {brand.id}
                       <span className="arrow-right">
                         <svg
@@ -129,62 +136,77 @@ const NavbarBottom = () => {
                         {brand.kinds.map((kind) => {
                           return (
                             <li className="sub-category__item">
-                              <a href="" className="sub-category__item-link">
+                              <NavLink
+                                to={`/collections`}
+                                className="sub-category__item-link"
+                              >
                                 {kind.name}
-                              </a>
+                              </NavLink>
                             </li>
                           );
                         })}
                       </ul>
-                    </a>
+                    </NavLink>
                   </li>
                 );
               })}
             </ul>
-          </a>
+          </NavLink>
         </li>
         <li className="navbar-bottom__list-item">
-          <a
-            href=""
+          <NavLink
+            to={`/`}
             className="navbar-bottom__list-item-link"
             title="Cách chọn size"
           >
             Cách chọn size
-          </a>
+          </NavLink>
         </li>
         <li className="navbar-bottom__list-item">
-          <a href="" className="navbar-bottom__list-item-link" title="Tin tức">
+          <NavLink
+            to={``}
+            className="navbar-bottom__list-item-link"
+            title="Tin tức"
+          >
             Tin tức
-          </a>
+          </NavLink>
         </li>
 
         <li className="navbar-bottom__list-item">
-          <a
-            href=""
+          <NavLink
+            to={``}
             className="navbar-bottom__list-item-link"
             title="Hệ thống cửa hàng"
           >
             Hệ thống cửa hàng
-          </a>
+          </NavLink>
         </li>
         <li className="navbar-bottom__list-item">
-          <a href="" className="navbar-bottom__list-item-link" title="Liên hệ">
+          <NavLink
+            to={`contact`}
+            className="navbar-bottom__list-item-link"
+            title="Liên hệ"
+          >
             Liên Hệ
-          </a>
+          </NavLink>
         </li>
         <li className="navbar-bottom__list-item">
-          <a
-            href=""
+          <NavLink
+            to={`/about`}
             className="navbar-bottom__list-item-link"
             title="Về chúng tôi"
           >
             Về chúng tôi
-          </a>
+          </NavLink>
         </li>
         <li className="navbar-bottom__list-item">
-          <a href="" className="navbar-bottom__list-item-link" title="SALE OFF">
+          <NavLink
+            to={``}
+            className="navbar-bottom__list-item-link"
+            title="SALE OFF"
+          >
             Sale off
-          </a>
+          </NavLink>
         </li>
       </ul>
     </div>

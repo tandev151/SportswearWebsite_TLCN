@@ -79,17 +79,17 @@
     }
   }
 }
-.seperate {
-  position: relative;
+// .seperate {
+//   position: relative;
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    width: 700px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 1px;
-    background-color: #d1d1d1;
-  }
-}
+//   &::after {
+//     content: "";
+//     position: absolute;
+//     top: 100%;
+//     width: 700px;
+//     left: 50%;
+//     transform: translateX(-50%);
+//     height: 1px;
+//     background-color: #d1d1d1;
+//   }
+// }

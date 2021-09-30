@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
 
 const Detail = () => {
@@ -18,7 +19,6 @@ const Detail = () => {
 
   const subPhotoSettings = {
     draggable: false,
-    speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
     adapterHeight: false,
@@ -152,7 +152,7 @@ const Detail = () => {
               <div className="body-size">
                 <div className="body-size__label">
                   <p>Size</p>
-                  <a href="#">(Hướng dẫn chọn size)</a>
+                  <Link to="#">(Hướng dẫn chọn size)</Link>
                 </div>
                 <ul className="body-size__options">
                   <li className="body-size__options-item body-size__options-item--selected">

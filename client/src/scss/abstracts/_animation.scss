@@ -2,7 +2,7 @@ $show: show;
 $hide: hide;
 $slideUp: slideUp;
 $rorate: rorate;
-
+$slideToRight: slideToRight;
 @keyframes show {
   from {
     opacity: 0;
@@ -38,5 +38,14 @@ $rorate: rorate;
   }
   to {
     transform: rotateY(-360deg);
+  }
+}
+
+@keyframes slideToRight {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }

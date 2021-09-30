@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 const CategoryMainBanners = [
   {
     img: require("../../../../assets/images/banner/position_banner_4.jpg")
@@ -34,7 +35,7 @@ const PositionBanner = () => {
         {CategoryMainBanners.map((item) => {
           return (
             <div className="col-3 ">
-              <a href="" className="banner-3 mgb-30">
+              <Link to="" className="banner-3 mgb-30">
                 <img className="banner-3__img" src={item.img} alt="" />
                 <div className="banner-3__body">
                   <h4 className="banner-3__body-title">{item.title}</h4>
@@ -42,7 +43,7 @@ const PositionBanner = () => {
                     {item.description}
                   </span>
                 </div>
-              </a>
+              </Link>
             </div>
           );
         })}

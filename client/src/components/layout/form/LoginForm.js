@@ -1,10 +1,24 @@
 import React, { useState } from "react";
-
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { login } from "../../../features/auth/authSlice";
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const [passwordShown, setPasswordShown] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordShown(passwordShown ? false : true);
+  };
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const user = { email, password };
+
+    console.log(email, password);
+    dispatch(login(user));
   };
 
   return (
@@ -14,7 +28,7 @@ const LoginForm = () => {
           <h2 className="wrapper-heading">Đăng nhập</h2>
           <div className="row">
             <div className="wrapper-body">
-              <form className="form-control" action="" method="post">
+              <form className="form-control" onSubmit={(e) => handleLogin(e)}>
                 <div className="form-control__input">
                   <span className="form-control__input-icon">
                     <svg
@@ -34,6 +48,8 @@ const LoginForm = () => {
                     name=""
                     id=""
                     placeholder="Email của bạn"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="form-control__input">
@@ -58,6 +74,8 @@ const LoginForm = () => {
                     name=""
                     id=""
                     placeholder="Mật khẩu"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <span
                     onClick={togglePasswordVisibility}
@@ -91,12 +109,12 @@ const LoginForm = () => {
                   </span>
                 </div>
                 <div className="form-control__link">
-                  <a href="/forget" className="form-control__link-forget">
+                  <Link to="/forget" className="form-control__link-forget">
                     Quên mật khẩu
-                  </a>
-                  <a href="/register" className="form-control__link-register">
+                  </Link>
+                  <Link to="/register" className="form-control__link-register">
                     Đăng ký
-                  </a>
+                  </Link>
                 </div>
                 <button className="btn form-control__btn" type="submit">
                   Đăng nhập

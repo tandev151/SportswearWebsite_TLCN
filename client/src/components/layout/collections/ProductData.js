@@ -11,7 +11,7 @@ export const ProductData = [
     ],
     oldPrice: 2500000,
     discount: 10,
-    sellDate: new Date("08/24/2021"),
+    sellDate: new Date("09/24/2021"),
   },
   {
     name: `NIKE MERCURIAL ZOOM VAPOR 14 PRO TF MOTIVATION - VOLT/BRIGHT
@@ -46,7 +46,7 @@ export const ProductData = [
     ],
     oldPrice: 3000000,
     discount: 15,
-    sellDate: new Date("09/05/2021"),
+    sellDate: new Date("09/28/2021"),
   },
   {
     name: `ADIDAS PREDATOR FREAK .1 LOW FG METEORITE - RED/CORE BLACK/SOLAR RED`,
@@ -68,6 +68,27 @@ export const ProductData = [
     oldPrice: 5000000,
     discount: 10,
     sellDate: new Date("09/05/2021"),
+  },
+  {
+    name: `ADIDAS X SPEEDFLOW .1 FG/AG METEORITE - SOLAR RED/WHITE/BLACK`,
+    photo: require("../../../assets/images/products/adidas/a4.jpg").default,
+    subPhoto: [
+      {
+        img: require("../../../assets/images/products/adidas/a41.jpg").default,
+      },
+      {
+        img: require("../../../assets/images/products/adidas/a42.jpg").default,
+      },
+      {
+        img: require("../../../assets/images/products/adidas/a43.jpg").default,
+      },
+      {
+        img: require("../../../assets/images/products/adidas/a44.jpg").default,
+      },
+    ],
+    oldPrice: 5000000,
+    discount: 10,
+    sellDate: new Date("08/05/2021"),
   },
   {
     name: `ADIDAS X SPEEDFLOW .1 FG/AG METEORITE - SOLAR RED/WHITE/BLACK`,

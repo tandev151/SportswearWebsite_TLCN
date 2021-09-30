@@ -1,12 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 const NavbarTop = () => {
   return (
     <div className="navbar-top">
       <div className="navbar-top__logo">
-        <a href="" className="navbar-top__logo-link">
-          Double T Sport
-        </a>
+        <NavLink to={`/`} className="navbar-top__logo-link">
+          <img
+            src={require("../../../assets/logo/DOUBLE T SPORT.png").default}
+            alt=""
+          />
+        </NavLink>
       </div>
       <button className="navbar-top__search">
         <input
@@ -29,7 +32,8 @@ const NavbarTop = () => {
       <div className="navbar-top__user">
         {/* navbar-top__user-info--define : define
         navbar-top__user-info--undefine : undefine */}
-        <div className="navbar-top__user-info navbar-top__user-info--undefine">
+
+        <div className="navbar-top__user-info navbar-top__user-info--define">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="30"
@@ -43,36 +47,36 @@ const NavbarTop = () => {
           <div className="navbar-top__user-info-box">
             <ul className="list">
               <li className="box-item">
-                <a href="/login" className="link">
+                <NavLink to={`/login`} className="link">
                   Đăng nhập
-                </a>
+                </NavLink>
               </li>
               <li className="box-item">
-                <a href="/register" className="link">
+                <NavLink to={`/register`} className="link">
                   Đăng ký
-                </a>
+                </NavLink>
               </li>
               <li className="box-item">
-                <a href="" className="link">
+                <NavLink to={`/login`} className="link">
                   Tra cứu đơn hàng
-                </a>
+                </NavLink>
               </li>
             </ul>
             <ul className="list">
               <li className="box-item">
-                <a href="" className="link">
+                <NavLink to={`/account`} className="link">
                   Tài khoản: Lê Đức Tân
-                </a>
+                </NavLink>
               </li>
               <li className="box-item">
-                <a href="" className="link">
+                <NavLink to={`/`} className="link">
                   Đăng xuất
-                </a>
+                </NavLink>
               </li>
               <li className="box-item">
-                <a href="" className="link">
+                <NavLink to={`/account`} className="link">
                   Tra cứu đơn hàng
-                </a>
+                </NavLink>
               </li>
             </ul>
           </div>

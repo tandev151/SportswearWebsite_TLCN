@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { CustomerCare, About, SocialNetwork, Contact } from "./FooterData";
 
 const Footer = () => {
@@ -14,9 +15,9 @@ const Footer = () => {
                 {CustomerCare.policy.map((item) => {
                   return (
                     <li className="footer-action__list-item">
-                      <a href="" className="footer-action__list-item-link">
+                      <Link to="" className="footer-action__list-item-link">
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   );
                 })}
