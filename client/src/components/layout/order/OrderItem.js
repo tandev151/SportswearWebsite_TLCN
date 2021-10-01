@@ -17,7 +17,7 @@ const OrderItem = () => {
               <div className="photo">
                 <img
                   src={
-                    require("../../../../assets/images/products/adidas/a1.jpg")
+                    require("../../../assets/images/products/adidas/a1.jpg")
                       .default
                   }
                   alt=""
@@ -42,7 +42,7 @@ const OrderItem = () => {
               <div className="photo">
                 <img
                   src={
-                    require("../../../../assets/images/products/adidas/a1.jpg")
+                    require("../../../assets/images/products/adidas/a1.jpg")
                       .default
                   }
                   alt=""

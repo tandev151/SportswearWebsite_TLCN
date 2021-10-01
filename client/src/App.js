@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PrivateRoute from "./components/HOC/PrivateRoute";
 import Home from "./views/Home";
 import Collections from "./views/Collections";
@@ -12,7 +14,15 @@ import About from "./views/About";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Forget from "./views/Forget";
+import { isUserLoggedIn } from "./features/auth/authSlice";
 function App() {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  useEffect(() => {
+    if (!auth.authenticate) {
+      dispatch(isUserLoggedIn());
+    }
+  }, [auth.authenticate]);
   return (
     <Router>
       <Switch>

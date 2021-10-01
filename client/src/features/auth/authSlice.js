@@ -24,7 +24,19 @@ export const authSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    isUserLoggedIn: (state) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        state.user = user;
+        state.token = token;
+        state.authenticate = true;
+      } else {
+        state.error = "Login failed";
+      }
+    },
+  },
   extraReducers: {
     [login.pending]: (state) => {
       state.loading = true;
@@ -37,12 +49,13 @@ export const authSlice = createSlice({
       state.loading = false;
       state.user = action.payload.data.user;
       state.token = action.payload.data.token;
-      localStorage.setItem('token', state.token);
-      localStorage.setItem('user', JSON.stringify(state.user));
-      console.log(action.payload)
+      state.authenticate = true;
+      localStorage.setItem("token", state.token);
+      localStorage.setItem("user", JSON.stringify(state.user));
+      console.log(action.payload);
     },
   },
 });
-export const { } = authSlice.actions;
+export const { isUserLoggedIn } = authSlice.actions;
 
 export default authSlice.reducer;
