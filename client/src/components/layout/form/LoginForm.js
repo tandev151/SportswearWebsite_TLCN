@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { login } from "../../../features/auth/authSlice";
 const LoginForm = () => {
@@ -12,12 +12,12 @@ const LoginForm = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  // const { token } = useSelector(state => state.auth)
+  // console.log(token)
   const handleLogin = (e) => {
     e.preventDefault();
     const user = { email, password };
 
-    console.log(email, password);
     dispatch(login(user));
   };
 

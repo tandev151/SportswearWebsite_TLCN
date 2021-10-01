@@ -37,10 +37,12 @@ export const authSlice = createSlice({
       state.loading = false;
       state.user = action.payload.data.user;
       state.token = action.payload.data.token;
-      console.log(action);
+      localStorage.setItem('token', state.token);
+      localStorage.setItem('user', JSON.stringify(state.user));
+      console.log(action.payload)
     },
   },
 });
-export const {} = authSlice.actions;
+export const { } = authSlice.actions;
 
 export default authSlice.reducer;

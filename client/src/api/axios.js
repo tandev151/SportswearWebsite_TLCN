@@ -1,5 +1,5 @@
 import axios from "axios";
-import store from "../app/store";
+// import store from "../app/store";
 
 const api = "https://api-sportswear.herokuapp.com/api";
 
@@ -11,11 +11,13 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((req) => {
-  const { auth } = store.getState();
-  if (auth.token) {
-    req.headers.Authorization = `Bearer ${auth.token}`;
+  // const { auth } = store.getState();
+  if (token) {
+    req.headers.Authorization = `Bearer ${token}}`;
   }
   return req;
+}, function error() {
+  return Promise.reject(error);
 });
 
 axiosInstance.interceptors.response.use(
