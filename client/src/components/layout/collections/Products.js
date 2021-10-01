@@ -1,5 +1,7 @@
 import React from "react";
 import { ProductData } from "./ProductData";
+import { Link } from "react-router-dom";
+
 const checkNewProduct = (createdbyDate) => {
   const sellDate = new Date(createdbyDate);
   const currentDate = new Date();
@@ -54,7 +56,7 @@ const Products = () => {
           <div className="row">
             {ProductData.map((product) => (
               <div className="col-3 mgt-25">
-                <a href="" className="product">
+                <Link to="" className="product">
                   <div className="product-img">
                     <img src={product.photo} alt="" />
 
@@ -93,7 +95,7 @@ const Products = () => {
                   {product.discount > 0 ? (
                     <span className="label-discount">{product.discount}%</span>
                   ) : null}
-                </a>
+                </Link>
               </div>
             ))}
           </div>

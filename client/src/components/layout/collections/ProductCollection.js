@@ -1,6 +1,6 @@
 import React from "react";
-import Products from "../layout/collections/Products";
-import NavbarLeft from "../layout/navbar/NavbarLeft";
+import Products from "./Products";
+import NavbarLeft from "../navbar/NavbarLeft";
 
 const ProductCollection = () => {
   return (

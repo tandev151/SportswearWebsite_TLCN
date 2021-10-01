@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const RegisterForm = () => {
   const [passwordShown, setPasswordShown] = useState(false);
@@ -196,7 +197,7 @@ const RegisterForm = () => {
 
                 <div className="form-control__go-login">
                   Bạn có tài khoản chưa?
-                  <a href="/login">Đăng nhập</a>
+                  <Link to="/login">Đăng nhập</Link>
                 </div>
               </form>
             </div>

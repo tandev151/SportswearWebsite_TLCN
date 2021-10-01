@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const ForgetForm = () => {
   return (
@@ -31,12 +32,12 @@ const ForgetForm = () => {
                   />
                 </div>
                 <div className="form-control__link">
-                  <a href="/login" className="form-control__link-forget">
+                  <Link to="/login" className="form-control__link-forget">
                     Đăng nhập
-                  </a>
-                  <a href="/register" className="form-control__link-register">
+                  </Link>
+                  <Link to="/register" className="form-control__link-register">
                     Đăng ký
-                  </a>
+                  </Link>
                 </div>
                 <button className="btn form-control__btn" type="submit">
                   Gửi yêu cầu

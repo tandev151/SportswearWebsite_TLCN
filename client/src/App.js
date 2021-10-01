@@ -1,34 +1,32 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Auth from "./views/Auth";
+import PrivateRoute from "./components/HOC/PrivateRoute";
 import Home from "./views/Home";
 import Collections from "./views/Collections";
 import "./scss/app.scss";
 import ProductDetails from "./views/ProductDetails";
 import Cart from "./views/Cart";
-
+import Account from "./views/Account";
+import Checkout from "./views/Checkout";
+import Contact from "./views/Contact";
+import About from "./views/About";
+import Login from "./views/Login";
+import Register from "./views/Register";
+import Forget from "./views/Forget";
 function App() {
   return (
     <Router>
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/collections" component={Collections} />
-        <Route exact path="/products" component={ProductDetails} />
-        <Route exact path="/cart" component={Cart} />
-        <Route
-          exact
-          path="/login"
-          render={(props) => <Auth {...props} authRoute="login" />}
-        />
-        <Route
-          exact
-          path="/register"
-          render={(props) => <Auth {...props} authRoute="register" />}
-        />
-        <Route
-          exact
-          path="/forget"
-          render={(props) => <Auth {...props} authRoute="forget" />}
-        />
+        <Route exact path="/product" component={ProductDetails} />
+        <PrivateRoute exact path="/cart" component={Cart} />
+        <PrivateRoute exact path="/account" component={Account} />
+        <PrivateRoute exact path="/checkout" component={Checkout} />
+        <Route exact path="/contact" component={Contact} />
+        <Route exact path="/about" component={About} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/forget" component={Forget} />
       </Switch>
     </Router>
   );

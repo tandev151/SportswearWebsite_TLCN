@@ -1,5 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
+import { Link } from "react-router-dom";
 import { HotProductData } from "./HotProductData";
 const HotProduct = () => {
   var settings = {
@@ -19,7 +20,7 @@ const HotProduct = () => {
         {HotProductData.map((product) => {
           return (
             <div className="col-2-4">
-              <a href="" className="hot-product__item">
+              <Link to="/product" className="hot-product__item">
                 <div className="hot-product__item-img">
                   <img className="item-img" src={product.image} alt="" />
                   <ul className="sub-img">
@@ -50,7 +51,7 @@ const HotProduct = () => {
 
                 <span className="label-new">New</span>
                 <span className="label-discount">{product.discount}%</span>
-              </a>
+              </Link>
             </div>
           );
         })}

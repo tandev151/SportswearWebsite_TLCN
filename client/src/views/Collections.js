@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../components/layout/header/Header";
 import Navbar from "../components/layout/navbar/Navbar";
-import ProductCollection from "../components/pages/ProductCollection";
+import ProductCollection from "../components/layout/collections/ProductCollection";
 import Policy from "../components/layout/content/policy/Policy";
 import Footer from "../components/layout/footer/Footer";
 const Collections = () => {
@@ -11,7 +11,6 @@ const Collections = () => {
     <div>
       <Navbar />
       <Header />
-
       <ProductCollection />
       <Policy />
       <Footer />

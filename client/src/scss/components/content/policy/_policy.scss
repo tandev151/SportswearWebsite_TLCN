@@ -1,5 +1,7 @@
 .policy {
   width: 100%;
+  position: relative;
+  padding-top: 45px;
   &-item {
     display: flex;
     cursor: default;
@@ -23,6 +25,16 @@
     &:hover &__img {
       animation: $rorate 2s infinite;
     }
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 1px;
+    background-color: #ccc;
   }
 }
 

@@ -1,12 +1,55 @@
 import React, { useState } from "react";
-
+import { Link } from "react-router-dom";
 const CartContainer = () => {
-  const [cart, setCart] = useState();
+  const [cartData, setCartData] = useState([
+    {
+      id: 1,
+      image: require("../../../assets/images/products/adidas/a2.jpg").default,
+      name: `adidas X Speedflow .1 TF Meteorite - Red/Core
+      Black/Solar Red`,
+      size: 43,
+      quantity: 1,
+      price: 1490000,
+    },
+    {
+      id: 2,
+      image: require("../../../assets/images/products/adidas/a2.jpg").default,
+      name: `adidas X Speedflow .1 TF Meteorite - Red/Core
+      Black/Solar Red`,
+      size: 43.5,
+      quantity: 1,
+      price: 1490000,
+    },
+    {
+      id: 3,
+      image: require("../../../assets/images/products/adidas/a2.jpg").default,
+      name: `adidas X Speedflow .1 TF Meteorite - Red/Core
+      Black/Solar Red`,
+      size: 42,
+      quantity: 2,
+      price: 1490000,
+    },
+  ]);
+
+  const totalPrice = cartData.reduce((total, priceItem) => {
+    total += priceItem.price;
+    return total;
+  }, 0);
+  function removeProduct(id) {
+    setCartData((prevCarts) => {
+      return prevCarts.filter((item) => item.id !== id);
+    });
+  }
   return (
     <div className="cart">
       <div className="container">
-        {cart === null ? (
-          <h3> Không có sản phẩm</h3>
+        {cartData.length === 0 ? (
+          <div className="cart-empty">
+            <h3> Không có sản phẩm !!!</h3>
+            <Link to="/" className="btn back-home">
+              Mua ngay
+            </Link>
+          </div>
         ) : (
           <div className="row  mgb-45">
             <div className="col-12">
@@ -25,127 +68,74 @@ const CartContainer = () => {
                         <th className="remove"></th>
                       </tr>
                     </thead>
+                  </table>
+                  <div className="scroll-table">
+                    <table className="cart-form-table">
+                      <tbody>
+                        {cartData.map((item) => (
+                          <tr>
+                            <td className="image">
+                              <Link to="#" className="image-link">
+                                <img src={item.image} alt="" />
+                              </Link>
+                            </td>
+
+                            <td className="name">
+                              <Link to="" className="name-link">
+                                <p className="name-link-text">{item.name}</p>
+                                <p className="name-link-size">
+                                  Size: {item.size}
+                                </p>
+                              </Link>
+                            </td>
+                            <td className="quantity">
+                              <input
+                                className="quantity-ip"
+                                type="number"
+                                name=""
+                                id=""
+                                value={item.quantity}
+                              />
+                            </td>
+                            <td className="price">
+                              <p>
+                                ₫
+                                {new Intl.NumberFormat("de-DE").format(
+                                  item.price * item.quantity
+                                )}
+                              </p>
+                            </td>
+                            <td className="remove">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  removeProduct(item.id);
+                                }}
+                                className="remove-btn"
+                              >
+                                Xóa
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <table className="cart-form-table">
                     <tbody>
-                      <tr>
-                        <td className="image">
-                          <a href="#" className="image-link">
-                            <img
-                              src={
-                                require("../../../assets/images/products/adidas/a2.jpg")
-                                  .default
-                              }
-                              alt=""
-                            />
-                          </a>
-                        </td>
-                        <td className="name">
-                          <a href="" className="name-link">
-                            <p className="name-link-text">
-                              adidas X Speedflow .1 TF Meteorite - Red/Core
-                              Black/Solar Red
-                            </p>
-                            <p className="name-link-size">Size: 43</p>
-                          </a>
-                        </td>
-                        <td className="quantity">
-                          <input
-                            className="quantity-ip"
-                            type="number"
-                            name=""
-                            id=""
-                          />
-                        </td>
-                        <td className="price">
-                          <p>₫1.490.000</p>
-                        </td>
-                        <td className="remove">
-                          <button className="remove-btn">Xóa</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="image">
-                          <a href="#" className="image-link">
-                            <img
-                              src={
-                                require("../../../assets/images/products/puma/puma3.jpeg")
-                                  .default
-                              }
-                              alt=""
-                            />
-                          </a>
-                        </td>
-                        <td className="name">
-                          <a href="" className="name-link">
-                            <p className="name-link-text">
-                              PUMA ULTRA 1.3 PRO CAGE TT FASTER FOOTBALL -
-                              SUNBLAZE/PUMA WHITE/BLUEMAZING
-                            </p>
-                            <p className="name-link-size">Size: 43</p>
-                          </a>
-                        </td>
-                        <td className="quantity">
-                          <input
-                            className="quantity-ip"
-                            type="number"
-                            name=""
-                            id=""
-                          />
-                        </td>
-                        <td className="price">
-                          <p> ₫1.490.000</p>
-                        </td>
-                        <td className="remove">
-                          <button className="remove-btn">Xóa</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="image">
-                          <a href="#" className="image-link">
-                            <img
-                              src={
-                                require("../../../assets/images/products/puma/puma3.jpeg")
-                                  .default
-                              }
-                              alt=""
-                            />
-                          </a>
-                        </td>
-                        <td className="name">
-                          <a href="" className="name-link">
-                            <p className="name-link-text">
-                              PUMA ULTRA 1.3 PRO CAGE TT FASTER FOOTBALL -
-                              SUNBLAZE/PUMA WHITE/BLUEMAZING
-                            </p>
-                            <p className="name-link-size">Size: 43</p>
-                          </a>
-                        </td>
-                        <td className="quantity">
-                          <input
-                            className="quantity-ip"
-                            type="number"
-                            name=""
-                            id=""
-                          />
-                        </td>
-                        <td className="price">
-                          <p> ₫1.490.000</p>
-                        </td>
-                        <td className="remove">
-                          <button className="remove-btn">Xóa</button>
-                        </td>
-                      </tr>
                       <tr className="summary">
-                        <td></td>
-                        <td></td>
+                        <td className="image"></td>
+                        <td className="name"></td>
                         <td className="summary-label">Tổng cộng : </td>
                         <td className="price">
-                          <p>₫14.490.000 </p>
+                          <p>
+                            ₫{new Intl.NumberFormat("de-DE").format(totalPrice)}
+                          </p>
                         </td>
-                        <td></td>
+                        <td className="remove"></td>
                       </tr>
                     </tbody>
                   </table>
-
                   <div className="row">
                     <div className="col-6">
                       <div className="cart-form-notes">
@@ -160,7 +150,7 @@ const CartContainer = () => {
                         ></textarea>
                       </div>
                       <div className="cart-form-collections">
-                        <a href="/collections">
+                        <Link to="/collections">
                           <span>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +171,7 @@ const CartContainer = () => {
                             </svg>
                           </span>
                           Tiếp tục mua sắm
-                        </a>
+                        </Link>
                       </div>
                     </div>
                     <div className="col-6">
