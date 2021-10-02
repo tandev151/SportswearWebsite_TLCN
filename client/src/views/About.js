@@ -1,14 +1,9 @@
 import React from "react";
-import Header from "../components/layout/header/Header";
-import Navbar from "../components/layout/navbar/Navbar";
+import Layout from "../components/layout/Layout";
 
-import Policy from "../components/layout/content/policy/Policy";
-import Footer from "../components/layout/footer/Footer";
 const About = () => {
   return (
-    <div>
-      <Navbar />
-      <Header />
+    <Layout>
       {/* <AboutContainer /> */}
       <div className="about">
         <div className="container mgb-45">
@@ -141,9 +136,7 @@ const About = () => {
           </div>
         </div>
       </div>
-      <Policy />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

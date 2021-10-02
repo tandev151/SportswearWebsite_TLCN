@@ -1,15 +1,10 @@
 import React from "react";
 import { FormControl, TextField } from "@material-ui/core";
-import Header from "../components/layout/header/Header";
-import Navbar from "../components/layout/navbar/Navbar";
+import Layout from "../components/layout/Layout"
 
-import Policy from "../components/layout/content/policy/Policy";
-import Footer from "../components/layout/footer/Footer";
 const Contact = () => {
   return (
-    <div>
-      <Navbar />
-      <Header />
+    <Layout>
       {/* <ContactContainer /> */}
       <div className="contact">
         <div className="container mgb-45">
@@ -104,9 +99,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
-      <Policy />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 
