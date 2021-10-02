@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 
-import Header from "../components/layout/header/Header";
-import Navbar from "../components/layout/navbar/Navbar";
-import Policy from "../components/layout/content/policy/Policy";
-import Footer from "../components/layout/footer/Footer";
+import Layout from "../components/layout/Layout"
 
 const ProductDetails = () => {
   const [slideSub, setSlideSub] = useState();
@@ -32,9 +29,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <div>
-      <Navbar />
-      <Header />
+    <Layout>
       <div className="detail mgb-45">
         <div className="container">
           <div className="row mgt-20 ">
@@ -190,9 +185,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
-      <Policy />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

@@ -1,14 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/layout/header/Header";
-import Navbar from "../components/layout/navbar/Navbar";
-import Policy from "../components/layout/content/policy/Policy";
-import Footer from "../components/layout/footer/Footer";
+import Layout from "../components/layout/Layout"
+
 const Forget = () => {
   return (
-    <div>
-      <Navbar />
-      <Header />
+    <Layout>
       <div className="form">
         <div className="container">
           <div className="wrapper mgb-45">
@@ -57,9 +53,7 @@ const Forget = () => {
           </div>
         </div>
       </div>
-      <Policy />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

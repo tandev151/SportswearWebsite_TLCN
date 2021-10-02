@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/layout/header/Header";
-import Navbar from "../components/layout/navbar/Navbar";
-
-import Policy from "../components/layout/content/policy/Policy";
-import Footer from "../components/layout/footer/Footer";
+import Layout from "../components/layout/Layout"
 const Register = () => {
   const [passwordShown, setPasswordShown] = useState(false);
   const [confirmShown, setConfirmShown] = useState(false);
@@ -16,9 +12,7 @@ const Register = () => {
     setConfirmShown(confirmShown ? false : true);
   };
   return (
-    <div>
-      <Navbar />
-      <Header />
+    <Layout>
       {/* <RegisterForm /> */}
       <div className="form">
         <div className="container">
@@ -213,9 +207,7 @@ const Register = () => {
           </div>
         </div>
       </div>
-      <Policy />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

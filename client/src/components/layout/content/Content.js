@@ -3,7 +3,6 @@ import CategoryBanner from "./category/CategoryBanner";
 import HotProduct from "./products/HotProduct";
 import BrandBanner from "./brand/BrandBanner";
 import PositionBanner from "./position/PositionBanner";
-import Policy from "./policy/Policy";
 const Content = () => {
   return (
     <div className="content">
@@ -12,7 +11,6 @@ const Content = () => {
         <CategoryBanner />
         <BrandBanner />
         <PositionBanner />
-        <Policy />
       </div>
     </div>
   );

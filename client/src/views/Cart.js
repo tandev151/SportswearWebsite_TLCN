@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/layout/header/Header";
-import Navbar from "../components/layout/navbar/Navbar";
-import Policy from "../components/layout/content/policy/Policy";
-import Footer from "../components/layout/footer/Footer";
+import Layout from "../components/layout/Layout";
+
 const Cart = () => {
   const [cartData, setCartData] = useState([
     {
@@ -46,9 +44,7 @@ const Cart = () => {
   }
 
   return (
-    <div>
-      <Navbar />
-      <Header />
+    <Layout>
       {/* <CartContainer /> */}
       <div className="cart">
         <div className="container">
@@ -204,9 +200,7 @@ const Cart = () => {
           )}
         </div>
       </div>
-      <Policy />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

@@ -8,11 +8,8 @@ import {
   MenuItem,
   InputLabel,
 } from "@material-ui/core";
-import Header from "../components/layout/header/Header";
-import Navbar from "../components/layout/navbar/Navbar";
+import Layout from "../components/layout/Layout";
 import OrderItem from "../components/layout/order/OrderItem";
-import Policy from "../components/layout/content/policy/Policy";
-import Footer from "../components/layout/footer/Footer";
 import ProvinceData from "../data/data.json";
 const Account = () => {
   const [addresses, setAddresses] = useState([
@@ -79,9 +76,7 @@ const Account = () => {
   };
 
   return (
-    <div>
-      <Navbar />
-      <Header />
+    <Layout>
       <div className="account">
         <div className="container mgb-45">
           <div className="row">
@@ -311,9 +306,9 @@ const Account = () => {
                                 style={
                                   address.isConfig
                                     ? {
-                                        cursor: "default",
-                                        visibility: "hidden",
-                                      }
+                                      cursor: "default",
+                                      visibility: "hidden",
+                                    }
                                     : null
                                 }
                                 onClick={() =>
@@ -326,9 +321,9 @@ const Account = () => {
                                 style={
                                   address.isConfig
                                     ? {
-                                        cursor: "default",
-                                        visibility: "hidden",
-                                      }
+                                      cursor: "default",
+                                      visibility: "hidden",
+                                    }
                                     : null
                                 }
                                 className="address-item__setup address-item__setup--delete"
@@ -374,9 +369,7 @@ const Account = () => {
           </div>
         </div>
       </div>
-      <Policy />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

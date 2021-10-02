@@ -1,8 +1,4 @@
-import Header from "../components/layout/header/Header";
-import Navbar from "../components/layout/navbar/Navbar";
-// import LoginForm from "../components/layout/form/LoginForm";
-import Policy from "../components/layout/content/policy/Policy";
-import Footer from "../components/layout/footer/Footer";
+import Layout from "../components/layout/Layout"
 import React, { useState } from "react";
 import { Redirect } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,9 +24,7 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <Navbar />
-      <Header />
+    <Layout>
       {/* <LoginForm  /> */}
       <div className="form">
         <div className="container">
@@ -154,9 +148,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Policy />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

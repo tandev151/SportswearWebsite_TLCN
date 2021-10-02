@@ -1,18 +1,14 @@
 import React from "react";
-import Header from "../components/layout/header/Header";
-import Navbar from "../components/layout/navbar/Navbar";
+import Layout from "../components/layout/Layout";
 import NavbarLeft from "../components/layout/navbar/NavbarLeft";
 import ProductItem from "../components/layout/product/ProductItem";
 import { ProductData } from "../components/layout/collections/ProductData";
-import Policy from "../components/layout/content/policy/Policy";
-import Footer from "../components/layout/footer/Footer";
+
 const Collections = () => {
   return (
     //   If user don't login , system will redirect to login page
     // <Redirect to="/login" />
-    <div>
-      <Navbar />
-      <Header />
+    <Layout>
       {/* <ProductCollection /> */}
       <div className="container">
         <div className="row mgt-20">
@@ -81,9 +77,7 @@ const Collections = () => {
           </div>
         </div>
       </div>
-      <Policy />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 
