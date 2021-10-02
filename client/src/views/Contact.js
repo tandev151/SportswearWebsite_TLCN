@@ -2,7 +2,6 @@ import React from "react";
 import { FormControl, TextField } from "@material-ui/core";
 import Header from "../components/layout/header/Header";
 import Navbar from "../components/layout/navbar/Navbar";
-
 import Policy from "../components/layout/content/policy/Policy";
 import Footer from "../components/layout/footer/Footer";
 const Contact = () => {
