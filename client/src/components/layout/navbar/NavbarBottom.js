@@ -1,42 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const categories = [
-  {
-    name: "Giày cỏ tự nhiên",
-  },
-  {
-    name: "Giày cỏ nhân tạo",
-  },
-  {
-    name: "Giày futsal",
-  },
-];
-
-const brands = [
-  {
-    id: "Nike",
-    kinds: [
-      { name: "Nike Mercurial" },
-      { name: "Nike Phantom" },
-      { name: "Nike Tiempo" },
-    ],
-  },
-  {
-    id: "Adidas",
-    kinds: [
-      { name: "Adidas X" },
-      { name: "Adidas Predator" },
-      { name: "Adidas Copa" },
-      { name: "Adidas Nemeziz" },
-    ],
-  },
-  {
-    id: "Puma",
-    kinds: [],
-  },
-];
-const NavbarBottom = () => {
+const NavbarBottom = ({ categories, brands }) => {
   return (
     <div className="navbar-bottom">
       <ul className="navbar-bottom__list">
@@ -52,7 +17,7 @@ const NavbarBottom = () => {
 
         <li className="navbar-bottom__list-item">
           <NavLink
-            to={`/collections`}
+            to={`/collections/all`}
             className="navbar-bottom__list-item-link"
             title="Tất cả sản phẩm"
           >
@@ -75,14 +40,47 @@ const NavbarBottom = () => {
             <ul className="category">
               {categories.map((category) => {
                 return (
-                  <li className="category__item">
+                  <li className="category__item" key={category._id}>
                     <NavLink
-                      to={`/collections`}
+                      to={`/collections/category/${category.slug}`}
                       className="category__item-link"
                     >
                       {category.name}
+                      {category.children.length > 0 && (
+                        <>
+                          <span className="arrow-right">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              fill="currentColor"
+                              class="bi bi-caret-right-fill"
+                              viewBox="0 0 16 16"
+                            >
+                              <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                            </svg>
+                          </span>
+
+                          <ul className="sub-category">
+                            {category.children.map((child) => {
+                              return (
+                                <li className="sub-category__item">
+                                  <NavLink
+                                    to={`/collections/category/${child.slug}`}
+                                    className="sub-category__item-link"
+                                  >
+                                    {child.name}
+                                  </NavLink>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </>
+                      )
+                      }
                     </NavLink>
                   </li>
+
                 );
               })}
             </ul>
@@ -90,7 +88,7 @@ const NavbarBottom = () => {
         </li>
         <li className="navbar-bottom__list-item">
           <NavLink
-            to={`/collections`}
+            to={`/collections/all`}
             className="navbar-bottom__list-item-link"
             title="Thương hiệu"
           >
@@ -115,37 +113,11 @@ const NavbarBottom = () => {
                 return (
                   <li className="category__item">
                     <NavLink
-                      to={`/collections`}
+                      to={`/collections/brand/${brand.slug}`}
                       className="category__item-link"
                     >
-                      {brand.id}
-                      <span className="arrow-right">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          class="bi bi-caret-right-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                        </svg>
-                      </span>
+                      {brand.name}
 
-                      <ul className="sub-category">
-                        {brand.kinds.map((kind) => {
-                          return (
-                            <li className="sub-category__item">
-                              <NavLink
-                                to={`/collections`}
-                                className="sub-category__item-link"
-                              >
-                                {kind.name}
-                              </NavLink>
-                            </li>
-                          );
-                        })}
-                      </ul>
                     </NavLink>
                   </li>
                 );

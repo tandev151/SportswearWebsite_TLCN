@@ -16,6 +16,10 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import Forget from "./views/Forget";
 import { isUserLoggedIn } from "./features/auth/authSlice";
+import { getCategories } from "./features/category/categorySlice";
+import { getBrands } from "./features/brand/brandSlice";
+
+
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -24,11 +28,18 @@ function App() {
       dispatch(isUserLoggedIn());
     }
   }, [auth.authenticate]);
+
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getBrands());
+  }, []);
+
+
   return (
     <Router>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/collections" component={Collections} />
+        <Route path="/collections/:type/:slug" component={Collections} />
         <Route exact path="/product" component={ProductDetails} />
         <PrivateRoute exact path="/cart" component={Cart} />
         <PrivateRoute exact path="/account" component={Account} />

@@ -16,7 +16,7 @@ exports.signup = (req, res) => {
             async (error, user) => {
                 if (user) {
                     return res.status(400).json({
-                        error: "User already registered"
+                        message: "User already registered"
                     })
                 }
                 const { name, email, password } = req.body;
