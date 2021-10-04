@@ -1,8 +1,23 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Layout from "../components/layout/Layout"
+import React, { useState } from "react";
 
+import { Link } from "react-router-dom";
+import Layout from "../components/layout/Layout";
+import { emailSchema } from "../validation/authValidations";
 const Forget = () => {
+  const [email, setEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(true);
+  const checkEmailValidation = (value) => {
+    emailSchema
+      .validate({ email: value })
+      .then(() => setEmailValid(true))
+      .catch(() => setEmailValid(false));
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (emailValid !== false) {
+      console.log(emailValid);
+    }
+  };
   return (
     <Layout>
       <div className="form">
@@ -11,7 +26,10 @@ const Forget = () => {
             <h2 className="wrapper-heading">Quên mật khẩu</h2>
             <div className="row">
               <div className="wrapper-body">
-                <form className="form-control" action="" method="post">
+                <form
+                  className="form-control"
+                  onSubmit={(e) => handleSubmit(e)}
+                >
                   <div className="form-control__input">
                     <span className="form-control__input-icon">
                       <svg
@@ -28,11 +46,17 @@ const Forget = () => {
                     <input
                       className="form-control__input-text"
                       type="email"
-                      name=""
-                      id=""
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      onBlur={(e) => checkEmailValidation(e.target.value)}
                       placeholder="Email của bạn"
                     />
                   </div>
+                  {emailValid ? null : (
+                    <div className="error-input">
+                      Email không hợp lệ. Vui lòng nhập lại!
+                    </div>
+                  )}
                   <div className="form-control__link">
                     <Link to="/login" className="form-control__link-forget">
                       Đăng nhập

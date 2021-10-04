@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PrivateRoute from "./components/HOC/PrivateRoute";
+import AuthRoute from "./components/HOC/AuthRoute";
 import Home from "./views/Home";
 import Collections from "./views/Collections";
 import "./scss/app.scss";
@@ -34,9 +35,9 @@ function App() {
         <PrivateRoute exact path="/checkout" component={Checkout} />
         <Route exact path="/contact" component={Contact} />
         <Route exact path="/about" component={About} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/forget" component={Forget} />
+        <AuthRoute exact path="/login" component={Login} />
+        <AuthRoute exact path="/register" component={Register} />
+        <AuthRoute exact path="/forget" component={Forget} />
       </Switch>
     </Router>
   );

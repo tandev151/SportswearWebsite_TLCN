@@ -64,7 +64,7 @@
       position: relative;
 
       &-box {
-        background-color: rgb(173, 170, 170);
+        background-color: rgb(241, 226, 226);
         position: absolute;
         top: calc(100% + 5px);
         right: -8px;
@@ -94,12 +94,17 @@
             text-decoration: none;
             font-size: 1.1rem;
             padding: 8px 16px;
-            color: $white;
+            color: $primary-text;
             @include text-over;
           }
           & .box-item .link:hover {
             color: $main-color;
             background-color: $hover-color;
+          }
+          & li:last-child .link {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: $hover-link;
           }
         }
       }
@@ -150,7 +155,24 @@
 
     &-info:hover,
     &-cart:hover {
-      color: $main-color;
+      color: $hover-link;
+    }
+  }
+  & .mobile-menu {
+    display: none;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .navbar-top {
+    & .mobile-menu {
+      display: block;
+      position: absolute;
+      left: 16px;
+      color: $white;
+      cursor: pointer;
+      &:hover {
+        color: $hover-link;
+      }
     }
   }
 }

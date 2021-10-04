@@ -1,11 +1,45 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { logout } from "../../../features/auth/authSlice";
 const NavbarTop = () => {
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   console.log(auth.authenticate);
+  // Handle logout => clear token
+  const handleLogOut = () => {
+    dispatch(logout());
+    console.log(auth.authenticate);
+  };
+
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const handleMenu = () => {
+    const mobileMenu = document.querySelector(".navbar-bottom__list");
+    if (isMenuOpen) {
+      mobileMenu.classList.remove("open-menu");
+      setMenuOpen(false);
+    } else {
+      mobileMenu.classList.add("open-menu");
+      setMenuOpen(true);
+    }
+  };
   return (
     <div className="navbar-top">
+      <div className="mobile-menu" onClick={() => handleMenu()}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          class="bi bi-list"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+          />
+        </svg>
+      </div>
       <div className="navbar-top__logo">
         <NavLink to={`/`} className="navbar-top__logo-link">
           <img
@@ -55,14 +89,19 @@ const NavbarTop = () => {
                     Tài khoản: {auth.user.name}
                   </NavLink>
                 </li>
-                <li className="box-item">
-                  <NavLink to={`/`} className="link">
-                    Đăng xuất
-                  </NavLink>
-                </li>
+
                 <li className="box-item">
                   <NavLink to={`/account`} className="link">
                     Tra cứu đơn hàng
+                  </NavLink>
+                </li>
+                <li className="box-item">
+                  <NavLink
+                    to="/"
+                    className="link"
+                    onClick={() => handleLogOut()}
+                  >
+                    Đăng xuất
                   </NavLink>
                 </li>
               </ul>
@@ -74,13 +113,13 @@ const NavbarTop = () => {
                   </NavLink>
                 </li>
                 <li className="box-item">
-                  <NavLink to={`/register`} className="link">
-                    Đăng ký
+                  <NavLink to={`/login`} className="link">
+                    Tra cứu đơn hàng
                   </NavLink>
                 </li>
                 <li className="box-item">
-                  <NavLink to={`/login`} className="link">
-                    Tra cứu đơn hàng
+                  <NavLink to={`/register`} className="link">
+                    Đăng ký
                   </NavLink>
                 </li>
               </ul>

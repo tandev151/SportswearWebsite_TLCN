@@ -13,5 +13,8 @@ const authAPI = {
     const url = "/signout";
     return axios.post(url);
   },
+  loginByGoogle: (token) => {
+    return axios.post("/v1/auth/google", token);
+  },
 };
 export default authAPI;

@@ -7,7 +7,7 @@
     list-style: none;
     align-items: center;
     justify-content: space-between;
-    height: 40px;
+
     &-item-link {
       color: $white;
       text-decoration: none;
@@ -79,6 +79,31 @@
 
     &-item:last-child {
       background: rgb(224, 25, 25);
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .navbar-bottom {
+    &__list {
+      animation: $show linear 0.25s;
+      transform-origin: top left;
+      background-color: $color1;
+      display: none;
+      &-item-link {
+        & .category {
+          display: block;
+          position: static;
+          width: 50%;
+          background-color: $color1;
+        }
+      }
+      &-item:first-child &-item-link {
+        padding-left: 20px;
+      }
+      &.open-menu {
+        display: block;
+      }
     }
   }
 }

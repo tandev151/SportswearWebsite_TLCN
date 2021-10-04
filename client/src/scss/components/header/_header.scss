@@ -4,3 +4,8 @@
   padding: 10px 0;
   @include backgroundHeader;
 }
+@media screen and (max-width: 1024px) {
+  .header {
+    height: 76px;
+  }
+}

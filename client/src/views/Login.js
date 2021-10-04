@@ -1,11 +1,19 @@
-import Layout from "../components/layout/Layout"
+import Layout from "../components/layout/Layout";
 import React, { useState } from "react";
-import { Redirect } from "react-router";
+import GoogleLogin from "react-google-login";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { login } from "../features/auth/authSlice";
+import { login, loginByGoogle } from "../features/auth/authSlice";
+import { emailSchema, passwordSchema } from "../validation/authValidations";
 
 const Login = () => {
+  const handleLoginByGoogle = async (googleData) => {
+    dispatch(loginByGoogle({ token: googleData.tokenId }));
+    console.log(googleData.tokenId);
+  };
+
+  const auth = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
   const [passwordShown, setPasswordShown] = useState(false);
 
@@ -17,10 +25,41 @@ const Login = () => {
   const [password, setPassword] = useState("");
   // const { token } = useSelector(state => state.auth)
   // console.log(token)
-  const handleLogin = (e) => {
+
+  //Validate email use Yub
+  const [emailValid, setEmailValid] = useState(true);
+  const checkEmailValidation = (value) => {
+    emailSchema
+      .validate({ email: value })
+      .then(() => setEmailValid(true))
+      .catch(() => setEmailValid(false));
+  };
+
+  //Validate password use Yub
+  const [passwordValid, setPasswordValid] = useState(true);
+  const checkPasswordValidation = (value) => {
+    passwordSchema
+      .validate({ password: value })
+      .then(() => setPasswordValid(true))
+      .catch(() => setPasswordValid(false));
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const user = { email, password };
-    dispatch(login(user));
+    if (
+      emailValid === false ||
+      email === "" ||
+      passwordValid === false ||
+      password === ""
+    ) {
+      alert("Vui lòng kiểm tra thông tin đăng nhập");
+    } else {
+      const user = { email, password };
+      await dispatch(login(user));
+      if (auth.error) {
+        alert("Thông tin đăng nhập không đúng!");
+      }
+    }
   };
 
   return (
@@ -32,11 +71,7 @@ const Login = () => {
             <h2 className="wrapper-heading">Đăng nhập</h2>
             <div className="row">
               <div className="wrapper-body">
-                <form
-                  className="form-control"
-                  method="post"
-                  onSubmit={(e) => handleLogin(e)}
-                >
+                <form className="form-control" onSubmit={(e) => handleLogin(e)}>
                   <div className="form-control__input">
                     <span className="form-control__input-icon">
                       <svg
@@ -53,13 +88,18 @@ const Login = () => {
                     <input
                       className="form-control__input-text"
                       type="email"
-                      name=""
-                      id=""
                       placeholder="Email của bạn"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      onBlur={(e) => checkEmailValidation(e.target.value)}
                     />
                   </div>
+                  {emailValid ? null : (
+                    <div className="error-input">
+                      Email không hợp lệ. Vui lòng nhập lại!
+                    </div>
+                  )}
+
                   <div className="form-control__input">
                     <span className="form-control__input-icon">
                       <svg
@@ -79,11 +119,10 @@ const Login = () => {
                     <input
                       className="form-control__input-text"
                       type={passwordShown ? "text" : "password"}
-                      name=""
-                      id=""
                       placeholder="Mật khẩu"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      onBlur={(e) => checkPasswordValidation(e.target.value)}
                     />
                     <span
                       onClick={togglePasswordVisibility}
@@ -116,6 +155,12 @@ const Login = () => {
                       )}
                     </span>
                   </div>
+                  {passwordValid ? null : (
+                    <div className="error-input">
+                      Mật khẩu hợp lệ chỉ chứa từ 8-50 ký tự!
+                    </div>
+                  )}
+
                   <div className="form-control__link">
                     <Link to="/forget" className="form-control__link-forget">
                       Quên mật khẩu
@@ -131,7 +176,7 @@ const Login = () => {
                     Đăng nhập
                   </button>
                   <div className="form-control__separate">Hoặc</div>
-                  <button className="btn form-control__gg">
+                  {/* <button className="btn form-control__gg">
                     <img
                       src={
                         require("../assets/icons/google-logo-9808-16x16.ico")
@@ -141,7 +186,14 @@ const Login = () => {
                       className="form-control__gg-icon"
                     />
                     Đăng nhập bằng Google
-                  </button>
+                  </button> */}
+                  <GoogleLogin
+                    clientId="707494384451-n2h8k22labbk1hqo3abuen1i5kdp40dn.apps.googleusercontent.com"
+                    buttonText="Đăng nhập bằng Google"
+                    onSuccess={handleLoginByGoogle}
+                    onFailure={handleLoginByGoogle}
+                    cookiePolicy={"single_host_origin"}
+                  />
                 </form>
               </div>
             </div>

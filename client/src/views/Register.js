@@ -1,15 +1,79 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Layout from "../components/layout/Layout"
+import Layout from "../components/layout/Layout";
+import { useDispatch } from "react-redux";
+import { register } from "../features/auth/authSlice";
+import {
+  nameSchema,
+  emailSchema,
+  passwordSchema,
+} from "../validation/authValidations";
+
 const Register = () => {
   const [passwordShown, setPasswordShown] = useState(false);
   const [confirmShown, setConfirmShown] = useState(false);
+  const dispatch = useDispatch();
+  const [user, setUser] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+  });
+  const [confirmPass, setConfirmPass] = useState("");
   const togglePasswordVisibility = () => {
     setPasswordShown(passwordShown ? false : true);
   };
 
   const toggleConfirmVisibility = () => {
     setConfirmShown(confirmShown ? false : true);
+  };
+
+  //Validate
+  const [nameValid, setNameValid] = useState(true);
+  const checkNameValidation = (value) => {
+    nameSchema
+      .validate({ name: value })
+      .then(() => setNameValid(true))
+      .catch(() => setNameValid(false));
+    console.log(nameValid);
+  };
+  const [emailValid, setEmailValid] = useState(true);
+  const checkEmailValidation = (value) => {
+    emailSchema
+      .validate({ email: value })
+      .then(() => setEmailValid(true))
+      .catch(() => setEmailValid(false));
+  };
+
+  const [passwordValid, setPasswordValid] = useState(true);
+  const checkPasswordValidation = (value) => {
+    passwordSchema
+      .validate({ password: value })
+      .then(() => setPasswordValid(true))
+      .catch(() => setPasswordValid(false));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userObject = {
+      name: user.fullName,
+      email: user.email,
+      password: user.password,
+    };
+    if (
+      nameValid === false ||
+      user.fullName === "" ||
+      emailValid === false ||
+      user.email === "" ||
+      passwordValid === false ||
+      user.password === ""
+    ) {
+      alert("Vui lòng kiểm tra lại thông tin đăng ký !");
+    } else if (confirmPass !== userObject.password) {
+      alert("Xác nhận mật khẩu không trùng khớp !");
+    } else {
+      console.log(userObject);
+      dispatch(register(userObject));
+    }
   };
   return (
     <Layout>
@@ -20,7 +84,10 @@ const Register = () => {
             <h2 className="wrapper-heading">Đăng ký</h2>
             <div className="row">
               <div className="wrapper-body">
-                <form className="form-control" action="" method="post">
+                <form
+                  className="form-control"
+                  onSubmit={(e) => handleSubmit(e)}
+                >
                   <div className="form-control__input">
                     <span className="form-control__input-icon">
                       <svg
@@ -37,32 +104,19 @@ const Register = () => {
                     <input
                       className="form-control__input-text"
                       type="name"
-                      name=""
-                      id=""
-                      placeholder="Họ của bạn"
+                      value={user.fullName}
+                      onChange={(e) =>
+                        setUser({ ...user, fullName: e.target.value })
+                      }
+                      onBlur={(e) => checkNameValidation(e.target.value)}
+                      placeholder="Họ tên đầy đủ của bạn"
                     />
                   </div>
-                  <div className="form-control__input">
-                    <span className="form-control__input-icon">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        class="bi bi-person"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-                      </svg>
-                    </span>
-                    <input
-                      className="form-control__input-text"
-                      type="name"
-                      name=""
-                      id=""
-                      placeholder="Tên của bạn"
-                    />
-                  </div>
+                  {nameValid ? null : (
+                    <div className="error-input">
+                      Vui lòng nhập tên của bạn!
+                    </div>
+                  )}
                   <div className="form-control__input">
                     <span className="form-control__input-icon">
                       <svg
@@ -79,11 +133,19 @@ const Register = () => {
                     <input
                       className="form-control__input-text"
                       type="email"
-                      name=""
-                      id=""
+                      value={user.email}
+                      onChange={(e) =>
+                        setUser({ ...user, email: e.target.value })
+                      }
+                      onBlur={(e) => checkEmailValidation(e.target.value)}
                       placeholder="Email của bạn"
                     />
                   </div>
+                  {emailValid ? null : (
+                    <div className="error-input">
+                      Email không hợp lệ. Vui lòng nhập lại!
+                    </div>
+                  )}
                   <div className="form-control__input">
                     <span className="form-control__input-icon">
                       <svg
@@ -103,8 +165,11 @@ const Register = () => {
                     <input
                       className="form-control__input-text"
                       type={passwordShown ? "text" : "password"}
-                      name=""
-                      id=""
+                      value={user.password}
+                      onChange={(e) =>
+                        setUser({ ...user, password: e.target.value })
+                      }
+                      onBlur={(e) => checkPasswordValidation(e.target.value)}
                       placeholder="Mật khẩu"
                     />
                     <span
@@ -138,6 +203,11 @@ const Register = () => {
                       )}
                     </span>
                   </div>
+                  {passwordValid ? null : (
+                    <div className="error-input">
+                      Mật khẩu hợp lệ chỉ chứa từ 8-50 ký tự!
+                    </div>
+                  )}
                   <div className="form-control__input">
                     <span className="form-control__input-icon">
                       <svg
@@ -157,8 +227,8 @@ const Register = () => {
                     <input
                       className="form-control__input-text"
                       type={confirmShown ? "text" : "password"}
-                      name=""
-                      id=""
+                      value={confirmPass}
+                      onChange={(e) => setConfirmPass(e.target.value)}
                       placeholder="Xác nhận mật khẩu"
                     />
                     <span
