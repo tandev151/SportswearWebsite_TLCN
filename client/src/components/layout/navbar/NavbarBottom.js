@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const NavbarBottom = ({ categories , brands}) => {
+const NavbarBottom = ({ categories, brands }) => {
   return (
     <div className="navbar-bottom">
       <ul className="navbar-bottom__list">
@@ -66,7 +66,7 @@ const NavbarBottom = ({ categories , brands}) => {
                               return (
                                 <li className="sub-category__item">
                                   <NavLink
-                                    to={`/collections/${child.slug}`}
+                                    to={`/collections/category/${child.slug}`}
                                     className="sub-category__item-link"
                                   >
                                     {child.name}
@@ -117,7 +117,7 @@ const NavbarBottom = ({ categories , brands}) => {
                       className="category__item-link"
                     >
                       {brand.name}
-                   
+
                     </NavLink>
                   </li>
                 );

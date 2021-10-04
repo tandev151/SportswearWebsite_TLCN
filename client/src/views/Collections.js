@@ -3,13 +3,11 @@ import Layout from "../components/layout/Layout";
 import NavbarLeft from "../components/layout/navbar/NavbarLeft";
 import ProductItem from "../components/layout/product/ProductItem";
 import { ProductData } from "../components/layout/collections/ProductData";
-import { useRouteMatch } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 const Collections = () => {
-  let match = useRouteMatch("/collections/:type/:slug");
-  
-
-
+  const slug = useParams();
+  console.log(slug)
   return (
     //   If user don't login , system will redirect to login page
     // <Redirect to="/login" />
