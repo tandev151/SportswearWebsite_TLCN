@@ -1,55 +1,57 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const product = {
-  image: require("../../../assets/images/products/adidas/a1.jpg").default,
-  name: "Mercurial Superfly 6 ACA TF",
-  oldPrice: 3500000,
-  // currentPrice: this.oldPrice - (this.oldPrice * this.discount) / 100,
-  discount: 10,
-  descriptionImage: [
-    {
-      img: require("../../../assets/images/products/adidas/a11.jpg").default,
-    },
-    {
-      img: require("../../../assets/images/products/adidas/a12.jpg").default,
-    },
-    {
-      img: require("../../../assets/images/products/adidas/a13.jpg").default,
-    },
-    {
-      img: require("../../../assets/images/products/adidas/a14.jpg").default,
-    },
-  ],
-};
-const ProductItem = () => {
+
+const ProductItem = ({ product }) => {
+  const checkNew = (createdAt) => {
+    const currentDate = new Date();
+    const createDate = new Date(createdAt);
+    if (currentDate - createDate < 864000000) return true;
+    return false;
+  };
+
   return (
-    <Link to="/product" className="hot-product__item">
+    <Link
+      to={`/product/${product.slug}`}
+      className="hot-product__item"
+      key={product?._id}
+    >
       <div className="hot-product__item-img">
-        <img className="item-img" src={product.image} alt="" />
-        <ul className="sub-img">
-          {product.descriptionImage.map((item) => {
-            return (
-              <li className="sub-img__item">
-                <img src={item.img} alt="" />
-              </li>
-            );
-          })}
-        </ul>
+        <img
+          className="item-img"
+          src={product?.productPictures[0].img}
+          alt={product?.name}
+        />
+        {product?.productPictures.length > 1 ? (
+          <ul className="sub-img">
+            {product?.productPictures.map((item) => {
+              return (
+                <li className="sub-img__item" key={item.id}>
+                  <img src={item.img} alt="" />
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
       </div>
       <div className="item-body">
-        <h4 className="item-body__name">{product.name}</h4>
+        <h4 className="item-body__name">{product?.name}</h4>
         <div className="item-body__price">
           <p className="item-body__price-old">
-            ₫{new Intl.NumberFormat("de-DE").format(1400000)}
+            ₫{new Intl.NumberFormat("de-DE").format(product?.price)}
           </p>
           <p className="item-body__price-current">
-            ₫{new Intl.NumberFormat("de-DE").format(1000000)}
+            ₫
+            {new Intl.NumberFormat("de-DE").format(
+              product?.price - (product?.discountPercent / product?.price) * 100
+            )}
           </p>
         </div>
       </div>
+      {checkNew(product?.createdAt) ? (
+        <span className="label-new">New</span>
+      ) : null}
 
-      <span className="label-new">New</span>
-      <span className="label-discount">{product.discount}%</span>
+      <span className="label-discount">{product?.discountPercent}%</span>
     </Link>
   );
 };

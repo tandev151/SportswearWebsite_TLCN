@@ -38,7 +38,7 @@
         transform-origin: 50% 0;
         animation: $show ease 0.2s;
         display: none;
-
+        width: 200px;
         &__item-link {
           @include category-link;
           position: relative;

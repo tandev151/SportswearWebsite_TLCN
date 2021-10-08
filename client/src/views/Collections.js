@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useRouteMatch } from "react-router";
 import Layout from "../components/layout/Layout";
 import NavbarLeft from "../components/layout/navbar/NavbarLeft";
 import ProductItem from "../components/layout/product/ProductItem";
-import { ProductData } from "../components/layout/collections/ProductData";
-
+import { useSelector, useDispatch } from "react-redux";
+import { getProductsBySlug } from "../features/product/productSlice";
+import axios from "axios";
+import productAPI from "../api/productAPI";
 const Collections = () => {
+  // const product = useSelector((state) => state.product);
+  // const dispatch = useDispatch();
+  let match = useRouteMatch();
+  const type = match.params.type;
+  const slug = match.params.slug;
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await productAPI.getProductsBySlug(type, slug);
+        console.log(data);
+        setProducts(data.data.products);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+    // dispatch(getProductsBySlug(type, slug));
+  }, [type, slug]);
   return (
     //   If user don't login , system will redirect to login page
     // <Redirect to="/login" />
@@ -65,9 +88,9 @@ const Collections = () => {
                 </div>
                 <div className="products-body">
                   <div className="row">
-                    {ProductData.map((product) => (
+                    {products?.map((product) => (
                       <div className="col-3 mgt-25">
-                        <ProductItem />
+                        <ProductItem product={product} />
                       </div>
                     ))}
                   </div>

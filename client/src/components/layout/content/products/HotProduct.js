@@ -1,8 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
-import { Link } from "react-router-dom";
-import { HotProductData } from "./HotProductData";
 import ProductItem from "../../product/ProductItem";
+import { useSelector } from "react-redux";
 const HotProduct = () => {
   var settings = {
     arrows: true,
@@ -13,15 +12,24 @@ const HotProduct = () => {
     adapterHeight: true,
     focusOnSelect: true,
   };
+
+  const product = useSelector((state) => state.product);
+
+  const currentDate = new Date();
+
+  const hotProduct = product.products.filter((product) => {
+    return currentDate - new Date(product?.createdAt) < 864000000;
+  });
+
   return (
     <div className="hot-product mgb-45">
       <h3 className="hot-product__heading ">Sản phẩm hot</h3>
 
       <Slider {...settings}>
-        {HotProductData.map((product) => {
+        {hotProduct.map((product) => {
           return (
             <div className="col-2-4">
-              <ProductItem />
+              <ProductItem product={product} />
             </div>
           );
         })}

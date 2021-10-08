@@ -1,11 +1,10 @@
 import React from "react";
 import NavbarTop from "./NavbarTop";
 import NavbarBottom from "./NavbarBottom";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 const Navbar = () => {
   const category = useSelector((state) => state.category);
   const brand = useSelector((state) => state.brand);
-
 
   return (
     <div className="navbar">

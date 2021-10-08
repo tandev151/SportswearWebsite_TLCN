@@ -9,7 +9,6 @@ import { emailSchema, passwordSchema } from "../validation/authValidations";
 const Login = () => {
   const handleLoginByGoogle = async (googleData) => {
     dispatch(loginByGoogle({ token: googleData.tokenId }));
-    console.log(googleData.tokenId);
   };
 
   const auth = useSelector((state) => state.auth);
@@ -46,6 +45,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     if (
       emailValid === false ||
       email === "" ||

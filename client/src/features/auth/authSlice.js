@@ -38,8 +38,6 @@ export const authSlice = createSlice({
         state.user = user;
         state.token = token;
         state.authenticate = true;
-      } else {
-        state.error = "Login failed";
       }
     },
   },
@@ -50,7 +48,7 @@ export const authSlice = createSlice({
     [login.rejected]: (state, action) => {
       state.loading = false;
       console.log(action);
-      state.error = action.error.message;
+      state.error = action.error;
     },
     [login.fulfilled]: (state, action) => {
       state.loading = false;
@@ -59,7 +57,7 @@ export const authSlice = createSlice({
       state.authenticate = true;
       localStorage.setItem("token", state.token);
       localStorage.setItem("user", JSON.stringify(state.user));
-      console.log(action.payload);
+      
     },
     [logout.pending]: (state) => {
       state.loading = true;
@@ -69,7 +67,7 @@ export const authSlice = createSlice({
       state.error = action.error.message;
     },
     [logout.fulfilled]: (state) => {
-      state.loading = true;
+      state.loading = false;
       state.authenticate = false;
       state = initialState;
       localStorage.clear();

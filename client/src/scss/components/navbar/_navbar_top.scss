@@ -62,7 +62,11 @@
       margin-right: 8px;
       cursor: pointer;
       position: relative;
-
+      & img {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+      }
       &-box {
         background-color: rgb(241, 226, 226);
         position: absolute;

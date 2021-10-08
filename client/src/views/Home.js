@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router";
+
 import Layout from "../components/layout/Layout";
 import Slides from "../components/layout/slides/Slides";
 import Content from "../components/layout/content/Content";
