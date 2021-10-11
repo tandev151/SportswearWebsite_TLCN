@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import Layout from "../components/layout/Layout";
-import Loading from "../components/layout/loading/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductBySlug } from "../features/product/productSlice";
 
@@ -51,7 +50,6 @@ const ProductDetails = () => {
   }
   return (
     <Layout>
-      {loading && <Loading />}
       <div className="detail mgb-45">
         <div className="container">
           <div className="row mgt-20 ">

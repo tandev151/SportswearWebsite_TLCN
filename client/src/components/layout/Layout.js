@@ -3,7 +3,8 @@ import Navbar from "./navbar/Navbar";
 import Policy from "./content/policy/Policy";
 import Footer from "./footer/Footer";
 import { useSelector } from "react-redux";
-import { CircularProgress, Stack } from "@material-ui/core";
+import { Stack } from "@material-ui/core";
+import Loading from "./loading/Loading";
 export default function Layout(props) {
   const auth = useSelector((state) => state.auth);
   const product = useSelector((state) => state.product);
@@ -19,10 +20,7 @@ export default function Layout(props) {
             zIndex: 5,
           }}
         >
-          <CircularProgress
-            color="primary"
-            sx={{ position: "absolute", left: "50%", top: "250px" }}
-          />
+          <Loading />
         </Stack>
       ) : null}
       <Navbar />

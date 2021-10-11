@@ -5,7 +5,6 @@ import NavbarLeft from "../components/layout/navbar/NavbarLeft";
 import ProductItem from "../components/layout/product/ProductItem";
 import { useSelector, useDispatch } from "react-redux";
 import { getProductsBySlug } from "../features/product/productSlice";
-import Loading from "../components/layout/loading/Loading";
 const Collections = () => {
 
   let match = useRouteMatch();
@@ -21,7 +20,6 @@ const Collections = () => {
     // <Redirect to="/login" />
     <Layout>
       {/* <ProductCollection /> */}
-      {product.loading && <Loading />}
       <div className="container">
         <div className="row mgt-20">
           <div className="col-2-4 ">
