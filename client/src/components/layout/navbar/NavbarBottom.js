@@ -17,7 +17,7 @@ const NavbarBottom = ({ categories, brands }) => {
 
         <li className="navbar-bottom__list-item">
           <NavLink
-            to={`/collections/all`}
+            to={`/collections/category/all`}
             className="navbar-bottom__list-item-link"
             title="Tất cả sản phẩm"
           >
@@ -88,7 +88,7 @@ const NavbarBottom = ({ categories, brands }) => {
         </li>
         <li className="navbar-bottom__list-item">
           <NavLink
-            to={`/collections/all`}
+            to={`/collections/brand/all`}
             className="navbar-bottom__list-item-link"
             title="Thương hiệu"
           >

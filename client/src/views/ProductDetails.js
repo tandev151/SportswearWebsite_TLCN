@@ -2,30 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import Layout from "../components/layout/Layout";
+import Loading from "../components/layout/loading/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductBySlug } from "../features/product/productSlice";
-import productAPI from "../api/productAPI";
+
 const ProductDetails = () => {
   let match = useRouteMatch();
-  const slug = match.params.slug;
-  console.log(match);
-  // const { product } = useSelector((state) => state.product);
+  const { slug } = match.params;
   const dispatch = useDispatch();
+  const { product, loading } = useSelector((state) => state.product);
   const [slideSub, setSlideSub] = useState();
   const [slidePhotos, setSlidePhotos] = useState();
   const [openDescription, setOpenDescription] = useState(false);
-  const [product, setProduct] = useState({});
   useEffect(() => {
-    (async () => {
-      try {
-        const result = await productAPI.getProductBySlug(slug);
-        const data = result.data.product;
-        // console.log(data);
-        setProduct(data);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
     dispatch(getProductBySlug(slug));
   }, [slug]);
 
@@ -55,9 +44,14 @@ const ProductDetails = () => {
     else setOpenDescription(true);
   };
   // Handle add cart
-  const handleAddCart = () => {};
+  const handleAddCart = () => { };
+
+  if (Object.keys(product).length === 0) {
+    return null;
+  }
   return (
     <Layout>
+      {loading && <Loading />}
       <div className="detail mgb-45">
         <div className="container">
           <div className="row mgt-20 ">
@@ -71,7 +65,7 @@ const ProductDetails = () => {
                         ref={(slide) => setSlidePhotos(slide)}
                         {...subPhotoSettings}
                       >
-                        {product.productPictures?.map((image) => (
+                        {product.productPictures.map((image) => (
                           <img src={image.img} alt="" />
                         ))}
                       </Slider>
@@ -84,8 +78,8 @@ const ProductDetails = () => {
                         ref={(slide) => setSlideSub(slide)}
                         {...photoSettings}
                       >
-                        {product.productPictures?.map((image) => (
-                          <img src={image.img} alt={product?.name} />
+                        {product.productPictures.map((image) => (
+                          <img src={image.img} alt={product.name} />
                         ))}
                       </Slider>
                     </div>
@@ -96,23 +90,23 @@ const ProductDetails = () => {
             <div className="col-6">
               <form className="body" onSubmit={() => handleAddCart()}>
                 <div className="body-heading">
-                  <h3>{product?.name}</h3>
+                  <h3>{product.name}</h3>
                 </div>
                 <div className="body-price">
                   <span className="body-price__old">
-                    ₫{new Intl.NumberFormat("de-DE").format(product?.price)}
+                    ₫{new Intl.NumberFormat("de-DE").format(product.price)}
                   </span>
                   <span className="body-price__current">
                     ₫
                     {new Intl.NumberFormat("de-DE").format(
-                      product?.price -
-                        (product?.discountPercent / 100) * product?.price
+                      product.price -
+                      (product.discountPercent / 100) * product.price
                     )}
                   </span>
                 </div>
                 <div className="body-brand">
                   <span className="body-brand__label">Thương hiệu: </span>
-                  <p className="body-brand__name">{product.brand?.name}</p>
+                  <p className="body-brand__name">{product.brand.name}</p>
                 </div>
                 <div className="body-size">
                   <div className="body-size__label">
@@ -120,7 +114,7 @@ const ProductDetails = () => {
                     <Link to="#">(Hướng dẫn chọn size)</Link>
                   </div>
                   <div className="body-size__options">
-                    {product.sizes?.map((size) => (
+                    {product.sizes.map((size) => (
                       <label
                         htmlFor={size.size.size}
                         className="body-size__options-item"
@@ -171,8 +165,8 @@ const ProductDetails = () => {
                 </div>
                 {openDescription ? (
                   <div className="description-body">
-                    {product?.description ? (
-                      <p>{product?.description}</p>
+                    {product.description ? (
+                      <p>{product.description}</p>
                     ) : (
                       <p>Chưa có mô tả sản phẩm này</p>
                     )}

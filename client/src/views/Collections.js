@@ -5,34 +5,23 @@ import NavbarLeft from "../components/layout/navbar/NavbarLeft";
 import ProductItem from "../components/layout/product/ProductItem";
 import { useSelector, useDispatch } from "react-redux";
 import { getProductsBySlug } from "../features/product/productSlice";
-import axios from "axios";
-import productAPI from "../api/productAPI";
+import Loading from "../components/layout/loading/Loading";
 const Collections = () => {
-  // const product = useSelector((state) => state.product);
-  // const dispatch = useDispatch();
+
   let match = useRouteMatch();
-  const type = match.params.type;
-  const slug = match.params.slug;
-
-  const [products, setProducts] = useState([]);
-
+  const { type, slug } = match.params;
+  const params = { type, slug }
+  const { products, title, loading } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
   useEffect(() => {
-    (async () => {
-      try {
-        const data = await productAPI.getProductsBySlug(type, slug);
-        console.log(data);
-        setProducts(data.data.products);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-    // dispatch(getProductsBySlug(type, slug));
-  }, [type, slug]);
+    dispatch(getProductsBySlug(params));
+  }, [params]);
   return (
     //   If user don't login , system will redirect to login page
     // <Redirect to="/login" />
     <Layout>
       {/* <ProductCollection /> */}
+      {loading && <Loading />}
       <div className="container">
         <div className="row mgt-20">
           <div className="col-2-4 ">
@@ -52,7 +41,7 @@ const Collections = () => {
                   />
                 </div>
                 <div className="products-heading">
-                  <h2 className="products-heading-title">Tất cả sản phẩm</h2>
+                  <h2 className="products-heading-title">{title}</h2>
                 </div>
                 <div className="products-sort">
                   <span className="products-sort__icon">
@@ -88,7 +77,7 @@ const Collections = () => {
                 </div>
                 <div className="products-body">
                   <div className="row">
-                    {products?.map((product) => (
+                    {products.map((product) => (
                       <div className="col-3 mgt-25">
                         <ProductItem product={product} />
                       </div>

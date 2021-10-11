@@ -6,6 +6,8 @@ const productAPI = {
     return axios.post(url);
   },
   getProductsBySlug: (type, slug) => {
+    console.log(type, slug);
+
     const url = `/product/${type}/${slug}`;
     console.log(url);
     console.log(type, slug);

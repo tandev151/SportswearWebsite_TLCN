@@ -13,17 +13,17 @@ const ProductItem = ({ product }) => {
     <Link
       to={`/product/${product.slug}`}
       className="hot-product__item"
-      key={product?._id}
+      key={product._id}
     >
       <div className="hot-product__item-img">
         <img
           className="item-img"
-          src={product?.productPictures[0].img}
-          alt={product?.name}
+          src={product.productPictures[0].img}
+          alt={product.name}
         />
         {product?.productPictures.length > 1 ? (
           <ul className="sub-img">
-            {product?.productPictures.map((item) => {
+            {product.productPictures.map((item) => {
               return (
                 <li className="sub-img__item" key={item.id}>
                   <img src={item.img} alt="" />
@@ -34,24 +34,24 @@ const ProductItem = ({ product }) => {
         ) : null}
       </div>
       <div className="item-body">
-        <h4 className="item-body__name">{product?.name}</h4>
+        <h4 className="item-body__name">{product.name}</h4>
         <div className="item-body__price">
           <p className="item-body__price-old">
-            ₫{new Intl.NumberFormat("de-DE").format(product?.price)}
+            ₫{new Intl.NumberFormat("de-DE").format(product.price)}
           </p>
           <p className="item-body__price-current">
             ₫
             {new Intl.NumberFormat("de-DE").format(
-              product?.price - (product?.discountPercent / product?.price) * 100
+              product.price - (product.discountPercent / product.price) * 100
             )}
           </p>
         </div>
       </div>
-      {checkNew(product?.createdAt) ? (
+      {checkNew(product.createdAt) ? (
         <span className="label-new">New</span>
       ) : null}
 
-      <span className="label-discount">{product?.discountPercent}%</span>
+      <span className="label-discount">{product.discountPercent}%</span>
     </Link>
   );
 };
