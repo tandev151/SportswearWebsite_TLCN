@@ -6,10 +6,10 @@ import { useSelector } from "react-redux";
 import { CircularProgress, Stack } from "@material-ui/core";
 export default function Layout(props) {
   const auth = useSelector((state) => state.auth);
-
+  const product = useSelector((state) => state.product);
   return (
     <div>
-      {auth.loading ? (
+      {auth.loading || product.loading ? (
         <Stack
           sx={{
             width: "100%",

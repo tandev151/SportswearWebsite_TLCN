@@ -4,30 +4,31 @@ import Layout from "../components/layout/Layout";
 import NavbarLeft from "../components/layout/navbar/NavbarLeft";
 import ProductItem from "../components/layout/product/ProductItem";
 import { useSelector, useDispatch } from "react-redux";
-import { getProductsBySlug } from "../features/product/productSlice";
-import axios from "axios";
-import productAPI from "../api/productAPI";
+import {
+  getProducts,
+  getProductsBySlug,
+} from "../features/product/productSlice";
+// import axios from "axios";
+// import productAPI from "../api/productAPI";
 const Collections = () => {
-  // const product = useSelector((state) => state.product);
-  // const dispatch = useDispatch();
-  let match = useRouteMatch();
-  const type = match.params.type;
-  const slug = match.params.slug;
-
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+  const product = useSelector((state) => state.product);
+  const match = useRouteMatch();
+  console.log(match);
+  const { type, slug } = match.params;
+  console.log(type, slug);
+  console.log(product);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const data = await productAPI.getProductsBySlug(type, slug);
-        console.log(data);
-        setProducts(data.data.products);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-    // dispatch(getProductsBySlug(type, slug));
+    if (type === undefined || slug === undefined) {
+      dispatch(getProducts());
+    } else {
+      const params = { type, slug };
+      console.log(typeof params);
+      dispatch(getProductsBySlug(params));
+    }
   }, [type, slug]);
+
   return (
     //   If user don't login , system will redirect to login page
     // <Redirect to="/login" />
@@ -88,7 +89,7 @@ const Collections = () => {
                 </div>
                 <div className="products-body">
                   <div className="row">
-                    {products?.map((product) => (
+                    {product.products.map((product) => (
                       <div className="col-3 mgt-25">
                         <ProductItem product={product} />
                       </div>

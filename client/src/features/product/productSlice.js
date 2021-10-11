@@ -9,9 +9,11 @@ export const getProducts = createAsyncThunk("product/getProducts", async () => {
 
 export const getProductsBySlug = createAsyncThunk(
   "product/getProductsBySlug",
-  async (type, slug) => {
-    console.log(type, slug);
-    const response = await productAPI.getProductsBySlug(type, slug);
+  async (params) => {
+    const response = await productAPI.getProductsBySlug(
+      params.type,
+      params.slug
+    );
 
     return response;
   }
@@ -51,7 +53,7 @@ export const productSlice = createSlice({
       state.error = action.error;
     },
     [getProductBySlug.fulfilled]: (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.product = action.payload.data.product;
     },
 

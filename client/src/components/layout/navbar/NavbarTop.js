@@ -76,7 +76,9 @@ const NavbarTop = () => {
 
         <div className="navbar-top__user-info navbar-top__user-info--define">
           {auth.authenticate ? (
-            <img src={auth.user.profilePicture} alt="" />
+            <NavLink to="/account">
+              <img src={auth.user.profilePicture} alt="" />
+            </NavLink>
           ) : (
             <svg
               xmlns="http://www.w3.org/2000/svg"

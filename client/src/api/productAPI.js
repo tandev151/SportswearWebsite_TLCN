@@ -7,9 +7,6 @@ const productAPI = {
   },
   getProductsBySlug: (type, slug) => {
     const url = `/product/${type}/${slug}`;
-    console.log(url);
-    console.log(type, slug);
-
     return axios.get(url);
   },
   getProductBySlug: (slug) => {

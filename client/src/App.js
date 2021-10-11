@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PrivateRoute from "./components/HOC/PrivateRoute";
@@ -19,7 +24,7 @@ import { isUserLoggedIn } from "./features/auth/authSlice";
 import { getCategories } from "./features/category/categorySlice";
 import { getBrands } from "./features/brand/brandSlice";
 import { getProducts } from "./features/product/productSlice";
-
+import ScrollToTop from "./components/scrollToTop/ScrollToTop";
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -36,21 +41,29 @@ function App() {
     dispatch(getProducts());
   }, []);
 
+  const URL_COLLECTIONS_BY_SLUG = `/collections/:type/:slug`;
+  const URL_COLLECTIONS_ALL = `/collections/all`;
+
   return (
     <Router>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path={`/collections/:type/:slug`} component={Collections} />
-        <Route path={`/product/:slug`} component={ProductDetails} />
-        <PrivateRoute exact path="/cart" component={Cart} />
-        <PrivateRoute exact path="/account" component={Account} />
-        <PrivateRoute exact path="/checkout" component={Checkout} />
-        <Route exact path="/contact" component={Contact} />
-        <Route exact path="/about" component={About} />
-        <AuthRoute exact path="/login" component={Login} />
-        <AuthRoute exact path="/register" component={Register} />
-        <AuthRoute exact path="/forget" component={Forget} />
-      </Switch>
+      <ScrollToTop>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route
+            path={[URL_COLLECTIONS_ALL, URL_COLLECTIONS_BY_SLUG]}
+            component={Collections}
+          />
+          <Route path={`/product/:slug`} component={ProductDetails} />
+          <PrivateRoute exact path="/cart" component={Cart} />
+          <PrivateRoute exact path="/account" component={Account} />
+          <PrivateRoute exact path="/checkout" component={Checkout} />
+          <Route exact path="/contact" component={Contact} />
+          <Route exact path="/about" component={About} />
+          <AuthRoute exact path="/login" component={Login} />
+          <AuthRoute exact path="/register" component={Register} />
+          <AuthRoute exact path="/forget" component={Forget} />
+        </Switch>
+      </ScrollToTop>
     </Router>
   );
 }
