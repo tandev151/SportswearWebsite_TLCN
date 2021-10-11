@@ -8,7 +8,6 @@ const ProductItem = ({ product }) => {
     if (currentDate - createDate < 864000000) return true;
     return false;
   };
-
   return (
     <Link
       to={`/product/${product.slug}`}

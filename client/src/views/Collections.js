@@ -11,7 +11,7 @@ const Collections = () => {
   let match = useRouteMatch();
   const { type, slug } = match.params;
   const params = { type, slug }
-  const { products, title, loading } = useSelector((state) => state.product);
+  const product = useSelector((state) => state.product);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProductsBySlug(params));
@@ -21,7 +21,7 @@ const Collections = () => {
     // <Redirect to="/login" />
     <Layout>
       {/* <ProductCollection /> */}
-      {loading && <Loading />}
+      {product.loading && <Loading />}
       <div className="container">
         <div className="row mgt-20">
           <div className="col-2-4 ">
@@ -41,7 +41,7 @@ const Collections = () => {
                   />
                 </div>
                 <div className="products-heading">
-                  <h2 className="products-heading-title">{title}</h2>
+                  <h2 className="products-heading-title">{product.title}</h2>
                 </div>
                 <div className="products-sort">
                   <span className="products-sort__icon">
@@ -77,7 +77,7 @@ const Collections = () => {
                 </div>
                 <div className="products-body">
                   <div className="row">
-                    {products.map((product) => (
+                    {product.products.map((product) => (
                       <div className="col-3 mgt-25">
                         <ProductItem product={product} />
                       </div>
