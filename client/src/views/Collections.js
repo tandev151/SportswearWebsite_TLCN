@@ -6,15 +6,16 @@ import ProductItem from "../components/layout/product/ProductItem";
 import { useSelector, useDispatch } from "react-redux";
 import { getProductsBySlug } from "../features/product/productSlice";
 const Collections = () => {
-
   let match = useRouteMatch();
   const { type, slug } = match.params;
-  const params = { type, slug }
+
   const product = useSelector((state) => state.product);
+
   const dispatch = useDispatch();
   useEffect(() => {
+    const params = { type, slug };
     dispatch(getProductsBySlug(params));
-  }, [params]);
+  }, [type, slug]);
   return (
     //   If user don't login , system will redirect to login page
     // <Redirect to="/login" />

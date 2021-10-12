@@ -14,7 +14,7 @@ axiosInstance.interceptors.request.use(
   (req) => {
     // const { auth } = store.getState();
     if (token) {
-      req.headers.Authorization = `Bearer ${token}}`;
+      req.headers.Authorization = `Bearer ${token}`;
     }
     return req;
   },

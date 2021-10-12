@@ -4,17 +4,25 @@ import Slider from "react-slick";
 import Layout from "../components/layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductBySlug } from "../features/product/productSlice";
-
+import { addToCart, getCartItems } from "../features/cart/cartSlice";
 const ProductDetails = () => {
   let match = useRouteMatch();
   const { slug } = match.params;
   const dispatch = useDispatch();
-  const { product, loading } = useSelector((state) => state.product);
+  const { product } = useSelector((state) => state.product);
+  console.log(product);
+  const [cartItem, setCartItem] = useState({
+    product: product._id,
+    size: "",
+    quantity: 1,
+  });
+
   const [slideSub, setSlideSub] = useState();
   const [slidePhotos, setSlidePhotos] = useState();
   const [openDescription, setOpenDescription] = useState(false);
   useEffect(() => {
     dispatch(getProductBySlug(slug));
+    dispatch(getCartItems());
   }, [slug]);
 
   const photoSettings = {
@@ -42,8 +50,29 @@ const ProductDetails = () => {
     if (openDescription === true) setOpenDescription(false);
     else setOpenDescription(true);
   };
+  // Handle change size
+  const handleChangeSize = (e) => {
+    const value = e.target.value;
+    setCartItem({ ...cartItem, size: value, product: product._id });
+  };
+  const handleChangeQuantity = (e) => {
+    const value = e.target.value;
+    if (value < 1) {
+      alert("Số lượng tối thiểu là 1");
+    } else {
+      setCartItem({ ...cartItem, quantity: value });
+    }
+  };
   // Handle add cart
-  const handleAddCart = () => { };
+  const handleAddCart = () => {
+    if (cartItem.size === "" || cartItem.quantity === 0) {
+      alert("Kiểm tra kích thước giày và số lượng muốn mua.");
+    } else {
+      const cart = { cartItems: [cartItem] };
+      console.log(cart);
+      dispatch(addToCart(cart));
+    }
+  };
 
   if (Object.keys(product).length === 0) {
     return null;
@@ -86,7 +115,7 @@ const ProductDetails = () => {
               </div>
             </div>
             <div className="col-6">
-              <form className="body" onSubmit={() => handleAddCart()}>
+              <form className="body">
                 <div className="body-heading">
                   <h3>{product.name}</h3>
                 </div>
@@ -98,7 +127,7 @@ const ProductDetails = () => {
                     ₫
                     {new Intl.NumberFormat("de-DE").format(
                       product.price -
-                      (product.discountPercent / 100) * product.price
+                        (product.discountPercent / 100) * product.price
                     )}
                   </span>
                 </div>
@@ -114,22 +143,44 @@ const ProductDetails = () => {
                   <div className="body-size__options">
                     {product.sizes.map((size) => (
                       <label
-                        htmlFor={size.size.size}
+                        htmlFor={size.size._id}
                         className="body-size__options-item"
                       >
                         <input
                           type="radio"
                           className="body-size__options-item__input"
                           name="size"
-                          id={size.size.size}
+                          id={size.size._id}
+                          value={size.size._id}
                           required
+                          onChange={handleChangeSize}
                         />
                         <div className="body-size__options-item__label">
                           {size.size.size}
+                          <div className="body-size__options-item__label-note">
+                            <p>Gợi ý ({size.size.description})</p>
+                            <p>Số lượng còn lại: {size.quantity}</p>
+                          </div>
                         </div>
                       </label>
                     ))}
                   </div>
+                </div>
+                <div className="body-quantity">
+                  <label
+                    htmlFor="quantity-input"
+                    className="body-quantity__label"
+                  >
+                    Số lượng
+                  </label>
+                  <input
+                    className="body-quantity__input"
+                    required
+                    name="quantity-input"
+                    value={cartItem.quantity}
+                    onChange={handleChangeQuantity}
+                    type="number"
+                  />
                 </div>
                 <div className="body-promotion">
                   <h4 className="body-promotion__title">Khuyến mãi tặng kèm</h4>
@@ -142,7 +193,11 @@ const ProductDetails = () => {
                 <div className="body-btn">
                   {/* Tạo disable khi sản phẩm hết hàng hay vì sự cố nào đó ( btn--disable)*/}
                   <span className="btn body-btn__buy">Mua ngay</span>
-                  <span className="btn body-btn__add-to-cart ">
+                  <span
+                    type="submit"
+                    className="btn body-btn__add-to-cart "
+                    onClick={() => handleAddCart()}
+                  >
                     Thêm vào giỏ hàng
                   </span>
                 </div>
