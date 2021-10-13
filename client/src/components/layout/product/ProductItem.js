@@ -8,6 +8,7 @@ const ProductItem = ({ product }) => {
     if (currentDate - createDate < 864000000) return true;
     return false;
   };
+
   return (
     <Link
       to={`/product/${product.slug}`}
@@ -41,7 +42,7 @@ const ProductItem = ({ product }) => {
           <p className="item-body__price-current">
             ₫
             {new Intl.NumberFormat("de-DE").format(
-              product.price - (product.discountPercent / product.price) * 100
+              product.price - (product.discountPercent / 100) *  product.price
             )}
           </p>
         </div>

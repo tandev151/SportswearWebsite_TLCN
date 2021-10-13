@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory , Redirect} from "react-router-dom";
 import { logout } from "../../../features/auth/authSlice";
 
 const NavbarTop = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const auth = useSelector((state) => state.auth);
+  const [searchText, setSearchText] = useState("");
   // Handle logout => clear token
   const handleLogOut = () => {
     const confirmLogOut = window.confirm(
@@ -27,6 +29,16 @@ const NavbarTop = () => {
       setMenuOpen(true);
     }
   };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchText === "") {
+      alert("Vui lòng nhập vào từ khóa cần tìm !")
+    } else {
+      history.push(`/collections/search?text=${searchText}`)
+    }
+  }
+
   return (
     <div className="navbar-top">
       <div className="mobile-menu" onClick={() => handleMenu()}>
@@ -52,12 +64,14 @@ const NavbarTop = () => {
           />
         </NavLink>
       </div>
-      <button className="navbar-top__search">
+      <form className="navbar-top__search" onSubmit={(e) => handleSearch(e)}>
         <input
           className="navbar-top__search-input"
           placeholder="Tìm kiếm ..."
-        ></input>
-        <div className="navbar-top__search-icon">
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+        <button className="navbar-top__search-icon" type ="submit">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -68,8 +82,8 @@ const NavbarTop = () => {
           >
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
           </svg>
-        </div>
-      </button>
+        </button>
+      </form>
       <div className="navbar-top__user">
         {/* navbar-top__user-info--define : define
         navbar-top__user-info--undefine : undefine */}

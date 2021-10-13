@@ -13,5 +13,13 @@ const productAPI = {
     const url = `/product/${slug}`;
     return axios.get(url);
   },
+  getSizes: () => {
+    const url = `/size/getAllSizes`;
+    return axios.get(url);
+  },
+  getProductsBySearchText: (searchText) => {
+    const url = `/product/searchByProductName`;
+    return axios.post(url, searchText);
+  },
 };
 export default productAPI;
