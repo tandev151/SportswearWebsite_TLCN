@@ -1,54 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Layout from "../components/layout/Layout";
+import { getCartItems } from "../features/cart/cartSlice";
 
 const Cart = () => {
-  const [cartData, setCartData] = useState([
-    {
-      id: 1,
-      image: require("../assets/images/products/adidas/a2.jpg").default,
-      name: `adidas X Speedflow .1 TF Meteorite - Red/Core
-      Black/Solar Red`,
-      size: 43,
-      quantity: 1,
-      price: 1490000,
-    },
-    {
-      id: 2,
-      image: require("../assets/images/products/adidas/a2.jpg").default,
-      name: `adidas X Speedflow .1 TF Meteorite - Red/Core
-      Black/Solar Red`,
-      size: 43.5,
-      quantity: 1,
-      price: 1490000,
-    },
-    {
-      id: 3,
-      image: require("../assets/images/products/adidas/a2.jpg").default,
-      name: `adidas X Speedflow .1 TF Meteorite - Red/Core
-      Black/Solar Red`,
-      size: 42,
-      quantity: 3,
-      price: 1490000,
-    },
-  ]);
+  const dispatch = useDispatch();
+  const authId = useSelector((state) => state.auth?.user?._id);
+  const { cartItems } = useSelector((state) => state.cart);
 
-  const totalPrice = cartData.reduce((total, priceItem) => {
-    total += priceItem.price * priceItem.quantity;
+  console.log(authId);
+
+  // const cartItems = cart.cartItems;
+
+  const totalPrice = cartItems.reduce((total, priceItem) => {
+    total += priceItem.product.price * priceItem.quantity;
     return total;
   }, 0);
+
+  // Handle quantity of product
+  const handleChangeQuantity = (event) => {
+    const value = event.target.value;
+  };
   function removeProduct(id) {
-    setCartData((prevCarts) => {
-      return prevCarts.filter((item) => item.id !== id);
-    });
+    // setCartItems((prevCarts) => {
+    //   return prevCarts.filter((item) => item.id !== id);
+    // });
   }
 
+  console.log(cartItems);
+  useEffect(() => {
+    (async () => {
+      const loadCart = getCartItems();
+      const response = await dispatch(loadCart);
+      console.log(authId);
+    })();
+  }, [authId]);
+
+  if (Object.keys(cartItems).length === 0) {
+    return null;
+  }
   return (
     <Layout>
       {/* <CartContainer /> */}
       <div className="cart">
         <div className="container">
-          {cartData.length === 0 ? (
+          {cartItems.length === 0 ? (
             <div className="cart-empty">
               <h3> Không có sản phẩm !!!</h3>
               <Link to="/" className="btn back-home">
@@ -77,19 +74,24 @@ const Cart = () => {
                     <div className="scroll-table">
                       <table className="cart-form-table">
                         <tbody>
-                          {cartData.map((item) => (
+                          {cartItems.map((item, index) => (
                             <tr>
                               <td className="image">
-                                <Link to="#" className="image-link">
-                                  <img src={item.image} alt="" />
+                                <Link to={`#`} className="image-link">
+                                  <img
+                                    src={item.product.productPictures[0].img}
+                                    alt=""
+                                  />
                                 </Link>
                               </td>
 
                               <td className="name">
                                 <Link to="" className="name-link">
-                                  <p className="name-link-text">{item.name}</p>
+                                  <p className="name-link-text">
+                                    {item.product.name}
+                                  </p>
                                   <p className="name-link-size">
-                                    Size: {item.size}
+                                    Size: {item.size.size}
                                   </p>
                                 </Link>
                               </td>
@@ -106,7 +108,7 @@ const Cart = () => {
                                 <p>
                                   ₫
                                   {new Intl.NumberFormat("de-DE").format(
-                                    item.price * item.quantity
+                                    item.product.price * item.quantity
                                   )}
                                 </p>
                               </td>
@@ -114,7 +116,7 @@ const Cart = () => {
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    removeProduct(item.id);
+                                    removeProduct(item.product._id);
                                   }}
                                   className="remove-btn"
                                 >
@@ -158,7 +160,7 @@ const Cart = () => {
                           ></textarea>
                         </div>
                         <div className="cart-form-collections">
-                          <Link to="/collections">
+                          <Link to="/collections/category/all">
                             <span>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -184,7 +186,10 @@ const Cart = () => {
                       </div>
                       <div className="col-6">
                         <div className="cart-form-btn">
-                          <button className="btn cart-form-btn__update">
+                          <button
+                            className="btn cart-form-btn__update"
+                            onClick={() => dispatch(getCartItems())}
+                          >
                             Cập nhập
                           </button>
                           <button className="btn cart-form-btn__payment">

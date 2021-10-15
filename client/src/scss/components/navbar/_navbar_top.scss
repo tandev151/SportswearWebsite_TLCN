@@ -144,6 +144,7 @@
     &-cart {
       cursor: pointer;
       position: relative;
+      color: $white;
       & .quantity {
         padding: 0 6px;
         position: absolute;

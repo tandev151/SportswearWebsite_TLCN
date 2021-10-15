@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { login, loginByGoogle } from "../features/auth/authSlice";
 import { emailSchema, passwordSchema } from "../validation/authValidations";
+import { getCartItems } from "../features/cart/cartSlice";
 
 const Login = () => {
   const handleLoginByGoogle = async (googleData) => {
-    dispatch(loginByGoogle({ token: googleData.tokenId }));
+    await dispatch(loginByGoogle({ token: googleData.tokenId }));
   };
 
   const auth = useSelector((state) => state.auth);
@@ -56,12 +57,13 @@ const Login = () => {
     } else {
       const user = { email, password };
       await dispatch(login(user));
+
       if (auth.error) {
         alert("Thông tin đăng nhập không đúng!");
       }
     }
   };
-
+  // console.log(auth?.user?._id);
   return (
     <Layout>
       {/* <LoginForm  /> */}

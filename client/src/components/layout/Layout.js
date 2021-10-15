@@ -8,9 +8,10 @@ import Loading from "./loading/Loading";
 export default function Layout(props) {
   const auth = useSelector((state) => state.auth);
   const product = useSelector((state) => state.product);
+  const cart = useSelector((state) => state.cart);
   return (
     <div>
-      {auth.loading || product.loading ? (
+      {auth.loading || product.loading || cart.loading ? (
         <Stack
           sx={{
             width: "100%",

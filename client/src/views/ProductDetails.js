@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch, useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import Layout from "../components/layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductBySlug } from "../features/product/productSlice";
 import { addToCart, getCartItems } from "../features/cart/cartSlice";
+import { confirmAlert } from "react-confirm-alert";
 const ProductDetails = () => {
   let match = useRouteMatch();
   const { slug } = match.params;
   const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
   const { product } = useSelector((state) => state.product);
-  console.log(product);
+
+  // useHistory be used to redirect page
+  const history = useHistory();
+  const routeChange = (url) => {
+    history.push(url);
+  };
+  // console.log(cart);
+  // console.log(product);
   const [cartItem, setCartItem] = useState({
     product: product._id,
     size: "",
@@ -44,6 +53,70 @@ const ProductDetails = () => {
     focusOnSelect: true,
     vertical: true,
   };
+  const pageRedirects = () => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className="confirm">
+            <h1>Bạn muốn làm gì tiếp theo ?</h1>
+            <div className="btn-container">
+              <button
+                className="btn"
+                onClick={() => {
+                  onClose();
+                  routeChange("/");
+                }}
+              >
+                <span className="icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-arrow-left-short"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
+                    />
+                  </svg>
+                </span>
+                Quay lại trang chủ
+              </button>
+              <button className="btn" onClick={onClose}>
+                Ở lại trang
+              </button>
+              <button
+                className="btn"
+                onClick={() => {
+                  onClose();
+                  routeChange("/cart");
+                }}
+              >
+                Đi đến Giỏ hàng
+                <span className="icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-arrow-right-short"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </div>
+        );
+      },
+    });
+  };
 
   // Open/Close description
   const handleOpenDescription = () => {
@@ -67,16 +140,22 @@ const ProductDetails = () => {
   const handleAddCart = () => {
     if (cartItem.size === "" || cartItem.quantity === 0) {
       alert("Kiểm tra kích thước giày và số lượng muốn mua.");
+    } else if (auth.authenticate === false) {
+      routeChange("/login");
     } else {
       const cart = { cartItems: [cartItem] };
-      console.log(cart);
+      // console.log(cart);
+
       dispatch(addToCart(cart));
+      pageRedirects();
     }
   };
+  // Show confirm alert to redirect
 
   if (Object.keys(product).length === 0) {
     return null;
   }
+
   return (
     <Layout>
       <div className="detail mgb-45">

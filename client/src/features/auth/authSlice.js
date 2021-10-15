@@ -57,7 +57,6 @@ export const authSlice = createSlice({
       state.authenticate = true;
       localStorage.setItem("token", state.token);
       localStorage.setItem("user", JSON.stringify(state.user));
-      
     },
     [logout.pending]: (state) => {
       state.loading = true;
