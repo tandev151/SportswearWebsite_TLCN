@@ -1,6 +1,5 @@
 import {
   BrowserRouter as Router,
-  Redirect,
   Route,
   Switch,
 } from "react-router-dom";
@@ -23,7 +22,7 @@ import Forget from "./views/Forget";
 import { isUserLoggedIn } from "./features/auth/authSlice";
 import { getCategories } from "./features/category/categorySlice";
 import { getBrands } from "./features/brand/brandSlice";
-import { getProducts } from "./features/product/productSlice";
+import { getProducts, getSizes } from "./features/product/productSlice";
 import ScrollToTop from "./components/scrollToTop/ScrollToTop";
 function App() {
   const dispatch = useDispatch();
@@ -39,6 +38,7 @@ function App() {
     dispatch(getCategories());
     dispatch(getBrands());
     dispatch(getProducts());
+    dispatch(getSizes());
   }, []);
 
   return (
@@ -46,7 +46,7 @@ function App() {
       <ScrollToTop>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path={`/collections/:type/:slug`} component={Collections} />
+          <Route path={[`/collections/:type/:slug`, `/collections/search`]} component={Collections} />
           <Route path={`/product/:slug`} component={ProductDetails} />
           <PrivateRoute exact path="/cart" component={Cart} />
           <PrivateRoute exact path="/account" component={Account} />

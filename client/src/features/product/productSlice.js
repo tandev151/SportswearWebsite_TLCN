@@ -25,12 +25,30 @@ export const getProductBySlug = createAsyncThunk(
     return response;
   }
 );
+
+export const getProductsBySearchText = createAsyncThunk(
+  "product/searchByProductName",
+  async (searchText) => {
+    const response = await productAPI.getProductsBySearchText(searchText);
+    return response;
+  }
+);
+
+export const getSizes = createAsyncThunk(
+  "product/getSizes",
+  async () => {
+    const response = await productAPI.getSizes();
+    return response;
+  }
+);
+
 export const productSlice = createSlice({
   name: "product",
   initialState: {
     product: {},
     title: "",
     products: [],
+    sizes: [],
     loading: false,
     error: null,
   },
@@ -70,6 +88,29 @@ export const productSlice = createSlice({
       state.loading = false;
       state.products = action.payload.data.products;
       state.title = action.payload.data.title;
+    },
+    [getProductsBySearchText.loading]: (state) => {
+      state.loading = true;
+    },
+    [getProductsBySearchText.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    },
+    [getProductsBySearchText.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.products = action.payload.data.products;
+      state.title = action.payload.data.title;
+    },
+    [getSizes.loading]: (state) => {
+      state.loading = true;
+    },
+    [getSizes.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    },
+    [getSizes.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.sizes = action.payload.data.sizes;
     },
   },
 });
