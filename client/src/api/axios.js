@@ -3,16 +3,15 @@ import axios from "axios";
 
 const api = "https://api-sportswear.herokuapp.com/api";
 
-const token = window.localStorage.getItem("token");
-
 const axiosInstance = axios.create({
   baseURL: api,
-  headers: { Authorization: token ? `Bearer ${token}` : "" },
+  headers: { "content-type": "application/json" },
 });
 
 axiosInstance.interceptors.request.use(
   (req) => {
     // const { auth } = store.getState();
+    const token = window.localStorage.getItem("token");
     if (token) {
       req.headers.Authorization = `Bearer ${token}`;
     }

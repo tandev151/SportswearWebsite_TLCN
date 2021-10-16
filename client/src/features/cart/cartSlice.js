@@ -10,9 +10,16 @@ export const addToCart = createAsyncThunk(
 );
 export const getCartItems = createAsyncThunk("/cart/getCartItems", async () => {
   const response = await cartAPI.getCartItems();
-  console.log(response);
   return response;
 });
+
+export const removeCartItem = createAsyncThunk(
+  "/cart/removeCartItem",
+  async (cartItem) => {
+    const response = await cartAPI.removeCartItem(cartItem);
+    return response;
+  }
+);
 
 //tạo 1 initialState Cart
 const initialState = {
@@ -36,7 +43,7 @@ export const cartSlice = createSlice({
     [addToCart.fulfilled]: (state, action) => {
       state.loading = false;
       state.message = action.payload.data.message;
-      // getCartItems();
+      getCartItems();
     },
     [getCartItems.pending]: (state) => {
       state.loading = true;
@@ -49,6 +56,17 @@ export const cartSlice = createSlice({
       state.loading = false;
       state.cartItems = action.payload.data.cartItems;
       console.log(state.cartItems);
+    },
+    [removeCartItem.pending]: (state) => {
+      state.loading = true;
+    },
+    [removeCartItem.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    },
+    [removeCartItem.fulfilled]: (state, action) => {
+      state.loading = false;
+      getCartItems();
     },
   },
 });

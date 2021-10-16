@@ -2,44 +2,53 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Layout from "../components/layout/Layout";
-import { getCartItems } from "../features/cart/cartSlice";
+import {
+  getCartItems,
+  addToCart,
+  removeCartItem,
+} from "../features/cart/cartSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const authId = useSelector((state) => state.auth?.user?._id);
+
   const { cartItems } = useSelector((state) => state.cart);
-
-  console.log(authId);
-
-  // const cartItems = cart.cartItems;
+  console.log(cartItems);
 
   const totalPrice = cartItems.reduce((total, priceItem) => {
-    total += priceItem.product.price * priceItem.quantity;
+    total += priceItem.product?.price * priceItem.quantity;
     return total;
   }, 0);
 
   // Handle quantity of product
-  const handleChangeQuantity = (event) => {
-    const value = event.target.value;
+  const handleChangeQuantity = (quantity, productId, sizeId) => {
+    const cartItem = {
+      product: productId,
+      size: sizeId,
+      quantity: quantity,
+    };
+    const cart = { cartItems: [cartItem] };
+    console.log(cartItem.quantity);
+    // dispatch(addToCart(cart));
   };
-  function removeProduct(id) {
-    // setCartItems((prevCarts) => {
-    //   return prevCarts.filter((item) => item.id !== id);
-    // });
-  }
+  const removeProduct = (product, size) => {
+    const confirmRemove = window.confirm(
+      "Bạn có chắc chắn muốn xóa sản phẩm này ra khỏi giỏ hàng không?"
+    );
+    if (confirmRemove) {
+      const cartItem = { product, size };
+      dispatch(removeCartItem({ cartItem }));
+      dispatch(getCartItems());
+    }
+  };
 
   console.log(cartItems);
   useEffect(() => {
     (async () => {
       const loadCart = getCartItems();
       const response = await dispatch(loadCart);
-      console.log(authId);
     })();
-  }, [authId]);
+  }, []);
 
-  if (Object.keys(cartItems).length === 0) {
-    return null;
-  }
   return (
     <Layout>
       {/* <CartContainer /> */}
@@ -79,7 +88,7 @@ const Cart = () => {
                               <td className="image">
                                 <Link to={`#`} className="image-link">
                                   <img
-                                    src={item.product.productPictures[0].img}
+                                    src={item.product?.productPictures[0].img}
                                     alt=""
                                   />
                                 </Link>
@@ -88,7 +97,7 @@ const Cart = () => {
                               <td className="name">
                                 <Link to="" className="name-link">
                                   <p className="name-link-text">
-                                    {item.product.name}
+                                    {item.product?.name}
                                   </p>
                                   <p className="name-link-size">
                                     Size: {item.size.size}
@@ -102,22 +111,32 @@ const Cart = () => {
                                   name=""
                                   id=""
                                   value={item.quantity}
+                                  onChange={(e) =>
+                                    handleChangeQuantity(
+                                      e.target.value,
+                                      item.product._id,
+                                      item.size._id
+                                    )
+                                  }
                                 />
                               </td>
                               <td className="price">
                                 <p>
                                   ₫
                                   {new Intl.NumberFormat("de-DE").format(
-                                    item.product.price * item.quantity
+                                    item.product?.price * item.quantity
                                   )}
                                 </p>
                               </td>
                               <td className="remove">
                                 <button
                                   type="button"
-                                  onClick={() => {
-                                    removeProduct(item.product._id);
-                                  }}
+                                  onClick={() =>
+                                    removeProduct(
+                                      item.product._id,
+                                      item.size._id
+                                    )
+                                  }
                                   className="remove-btn"
                                 >
                                   Xóa
