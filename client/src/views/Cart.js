@@ -9,13 +9,15 @@ import {
 } from "../features/cart/cartSlice";
 
 const Cart = () => {
+
+  useEffect(() => {
+    dispatch(getCartItems());
+  }, []);
+
   const dispatch = useDispatch();
-
   const { cartItems } = useSelector((state) => state.cart);
-  console.log(cartItems);
-
   const totalPrice = cartItems.reduce((total, priceItem) => {
-    total += priceItem.product?.price * priceItem.quantity;
+    total += priceItem.product.price * priceItem.quantity;
     return total;
   }, 0);
 
@@ -27,8 +29,11 @@ const Cart = () => {
       quantity: quantity,
     };
     const cart = { cartItems: [cartItem] };
-    console.log(cartItem.quantity);
-    // dispatch(addToCart(cart));
+    if (quantity > 0) {
+      dispatch(addToCart(cart))
+    } else {
+      alert("Số lượng sản phẩm không thể nhỏ hơn 1");
+    }
   };
   const removeProduct = (product, size) => {
     const confirmRemove = window.confirm(
@@ -36,18 +41,10 @@ const Cart = () => {
     );
     if (confirmRemove) {
       const cartItem = { product, size };
-      dispatch(removeCartItem({ cartItem }));
-      dispatch(getCartItems());
+      dispatch(removeCartItem({ cartItem }))
     }
   };
 
-  console.log(cartItems);
-  useEffect(() => {
-    (async () => {
-      const loadCart = getCartItems();
-      const response = await dispatch(loadCart);
-    })();
-  }, []);
 
   return (
     <Layout>

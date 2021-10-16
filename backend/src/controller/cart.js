@@ -38,7 +38,7 @@ exports.addToCart = (req, res) => {
                 promiseArray.push(runUpdate(condition, update));
             })
             Promise.all(promiseArray)
-                .then(resq => res.status(201).json({ message: "add to cart successfully"}))
+                .then(result => res.status(201).json({ message: "add to cart successfully"}))
                 .catch(error => res.status(400).json({ error }))
 
         } else {
@@ -49,7 +49,7 @@ exports.addToCart = (req, res) => {
             cart.save((error, cart) => {
                 if (error) return res.status(400).json({ error });
                 if (cart) {
-                    res.status(201).json({ cart });
+                    return res.status(201).json({ cart });
                 }
             })
         }
