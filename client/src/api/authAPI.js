@@ -13,6 +13,10 @@ const authAPI = {
     const url = "/signout";
     return axios.post(url);
   },
+  isUserLoggedIn: () => {
+    const url = "/isUserLoggedIn";
+    return axios.post(url);
+  },
   loginByGoogle: (token) => {
     return axios.post("/v1/auth/google", token);
   },

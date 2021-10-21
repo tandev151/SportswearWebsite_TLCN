@@ -97,7 +97,7 @@ const Account = () => {
                               }
                               alt=""
                             />
-                            <span className="form-header__img-edit">
+                            <span className="form-header__img-edit" >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
