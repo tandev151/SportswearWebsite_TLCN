@@ -38,6 +38,13 @@
         padding: 8px 0;
         border-bottom: 1px solid #ccc;
       }
+      & .checkbox {
+        padding: 0 12px;
+        font-size: 2rem;
+        & input {
+          cursor: pointer;
+        }
+      }
       & .image {
         width: 10%;
         text-align: center;

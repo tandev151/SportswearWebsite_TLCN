@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PrivateRoute from "./components/HOC/PrivateRoute";
@@ -24,6 +20,7 @@ import { getCategories } from "./features/category/categorySlice";
 import { getBrands } from "./features/brand/brandSlice";
 import { getProducts, getSizes } from "./features/product/productSlice";
 import ScrollToTop from "./components/scrollToTop/ScrollToTop";
+import MyOrder from "./views/MyOrder";
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -46,10 +43,14 @@ function App() {
       <ScrollToTop>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path={[`/collections/:type/:slug`, `/collections/search`]} component={Collections} />
+          <Route
+            path={[`/collections/:type/:slug`, `/collections/search`]}
+            component={Collections}
+          />
           <Route path={`/product/:slug`} component={ProductDetails} />
           <PrivateRoute exact path="/cart" component={Cart} />
           <PrivateRoute exact path="/account" component={Account} />
+          <PrivateRoute exact path="/order" component={MyOrder} />
           <PrivateRoute exact path="/checkout" component={Checkout} />
           <Route exact path="/contact" component={Contact} />
           <Route exact path="/about" component={About} />

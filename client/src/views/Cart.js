@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import {
   getCartItems,
@@ -9,15 +9,18 @@ import {
 } from "../features/cart/cartSlice";
 
 const Cart = () => {
-
+  const [isSelectAll, setSelectAll] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const { cartItems } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const history = useHistory();
   useEffect(() => {
     dispatch(getCartItems());
   }, []);
 
-  const dispatch = useDispatch();
-  const { cartItems } = useSelector((state) => state.cart);
+  // Handle calc total price
   const totalPrice = cartItems.reduce((total, priceItem) => {
-    total += priceItem.product.price * priceItem.quantity;
+    total += priceItem.product?.price * priceItem.quantity;
     return total;
   }, 0);
 
@@ -30,22 +33,59 @@ const Cart = () => {
     };
     const cart = { cartItems: [cartItem] };
     if (quantity > 0) {
-      dispatch(addToCart(cart))
+      dispatch(addToCart(cart));
     } else {
       alert("Số lượng sản phẩm không thể nhỏ hơn 1");
     }
   };
+
+  // Handle remove cart item
   const removeProduct = (product, size) => {
     const confirmRemove = window.confirm(
       "Bạn có chắc chắn muốn xóa sản phẩm này ra khỏi giỏ hàng không?"
     );
     if (confirmRemove) {
       const cartItem = { product, size };
-      dispatch(removeCartItem({ cartItem }))
+      dispatch(removeCartItem({ cartItem }));
     }
   };
+  // Handle select all item in cart
+  const handleSelectAll = () => {
+    if (isSelectAll) {
+      setSelectAll(false);
+    } else setSelectAll(true);
+  };
+  console.log(isSelectAll);
+  // Handle selected items which customer want to payment
+  const handleSelected = (e, item) => {
+    const isChecked = e.target.checked; //false
+    console.log(isChecked);
+    if (isChecked) {
+      setSelected([...selected, item]);
+    } else {
+      const newSelected = selected.filter((newItem) => {
+        console.log("id: ", newItem.product._id !== item.product._id);
+        console.log("size_id: ", newItem.size._id !== item.size._id);
+        return (
+          newItem.product._id !== item.product._id ||
+          newItem.size._id !== item.size._id
+        );
+      });
+      setSelected(newSelected);
+    }
+  };
+  console.log(selected);
+  const handlePayment = (e) => {
+    e.preventDefault();
 
-
+    if (selected.length > 0) {
+      console.log(selected);
+      history.push({
+        pathname: "/checkout",
+        state: selected,
+      });
+    } else console.log(0);
+  };
   return (
     <Layout>
       {/* <CartContainer /> */}
@@ -69,6 +109,13 @@ const Cart = () => {
                     <table className="cart-form-table">
                       <thead>
                         <tr>
+                          <th className="checkbox">
+                            <input
+                              type="checkbox"
+                              name=""
+                              onChange={() => handleSelectAll()}
+                            />
+                          </th>
                           <th className="image"></th>
                           <th className="name">Tên sản phẩm</th>
                           <th className="quantity">Số lượng</th>
@@ -81,9 +128,21 @@ const Cart = () => {
                       <table className="cart-form-table">
                         <tbody>
                           {cartItems.map((item, index) => (
-                            <tr>
+                            <tr key={index}>
+                              <td className="checkbox">
+                                <input
+                                  type="checkbox"
+                                  name=""
+                                  // checked={isSelectAll ? true : false}
+                                  value={item}
+                                  onChange={(e) => handleSelected(e, item)}
+                                />
+                              </td>
                               <td className="image">
-                                <Link to={`#`} className="image-link">
+                                <Link
+                                  to={`/product/${item.product?.slug}`}
+                                  className="image-link"
+                                >
                                   <img
                                     src={item.product?.productPictures[0].img}
                                     alt=""
@@ -92,12 +151,15 @@ const Cart = () => {
                               </td>
 
                               <td className="name">
-                                <Link to="" className="name-link">
+                                <Link
+                                  to={`/product/${item.product?.slug}`}
+                                  className="name-link"
+                                >
                                   <p className="name-link-text">
                                     {item.product?.name}
                                   </p>
                                   <p className="name-link-size">
-                                    Size: {item.size.size}
+                                    Size: {item.size?.size}
                                   </p>
                                 </Link>
                               </td>
@@ -147,6 +209,7 @@ const Cart = () => {
                     <table className="cart-form-table">
                       <tbody>
                         <tr className="summary">
+                          <td className="checkbox"></td>
                           <td className="image"></td>
                           <td className="name"></td>
                           <td className="summary-label">Tổng cộng : </td>
@@ -208,7 +271,10 @@ const Cart = () => {
                           >
                             Cập nhập
                           </button>
-                          <button className="btn cart-form-btn__payment">
+                          <button
+                            className="btn cart-form-btn__payment"
+                            onClick={(e) => handlePayment(e)}
+                          >
                             Thanh toán
                           </button>
                         </div>

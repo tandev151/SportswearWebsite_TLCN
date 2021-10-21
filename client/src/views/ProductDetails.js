@@ -12,7 +12,7 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const { product } = useSelector((state) => state.product);
-
+  const { cartItems } = useSelector((state) => state.cart);
   // useHistory be used to redirect page
   const history = useHistory();
   const routeChange = (url) => {
@@ -143,11 +143,29 @@ const ProductDetails = () => {
     } else if (auth.authenticate === false) {
       routeChange("/login");
     } else {
+      // console.log(cart.cartItems[0].product, cartItems);
+      const cartObject = cartItems.find(
+        (item) =>
+          item.product?._id === cartItem.product &&
+          item.size?._id === cartItem.size
+      );
       const cart = { cartItems: [cartItem] };
-      // console.log(cart);
-
-      dispatch(addToCart(cart));
-      pageRedirects();
+      if (cartObject) {
+        const cartExisted = {
+          cartItems: [
+            {
+              ...cartItem,
+              quantity:
+                Number.parseInt(cartItem.quantity) + cartObject.quantity,
+            },
+          ],
+        };
+        dispatch(addToCart(cartExisted));
+        pageRedirects();
+      } else {
+        dispatch(addToCart(cart));
+        pageRedirects();
+      }
     }
   };
   // Show confirm alert to redirect

@@ -9,7 +9,6 @@ import {
   InputLabel,
 } from "@material-ui/core";
 import Layout from "../components/layout/Layout";
-import OrderItem from "../components/layout/order/OrderItem";
 import ProvinceData from "../data/data.json";
 const Account = () => {
   const [addresses, setAddresses] = useState([
@@ -306,9 +305,9 @@ const Account = () => {
                                 style={
                                   address.isConfig
                                     ? {
-                                      cursor: "default",
-                                      visibility: "hidden",
-                                    }
+                                        cursor: "default",
+                                        visibility: "hidden",
+                                      }
                                     : null
                                 }
                                 onClick={() =>
@@ -321,9 +320,9 @@ const Account = () => {
                                 style={
                                   address.isConfig
                                     ? {
-                                      cursor: "default",
-                                      visibility: "hidden",
-                                    }
+                                        cursor: "default",
+                                        visibility: "hidden",
+                                      }
                                     : null
                                 }
                                 className="address-item__setup address-item__setup--delete"
@@ -338,30 +337,6 @@ const Account = () => {
                         })}
                       </div>
                     )}
-                  </div>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-12">
-                  <div className="account-wrapper__order">
-                    <div className="account-wrapper__order__heading">
-                      <h3>Đơn hàng</h3>
-                      <div className="status-sort">
-                        <span className="status-sort-label">Trạng thái: </span>
-                        <select name="" id="">
-                          <option value="">Tất cả</option>
-                          <option value="">Chờ xác nhận</option>
-                          <option value="">Đang đóng gói</option>
-                          <option value="">Đang vận chuyển</option>
-                          <option value="">Giao hàng thành công</option>
-                          <option value="">Đơn hàng đã hủy</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="account-wrapper__order__body">
-                      {/* 1 đơn hàng trong list các đơn hàng */}
-                      <OrderItem />
-                    </div>
                   </div>
                 </div>
               </div>

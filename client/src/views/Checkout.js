@@ -1,11 +1,23 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router";
 import { Select, FormControl, MenuItem, InputLabel } from "@material-ui/core";
-const Checkout = () => {
+const Checkout = (props) => {
+  const orderItems = props.location.state;
+  console.log(orderItems);
+  // Checkout orderItems if it hasn't item
   const [address, setAddress] = useState("");
 
   const handleChange = (event) => {
     setAddress(event.target.value);
   };
+  if (!orderItems) {
+    return null;
+  }
+  const totalPrice = orderItems.reduce((total, priceItem) => {
+    total += priceItem.quantity * priceItem.product.price;
+    return total;
+  }, 0);
+  const shippingFee = 30000;
   return (
     <div className="checkout">
       <div className="container">
@@ -101,116 +113,61 @@ const Checkout = () => {
                     <div className="wrapper__body-orders">
                       <h5 className="wrapper__body-orders__title">Sản phẩm</h5>
                       <ul className="wrapper__body-orders__list">
-                        <li className="wrapper__body-orders__list-item">
-                          <div className="photo">
-                            <img
-                              src={
-                                require("../assets/images/products/adidas/a4.jpg")
-                                  .default
-                              }
-                              alt=""
-                            />
-                            <span className="quantity-label">4</span>
-                          </div>
-                          <div className="content">
-                            <h6 className="name">
-                              adidas Copa Sense .3 FG Meteorite - Red/Footwear
-                              White/Solar Red adidas Copa Sense .3 FG Meteorite
-                              - Red/Footwear White/Solar Red adidas Copa Sense
-                              .3 FG Meteorite - Red/Footwear White/Solar Red
-                            </h6>
-                            <p className="size">Size: 43</p>
-                          </div>
-                          <div className="price">
-                            <p>₫1.490.000</p>
-                          </div>
-                        </li>
-                        <li className="wrapper__body-orders__list-item">
-                          <div className="photo">
-                            <img
-                              src={
-                                require("../assets/images/products/adidas/a2.jpg")
-                                  .default
-                              }
-                              alt=""
-                            />
-                            <span className="quantity-label">4</span>
-                          </div>
-                          <div className="content">
-                            <h6 className="name">
-                              adidas Copa Sense .3 FG Meteorite - Red/Footwear
-                              White/Solar Red adidas Copa Sense .3 FG Meteorite
-                              - Red/Footwear White/Solar Red adidas Copa Sense
-                              .3 FG Meteorite - Red/Footwear White/Solar Red
-                            </h6>
-                            <p className="size">Size: 43</p>
-                          </div>
-                          <div className="price">
-                            <p>₫1.490.000</p>
-                          </div>
-                        </li>
-                        <li className="wrapper__body-orders__list-item">
-                          <div className="photo">
-                            <img
-                              src={
-                                require("../assets/images/products/adidas/a2.jpg")
-                                  .default
-                              }
-                              alt=""
-                            />
-                            <span className="quantity-label">4</span>
-                          </div>
-                          <div className="content">
-                            <h6 className="name">
-                              adidas Copa Sense .3 FG Meteorite - Red/Footwear
-                              White/Solar Red adidas Copa Sense .3 FG Meteorite
-                              - Red/Footwear White/Solar Red adidas Copa Sense
-                              .3 FG Meteorite - Red/Footwear White/Solar Red
-                            </h6>
-                            <p className="size">Size: 43</p>
-                          </div>
-                          <div className="price">
-                            <p>₫1.490.000</p>
-                          </div>
-                        </li>
-                        <li className="wrapper__body-orders__list-item">
-                          <div className="photo">
-                            <img
-                              src={
-                                require("../assets/images/products/adidas/a4.jpg")
-                                  .default
-                              }
-                              alt=""
-                            />
-                            <span className="quantity-label">4</span>
-                          </div>
-                          <div className="content">
-                            <h6 className="name">
-                              adidas Copa Sense .3 FG Meteorite - Red/Footwear
-                              White/Solar Red adidas Copa Sense .3 FG Meteorite
-                              - Red/Footwear White/Solar Red adidas Copa Sense
-                              .3 FG Meteorite - Red/Footwear White/Solar Red
-                            </h6>
-                            <p className="size">Size: 43</p>
-                          </div>
-                          <div className="price">
-                            <p>₫1.490.000</p>
-                          </div>
-                        </li>
+                        {orderItems.map((orderItem, index) => (
+                          <li
+                            className="wrapper__body-orders__list-item"
+                            key={index}
+                          >
+                            <div className="photo">
+                              <img
+                                src={orderItem.product.productPictures[0].img}
+                                alt=""
+                              />
+                              <span className="quantity-label">
+                                {orderItem.quantity}
+                              </span>
+                            </div>
+                            <div className="content">
+                              <h6 className="name">{orderItem.product.name}</h6>
+                              <p className="size">
+                                Size: {orderItem.size.size}
+                              </p>
+                            </div>
+                            <div className="price">
+                              <p>
+                                ₫
+                                {new Intl.NumberFormat("de-DE").format(
+                                  orderItem.quantity * orderItem.product.price
+                                )}
+                              </p>
+                            </div>
+                          </li>
+                        ))}
                       </ul>
                       <div className="wrapper__body-orders__summary">
                         <div className="wrapper__body-orders__summary__fee">
                           <p className="text">Tạm tính</p>
-                          <p className="price">₫1.490.000</p>
+                          <p className="price">
+                            ₫{new Intl.NumberFormat("de-DE").format(totalPrice)}
+                          </p>
                         </div>
                         <div className="wrapper__body-orders__summary__fee">
                           <p className="text">Phí vận chuyển</p>
-                          <p className="price">0</p>
+                          <p className="price">
+                            ₫
+                            {new Intl.NumberFormat("de-DE").format(shippingFee)}
+                          </p>
                         </div>
                       </div>
                       <div className="wrapper__body-orders__total">
                         <p className="text">Tổng cộng</p>
-                        <p className="price">₫1.490.000 </p>
+                        <p className="price">
+                          {" "}
+                          ₫
+                          {new Intl.NumberFormat("de-DE").format(
+                            totalPrice + shippingFee
+                          )}{" "}
+                        </p>
                       </div>
                     </div>
                   </div>
