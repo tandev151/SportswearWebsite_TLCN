@@ -83,7 +83,7 @@ const Cart = () => {
                           {cartItems.map((item, index) => (
                             <tr>
                               <td className="image">
-                                <Link to={`#`} className="image-link">
+                                <Link to={`/product/${item.product.slug}`} className="image-link">
                                   <img
                                     src={item.product?.productPictures[0].img}
                                     alt=""
@@ -92,7 +92,7 @@ const Cart = () => {
                               </td>
 
                               <td className="name">
-                                <Link to="" className="name-link">
+                                <Link to={`/product/${item.product.slug}`} className="name-link">
                                   <p className="name-link-text">
                                     {item.product?.name}
                                   </p>

@@ -17,9 +17,10 @@ const HotProduct = () => {
 
   const currentDate = new Date();
 
-  const hotProduct = product.products.filter((product) => {
-    return currentDate - new Date(product?.createdAt) < 864000000;
-  });
+  // const hotProduct = product.products.filter((product) => {
+  //   return currentDate - new Date(product?.createdAt) < 864000000;
+  // });
+  const hotProduct = product.products
 
   return (
     <div className="hot-product mgb-45">

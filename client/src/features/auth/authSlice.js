@@ -19,6 +19,11 @@ export const loginByGoogle = createAsyncThunk("auth/google", async (token) => {
   return response;
 });
 
+export const isUserLoggedIn = createAsyncThunk("auth/isUserLoggedIn", async () => {
+  const response = await authAPI.isUserLoggedIn();
+  return response;
+});
+
 const initialState = {
   user: null,
   authenticate: false,
@@ -30,17 +35,6 @@ const initialState = {
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    isUserLoggedIn: (state) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const user = JSON.parse(localStorage.getItem("user"));
-        state.user = user;
-        state.token = token;
-        state.authenticate = true;
-      }
-    },
-  },
   extraReducers: {
     [login.pending]: (state) => {
       state.loading = true;
@@ -101,8 +95,21 @@ export const authSlice = createSlice({
       localStorage.setItem("token", state.token);
       localStorage.setItem("user", JSON.stringify(state.user));
     },
+    [isUserLoggedIn.pending]: (state) => {
+      state.loading = true;
+    },
+    [isUserLoggedIn.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message
+    },
+    [isUserLoggedIn.fulfilled]: (state, action) => {
+      state.loading = false;
+      const user = JSON.parse(localStorage.getItem("user"));
+      state.user = user;
+      state.token = localStorage.getItem("token");
+      state.authenticate = action.payload.data.authenticate;
+    },
   },
 });
-export const { isUserLoggedIn } = authSlice.actions;
 
 export default authSlice.reducer;
