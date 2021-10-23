@@ -9,21 +9,15 @@ import {
 } from "../features/cart/cartSlice";
 
 const Cart = () => {
-  const [isSelectAll, setSelectAll] = useState(false);
   const [selected, setSelected] = useState([]);
   const { cartItems } = useSelector((state) => state.cart);
+  console.log(cartItems);
   const dispatch = useDispatch();
   const history = useHistory();
   useEffect(() => {
     dispatch(getCartItems());
   }, []);
-
-  // Handle calc total price
-  const totalPrice = cartItems.reduce((total, priceItem) => {
-    total += priceItem.product?.price * priceItem.quantity;
-    return total;
-  }, 0);
-
+  console.log(cartItems);
   // Handle quantity of product
   const handleChangeQuantity = (quantity, productId, sizeId) => {
     const cartItem = {
@@ -47,25 +41,30 @@ const Cart = () => {
     if (confirmRemove) {
       const cartItem = { product, size };
       dispatch(removeCartItem({ cartItem }));
+      const newSelected = selected.filter((newItem) => {
+        return newItem.product._id !== product || newItem.size._id !== size;
+      });
+      setSelected(newSelected);
     }
   };
-  // Handle select all item in cart
-  const handleSelectAll = () => {
-    if (isSelectAll) {
-      setSelectAll(false);
-    } else setSelectAll(true);
+  const handleSelectedAll = (e) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setSelected(cartItems);
+    } else {
+      setSelected([]);
+    }
   };
-  console.log(isSelectAll);
   // Handle selected items which customer want to payment
   const handleSelected = (e, item) => {
+    const { name, checked } = e.target;
+    console.log(name, checked);
     const isChecked = e.target.checked; //false
     console.log(isChecked);
     if (isChecked) {
       setSelected([...selected, item]);
     } else {
       const newSelected = selected.filter((newItem) => {
-        console.log("id: ", newItem.product._id !== item.product._id);
-        console.log("size_id: ", newItem.size._id !== item.size._id);
         return (
           newItem.product._id !== item.product._id ||
           newItem.size._id !== item.size._id
@@ -75,9 +74,10 @@ const Cart = () => {
     }
   };
   console.log(selected);
+
+  // Handle pass items which is selected to checkout form
   const handlePayment = (e) => {
     e.preventDefault();
-
     if (selected.length > 0) {
       console.log(selected);
       history.push({
@@ -86,6 +86,27 @@ const Cart = () => {
       });
     } else console.log(0);
   };
+  // Check length of selected ===  length of cartItems ?
+  const isSelectedAll = cartItems.length === selected.length;
+  console.log(isSelectedAll);
+
+  // Handle when user check to all item
+  const itemSelected = (item) => {
+    return selected.find(
+      (itemSelected) =>
+        itemSelected.product._id === item.product._id &&
+        itemSelected.size._id === item.size._id
+    );
+  };
+  // Handle calc total price
+  const totalPrice = selected.reduce((total, priceItem) => {
+    total +=
+      (priceItem.product?.price -
+        (priceItem.product?.discountPercent / 100) * priceItem.product?.price) *
+      priceItem.quantity;
+    return total;
+  }, 0);
+
   return (
     <Layout>
       {/* <CartContainer /> */}
@@ -112,8 +133,9 @@ const Cart = () => {
                           <th className="checkbox">
                             <input
                               type="checkbox"
-                              name=""
-                              onChange={() => handleSelectAll()}
+                              name="selectAll"
+                              checked={isSelectedAll ? true : false}
+                              onChange={handleSelectedAll}
                             />
                           </th>
                           <th className="image"></th>
@@ -132,14 +154,16 @@ const Cart = () => {
                               <td className="checkbox">
                                 <input
                                   type="checkbox"
-                                  name=""
-                                  // checked={isSelectAll ? true : false}
+                                  checked={itemSelected(item) ? true : false}
                                   value={item}
                                   onChange={(e) => handleSelected(e, item)}
                                 />
                               </td>
                               <td className="image">
-                                <Link to={`/product/${item.product.slug}`} className="image-link">
+                                <Link
+                                  to={`/product/${item.product.slug}`}
+                                  className="image-link"
+                                >
                                   <img
                                     src={item.product?.productPictures[0].img}
                                     alt=""
@@ -148,7 +172,10 @@ const Cart = () => {
                               </td>
 
                               <td className="name">
-                                <Link to={`/product/${item.product.slug}`} className="name-link">
+                                <Link
+                                  to={`/product/${item.product.slug}`}
+                                  className="name-link"
+                                >
                                   <p className="name-link-text">
                                     {item.product?.name}
                                   </p>
@@ -177,7 +204,10 @@ const Cart = () => {
                                 <p>
                                   ₫
                                   {new Intl.NumberFormat("de-DE").format(
-                                    item.product?.price * item.quantity
+                                    (item.product?.price -
+                                      (item.product?.discountPercent / 100) *
+                                        item.product?.price) *
+                                      item.quantity
                                   )}
                                 </p>
                               </td>
