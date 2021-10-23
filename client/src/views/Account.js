@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Select,
   FormControl,
@@ -10,69 +10,61 @@ import {
 } from "@material-ui/core";
 import Layout from "../components/layout/Layout";
 import ProvinceData from "../data/data.json";
+import { addDeliveryInfo, getDeliveryInfo, deleteDeliveryInfo, setDefaultDeliveryInfo } from "../features/deliveryInfo/deliveryInfoSlice";
 const Account = () => {
-  const [addresses, setAddresses] = useState([
-    {
-      id: 1,
-      address: "36 Bờ Bao Tân Thắng, Sơn Kỳ, Tân Phú, TP.HCM",
-      isConfig: true,
-    },
-    {
-      id: 2,
-      address: "14 Nguyễn Công Trứ, Q7, Tân Phú, TP.HCM",
-      isConfig: false,
-    },
-    { id: 3, address: "122 Võ Văn Ngân, Thủ Đức, TP.HCM", isConfig: false },
-  ]);
-
+  const { user } = useSelector((state) => state.auth)
+  const { deliveryInfo } = useSelector((state) => state.deliveryInfo)
+  const [address, setAddress] = useState("");
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
   const [commune, setCommune] = useState("");
+  const [newDeliveryInfo, setNewDeliveryInfo] = useState({});
   const [formAddressOpen, setFormAddressOpen] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   // Dùng để kích hoạt chọn ở selectbox
-  const handleChangeProvince = (event) => {
-    setProvince(event.target.value);
-  };
 
-  const handleChangeDistrict = (event) => {
-    setDistrict(event.target.value);
-  };
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    dispatch(getDeliveryInfo())
+  }, [])
+
 
   const handleChangeCommune = (event) => {
-    console.log(event.target.value);
-    setCommune(event.target.value);
+    const commune = event.target.value;
+    setNewDeliveryInfo({ ...newDeliveryInfo, address: `${address}, ${commune.Name}, ${district.Name}, ${province.Name}` });
+    setCommune(commune);
   };
 
-  const handleDeleteAddress = (id) => {
-    setAddresses((prevAddresses) =>
-      prevAddresses.filter((item) => item.id !== id)
-    );
-  };
-
-  const handleConfigAddress = (address, index) => {
-    const replaceAddress = [...addresses];
-    replaceAddress.splice(index, 1);
-    replaceAddress.unshift(address);
-
-    const newAddresses = replaceAddress.map((item) => {
-      if (item.id === address.id) {
-        return {
-          ...item,
-          isConfig: true,
-        };
+  const handleDeleteAddress = (addressId) => {
+    console.log(addressId)
+    if (window.confirm('Bạn có chắc muốn xóa thông tin này ra khỏi danh sách ?')) {
+      const payload = {
+        addressId
       }
-      return {
-        ...item,
-        isConfig: false,
-      };
-    });
-    console.log(newAddresses);
-    return setAddresses(newAddresses);
+      dispatch(deleteDeliveryInfo({ payload }))
+    }
+  };
+
+  const handleSetDefaultAddress = (addressId) => {
+    const payload = {
+      addressId
+    }
+    dispatch(setDefaultDeliveryInfo({ payload }))
   };
 
   const handleCloseAddForm = () => {
     setFormAddressOpen(false);
   };
+  const handleSubmitAddDeliveryInfoForm = (e) => {
+    e.preventDefault();
+    const info = {
+      address: newDeliveryInfo
+    }
+    dispatch(addDeliveryInfo(info))
+    setFormAddressOpen(false)
+  }
 
   return (
     <Layout>
@@ -91,10 +83,7 @@ const Account = () => {
                         <div className="form-header">
                           <div className="form-header__img">
                             <img
-                              src={
-                                require("../assets/images/account/user.jpg")
-                                  .default
-                              }
+                              src={user.profilePicture}
                               alt=""
                             />
                             <span className="form-header__img-edit" >
@@ -115,33 +104,32 @@ const Account = () => {
                             </span>
                           </div>
                           <div className="form-header__username">
-                            <h5>Tài khoản: tanle@gmail.com</h5>
+                            <h5>Tài khoản: {user.email}</h5>
                           </div>
                         </div>
                         {/* <div className="form-control"> */}
                         <FormControl fullWidth style={{ marginBottom: "25px" }}>
-                          <TextField label="Họ và tên" variant="outlined" />
+                          <TextField label="Họ và tên" variant="outlined" value={user.name} />
                         </FormControl>
-                        <FormControl fullWidth style={{ marginBottom: "25px" }}>
-                          <TextField label="Số điện thoại" variant="outlined" />
+                        <FormControl fullWidth style={{ marginBottom: "25px", display: "flex", justifyContent: "flex-end" }}>
+                          <h1 onClick={() => setShowChangePassword(!showChangePassword)} style={{ display: "flex", justifyContent: "flex-end" }}> Đổi mật khẩu </h1>
                         </FormControl>
-                        {/* <label htmlFor="">Họ và tên</label>
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Nhập tên của bạn"
-                        />
-                      </div>
-                      <div className="form-control">
-                        <label htmlFor="">Số điện thoại</label>
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Nhập số điện thoại của bạn"
-                        />
-                      </div> */}
+                        {showChangePassword && (
+                          <>
+                            <FormControl fullWidth style={{ marginBottom: "25px" }}>
+                              <TextField type="password" label="Mật khẩu mới" variant="outlined" />
+                            </FormControl>
+                            <FormControl fullWidth style={{ marginBottom: "25px" }}>
+                              <TextField type="password" label="Xác nhận mật khẩu" variant="outlined" />
+                            </FormControl>
+                            <FormControl >
+                              <div style={{ display: "flex" }}>
+                                <TextField label="Mã OTP" variant="outlined" />
+                                <button> Lấy mã </button>
+                              </div>
+                            </FormControl>
+                          </>
+                        )}
                         <input
                           type="submit"
                           value="Cập nhật"
@@ -154,32 +142,63 @@ const Account = () => {
                 <div className="col-6">
                   <div className="account-wrapper__address ">
                     <div className="account-wrapper__address__heading">
-                      <h3>Địa chỉ </h3>
+                      <h3>Thông tin nhận hàng</h3>
 
                       <div
                         className="add-btn"
                         onClick={() => setFormAddressOpen(true)}
                       >
-                        Thêm địa chỉ
+                        Thêm thông tin
                       </div>
                     </div>
                     {formAddressOpen ? (
                       <div className="account-wrapper__address__form">
-                        <form action="">
+                        <form onSubmit={(e) => handleSubmitAddDeliveryInfoForm(e)}>
                           <FormControl
+                            required
                             fullWidth
-                            style={{ marginBottom: "25px" }}
+                            style={{ marginBottom: "10px" }}
+                            variant="standard"
                           >
                             <TextField
                               required
-                              label="Địa chỉ"
+                              label="Tên người nhận"
                               variant="outlined"
+                              value={newDeliveryInfo.name}
+                              onChange={(e) => setNewDeliveryInfo({ ...newDeliveryInfo, name: e.target.value })}
                             />
                           </FormControl>
                           <FormControl
                             required
                             fullWidth
-                            style={{ marginBottom: "25px" }}
+                            style={{ marginBottom: "10px" }}
+                            variant="standard"
+                          >
+                            <TextField
+                              required
+                              label="Số điện thoại người nhận"
+                              type="tel"
+                              variant="outlined"
+                              value={newDeliveryInfo.phoneNumber}
+                              onChange={(e) => setNewDeliveryInfo({ ...newDeliveryInfo, phoneNumber: e.target.value })}
+                            />
+                          </FormControl>
+                          <FormControl
+                            fullWidth
+                            style={{ marginBottom: "10px" }}
+                          >
+                            <TextField
+                              required
+                              label="Địa chỉ"
+                              variant="outlined"
+                              value={address}
+                              onChange={(e) => setAddress(e.target.value)}
+                            />
+                          </FormControl>
+                          <FormControl
+                            required
+                            fullWidth
+                            style={{ marginBottom: "10px" }}
                             variant="standard"
                           >
                             <InputLabel id="province">
@@ -188,7 +207,7 @@ const Account = () => {
                             <Select
                               labelId="province"
                               value={province}
-                              onChange={handleChangeProvince}
+                              onChange={(e) => setProvince(e.target.value)}
                               sx={{
                                 width: 565,
                               }}
@@ -212,14 +231,14 @@ const Account = () => {
                           <FormControl
                             required
                             fullWidth
-                            style={{ marginBottom: "25px" }}
+                            style={{ marginBottom: "10px" }}
                             variant="standard"
                           >
                             <InputLabel id="district">Quận/Huyện</InputLabel>
                             <Select
                               labelId="district"
                               value={district}
-                              onChange={handleChangeDistrict}
+                              onChange={(e) => setDistrict(e.target.value)}
                               label="district"
                               sx={{ width: 565 }}
                             >
@@ -276,13 +295,13 @@ const Account = () => {
                       </div>
                     ) : (
                       <div className="account-wrapper__address__body">
-                        {addresses.map((address, index) => {
+                        {deliveryInfo.address ? deliveryInfo.address.map((address) => {
                           return (
-                            <div className="address-item" key={address.id}>
+                            <div className="address-item" key={address._id}>
                               <div className="address-item__icon">
                                 <svg
                                   style={
-                                    address.isConfig
+                                    address.isDefault
                                       ? { color: "green" }
                                       : { color: "transparent" }
                                   }
@@ -303,38 +322,38 @@ const Account = () => {
                               <div
                                 className="address-item__setup address-item__setup--config"
                                 style={
-                                  address.isConfig
+                                  address.isDefault
                                     ? {
-                                        cursor: "default",
-                                        visibility: "hidden",
-                                      }
+                                      cursor: "default",
+                                      visibility: "hidden",
+                                    }
                                     : null
                                 }
                                 onClick={() =>
-                                  handleConfigAddress(address, index)
+                                  handleSetDefaultAddress(address._id)
                                 }
                               >
                                 Đặt làm mặc định
                               </div>
                               <div
                                 style={
-                                  address.isConfig
+                                  address.isDefault
                                     ? {
-                                        cursor: "default",
-                                        visibility: "hidden",
-                                      }
+                                      cursor: "default",
+                                      visibility: "hidden",
+                                    }
                                     : null
                                 }
                                 className="address-item__setup address-item__setup--delete"
                                 onClick={() => {
-                                  handleDeleteAddress(address.id);
+                                  handleDeleteAddress(address._id);
                                 }}
                               >
                                 Xóa
                               </div>
                             </div>
                           );
-                        })}
+                        }) : <h1 style={{ margin: "20px" }}> Chưa có thông tin nhận hàng được thêm </h1>}
                       </div>
                     )}
                   </div>

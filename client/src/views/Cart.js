@@ -19,7 +19,7 @@ const Cart = () => {
   }, []);
 
   // Handle calc total price
-  const totalPrice = cartItems.reduce((total, priceItem) => {
+  const totalPrice = selected.reduce((total, priceItem) => {
     total += priceItem.product?.price * priceItem.quantity;
     return total;
   }, 0);

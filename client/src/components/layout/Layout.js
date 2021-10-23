@@ -9,9 +9,13 @@ export default function Layout(props) {
   const auth = useSelector((state) => state.auth);
   const product = useSelector((state) => state.product);
   const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.user);
+  const deliveryInfo = useSelector((state) => state.deliveryInfo);
+
+
   return (
     <div>
-      {auth.loading || product.loading || cart.loading ? (
+      {auth.loading || product.loading || cart.loading || deliveryInfo.loading || user.loading ? (
         <Stack
           sx={{
             width: "100%",
