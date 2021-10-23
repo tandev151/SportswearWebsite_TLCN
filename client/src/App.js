@@ -21,6 +21,8 @@ import { getBrands } from "./features/brand/brandSlice";
 import { getProducts, getSizes } from "./features/product/productSlice";
 import ScrollToTop from "./components/scrollToTop/ScrollToTop";
 import MyOrder from "./views/MyOrder";
+import { getCartItems } from "./features/cart/cartSlice";
+import Size from "./views/Size";
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -28,6 +30,8 @@ function App() {
   useEffect(() => {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn());
+    } else {
+      dispatch(getCartItems());
     }
   }, [auth.authenticate]);
 
@@ -57,6 +61,7 @@ function App() {
           <AuthRoute exact path="/login" component={Login} />
           <AuthRoute exact path="/register" component={Register} />
           <AuthRoute exact path="/forget" component={Forget} />
+          <Route exact path="/size-choose" component={Size} />
         </Switch>
       </ScrollToTop>
     </Router>

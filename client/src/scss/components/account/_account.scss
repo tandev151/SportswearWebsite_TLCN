@@ -79,6 +79,37 @@
               opacity: 0.8;
             }
           }
+          & .form-password {
+            @include text-title;
+            background-color: #d34d4d;
+            cursor: pointer;
+            width: 150px;
+            color: $white;
+            text-align: center;
+            margin-bottom: 25px;
+            position: absolute;
+            right: 0;
+          }
+          & .btn-otp {
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.5;
+            padding: 8px;
+            color: $white;
+            background-image: linear-gradient(45deg, #cf3c17 30%, #185d66 90%);
+            text-transform: uppercase;
+            margin-left: 8px;
+            height: 40px;
+            cursor: pointer;
+            align-self: center;
+            &:hover {
+              background-image: linear-gradient(
+                45deg,
+                #185d66 30%,
+                #cf3c17 90%
+              );
+            }
+          }
         }
       }
     }
@@ -110,7 +141,6 @@
         }
       }
       &__form {
-        height: 428.2px;
         & form {
           padding: 16px;
           & .add-form-btn {

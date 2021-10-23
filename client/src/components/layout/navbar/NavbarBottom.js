@@ -76,11 +76,9 @@ const NavbarBottom = ({ categories, brands }) => {
                             })}
                           </ul>
                         </>
-                      )
-                      }
+                      )}
                     </NavLink>
                   </li>
-
                 );
               })}
             </ul>
@@ -117,7 +115,6 @@ const NavbarBottom = ({ categories, brands }) => {
                       className="category__item-link"
                     >
                       {brand.name}
-
                     </NavLink>
                   </li>
                 );
@@ -127,7 +124,7 @@ const NavbarBottom = ({ categories, brands }) => {
         </li>
         <li className="navbar-bottom__list-item">
           <NavLink
-            to={`/`}
+            to={`/size-choose`}
             className="navbar-bottom__list-item-link"
             title="Cách chọn size"
           >
