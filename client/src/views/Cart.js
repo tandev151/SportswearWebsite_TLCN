@@ -17,7 +17,7 @@ const Cart = () => {
   useEffect(() => {
     dispatch(getCartItems());
   }, []);
-  console.log(cartItems);
+
   // Handle quantity of product
   const handleChangeQuantity = (quantity, productId, sizeId) => {
     const cartItem = {
