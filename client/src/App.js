@@ -21,22 +21,29 @@ import { getBrands } from "./features/brand/brandSlice";
 import { getProducts, getSizes } from "./features/product/productSlice";
 import ScrollToTop from "./components/scrollToTop/ScrollToTop";
 import MyOrder from "./views/MyOrder";
+import { getDeliveryInfo } from "./features/deliveryInfo/deliveryInfoSlice";
+import { getCartItems } from "./features/cart/cartSlice";
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (!auth.authenticate) {
-      dispatch(isUserLoggedIn());
-    }
-  }, [auth.authenticate]);
-
+  
   useEffect(() => {
     dispatch(getCategories());
     dispatch(getBrands());
     dispatch(getProducts());
     dispatch(getSizes());
   }, []);
+
+  useEffect(() => {
+    if (!auth.authenticate) {
+      dispatch(isUserLoggedIn());
+    } else {
+      dispatch(getDeliveryInfo())
+      dispatch(getCartItems());
+    }
+  }, [auth.authenticate]);
+
+
 
   return (
     <Router>

@@ -1,22 +1,43 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router";
+import React, { useState, useEffect } from "react";
 import { Select, FormControl, MenuItem, InputLabel } from "@material-ui/core";
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router";
 const Checkout = (props) => {
   const orderItems = props.location.state;
-  console.log(orderItems);
-  // Checkout orderItems if it hasn't item
-  const [address, setAddress] = useState("");
+  const { deliveryInfo } = useSelector(state => state.deliveryInfo);
+  const [address, setAddress] = useState(null)
+  const setDefaultDeliveryInfo = () => {
+    if (deliveryInfo.address) {
+      const defaultAddress = deliveryInfo.address.find(add => add.isDefault === true)
+      if (defaultAddress) {
+        setAddress(defaultAddress);
+      } else {
+        setAddress(deliveryInfo.address[0])
+      }
+    }
+  };
+
+  useEffect(() => {
+    setDefaultDeliveryInfo()
+  }, [setDefaultDeliveryInfo])
 
   const handleChange = (event) => {
-    setAddress(event.target.value);
+    const newAddress = deliveryInfo.address.find(add => add._id === event.target.value)
+    setAddress(newAddress);
   };
-  if (!orderItems) {
-    return null;
-  }
+
   const totalPrice = orderItems.reduce((total, priceItem) => {
-    total += priceItem.quantity * priceItem.product.price;
+    total +=
+      (priceItem.product?.price -
+        (priceItem.product?.discountPercent / 100) * priceItem.product?.price) *
+      priceItem.quantity;
     return total;
   }, 0);
+
+  if (!deliveryInfo.address || !address) {
+    return null;
+  }
+
   const shippingFee = 30000;
   return (
     <div className="checkout">
@@ -25,7 +46,7 @@ const Checkout = (props) => {
           <div className="col-12">
             <div className="wrapper mgt-20 mgb-45">
               <div className="wrapper__heading">
-                <div className="wrapper__heading-logo">DoupleT Sport</div>
+                <div className="wrapper__heading-logo">DoubleT Sport</div>
                 <h3 className="wrapper__heading-title">Thanh toán</h3>
               </div>
               <div className="wrapper__body">
@@ -38,19 +59,16 @@ const Checkout = (props) => {
                       <div className="wrapper__body-info__body">
                         <div className="photo">
                           <img
-                            src={
-                              require("../assets/images/account/user.jpg")
-                                .default
-                            }
+                            src={deliveryInfo.user.profilePicture}
                             alt=""
                           />
                         </div>
                         <div className="information">
                           <div className="information-name">
-                            Tân Lê (tanle@gmail.com)
+                            Tên người nhận: {address.name}
                           </div>
                           <div className="information-phone">
-                            Số điện thoại: 0123456789
+                            SĐT người nhận: {address.phoneNumber}
                           </div>
                         </div>
                       </div>
@@ -62,19 +80,18 @@ const Checkout = (props) => {
                           <Select
                             labelId="address-user-label"
                             id="address-user"
-                            value={address}
+                            value={address._id}
                             onChange={handleChange}
                             autoWidth
-                            label="Address"
+                            label={address.address}
                           >
-                            <MenuItem value={1} sx={{ minWidth: 510 }}>
-                              36 Bờ Bao Tân Thắng, Sơn Kỳ, Tân Phú, TP.HCM
-                            </MenuItem>
-                            <MenuItem value={10}>Twenty</MenuItem>
-                            <MenuItem value={21}>Twenty one</MenuItem>
-                            <MenuItem value={26}>
-                              Twenty one and a half
-                            </MenuItem>
+                            {
+                              deliveryInfo.address.map((info) =>
+                                <MenuItem value={info._id} sx={{ minWidth: 510 }}>
+                                  {info.address}
+                                </MenuItem>
+                              )
+                            }
                           </Select>
                         </FormControl>
                       </div>
@@ -137,7 +154,9 @@ const Checkout = (props) => {
                               <p>
                                 ₫
                                 {new Intl.NumberFormat("de-DE").format(
-                                  orderItem.quantity * orderItem.product.price
+                                  (orderItem.product.price -
+                                    (orderItem.product.discountPercent / 100) * orderItem.product.price) *
+                                  orderItem.quantity
                                 )}
                               </p>
                             </div>

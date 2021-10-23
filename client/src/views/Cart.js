@@ -11,7 +11,7 @@ import {
 const Cart = () => {
   const [selected, setSelected] = useState([]);
   const { cartItems } = useSelector((state) => state.cart);
-  console.log(cartItems);
+  const { deliveryInfo } = useSelector(state => state.deliveryInfo);
   const dispatch = useDispatch();
   const history = useHistory();
   useEffect(() => {
@@ -78,13 +78,18 @@ const Cart = () => {
   // Handle pass items which is selected to checkout form
   const handlePayment = (e) => {
     e.preventDefault();
+    if (!deliveryInfo.address) {
+      window.confirm('Bạn chưa có thông tin nhận hàng! Bạn có muốn chuyển hướng đến trang thêm thông tin ?')
+        && history.push("/account");
+      return;
+    }
     if (selected.length > 0) {
       console.log(selected);
       history.push({
         pathname: "/checkout",
         state: selected,
       });
-    } else console.log(0);
+    }
   };
   // Check length of selected ===  length of cartItems ?
   const isSelectedAll = cartItems.length === selected.length;
@@ -206,8 +211,8 @@ const Cart = () => {
                                   {new Intl.NumberFormat("de-DE").format(
                                     (item.product?.price -
                                       (item.product?.discountPercent / 100) *
-                                        item.product?.price) *
-                                      item.quantity
+                                      item.product?.price) *
+                                    item.quantity
                                   )}
                                 </p>
                               </td>
