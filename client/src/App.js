@@ -15,25 +15,18 @@ import About from "./views/About";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Forget from "./views/Forget";
+import Size from "./views/Size";
 import { isUserLoggedIn } from "./features/auth/authSlice";
 import { getCategories } from "./features/category/categorySlice";
 import { getBrands } from "./features/brand/brandSlice";
 import { getProducts, getSizes } from "./features/product/productSlice";
 import ScrollToTop from "./components/scrollToTop/ScrollToTop";
 import MyOrder from "./views/MyOrder";
+import { getDeliveryInfo } from "./features/deliveryInfo/deliveryInfoSlice";
 import { getCartItems } from "./features/cart/cartSlice";
-import Size from "./views/Size";
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (!auth.authenticate) {
-      dispatch(isUserLoggedIn());
-    } else {
-      dispatch(getCartItems());
-    }
-  }, [auth.authenticate]);
 
   useEffect(() => {
     dispatch(getCategories());
@@ -41,6 +34,17 @@ function App() {
     dispatch(getProducts());
     dispatch(getSizes());
   }, []);
+
+  useEffect(() => {
+    if (!auth.authenticate) {
+      dispatch(isUserLoggedIn());
+    } else {
+      dispatch(getDeliveryInfo())
+      dispatch(getCartItems());
+    }
+  }, [auth.authenticate]);
+
+
 
   return (
     <Router>
