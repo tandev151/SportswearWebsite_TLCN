@@ -25,7 +25,15 @@ export const addOrder = createAsyncThunk(
     }
 );
 
-export const categorySlice = createSlice({
+export const paymentWithMomo = createAsyncThunk(
+    "order/paymentWithMomo",
+    async (amount) => {
+        const response = await orderAPI.paymentWithMomo(amount);
+        return response;
+    }
+);
+
+export const orderSlice = createSlice({
     name: "order",
     initialState: {
         orders: [],
@@ -67,7 +75,17 @@ export const categorySlice = createSlice({
             state.loading = false;
             state.order = action.payload.data.order;
         },
+        [paymentWithMomo.pending]: (state) => {
+            state.loading = true;
+        },
+        [paymentWithMomo.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.error;
+        },
+        [paymentWithMomo.fulfilled]: (state) => {
+            state.loading = false;
+        },
     },
 });
 
-export default categorySlice.reducer;
+export default orderSlice.reducer;

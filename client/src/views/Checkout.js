@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Select, FormControl, MenuItem, InputLabel } from "@material-ui/core";
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { paymentWithMomo } from "../features/order/orderSlice"
+
 const Checkout = (props) => {
   const orderItems = props.location.state;
   const { deliveryInfo } = useSelector(state => state.deliveryInfo);
   const [address, setAddress] = useState(null)
+  const [paymentType, setPaymentType] = useState("cod")
+  const totalPrice = orderItems.reduce((total, priceItem) => {
+    total +=
+      (priceItem.product?.price -
+        (priceItem.product?.discountPercent / 100) * priceItem.product?.price) *
+      priceItem.quantity;
+    return total;
+  }, 0);
+  const shippingFee = 30000;
+  const dispatch = useDispatch();
+
   const setDefaultDeliveryInfo = () => {
     if (deliveryInfo.address) {
       const defaultAddress = deliveryInfo.address.find(add => add.isDefault === true)
@@ -19,26 +31,30 @@ const Checkout = (props) => {
 
   useEffect(() => {
     setDefaultDeliveryInfo()
-  }, [setDefaultDeliveryInfo])
+  }, [deliveryInfo])
 
-  const handleChange = (event) => {
-    const newAddress = deliveryInfo.address.find(add => add._id === event.target.value)
+  const handleChange = (e) => {
+    const newAddress = deliveryInfo.address.find(add => add._id === e.target.value)
     setAddress(newAddress);
   };
-
-  const totalPrice = orderItems.reduce((total, priceItem) => {
-    total +=
-      (priceItem.product?.price -
-        (priceItem.product?.discountPercent / 100) * priceItem.product?.price) *
-      priceItem.quantity;
-    return total;
-  }, 0);
+  const handlePayment = async () => {
+    const amount = totalPrice + shippingFee;
+    if (paymentType === "card") {
+      const resultAction = await dispatch(paymentWithMomo({ amount })).unwrap();
+      console.log({ amount })
+      const url = resultAction.data.url;
+      if (url) {
+        window.location.href = url
+      } else {
+        alert('Hiện tại không thể thanh toán bằng hình thức này !')
+      }
+    }
+  }
 
   if (!deliveryInfo.address || !address) {
     return null;
   }
 
-  const shippingFee = 30000;
   return (
     <div className="checkout">
       <div className="container">
@@ -81,7 +97,7 @@ const Checkout = (props) => {
                             labelId="address-user-label"
                             id="address-user"
                             value={address._id}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e)}
                             autoWidth
                             label={address.address}
                           >
@@ -99,30 +115,35 @@ const Checkout = (props) => {
                         <h5 className="payments-title">
                           Phương thức thanh toán
                         </h5>
-
-                        <label htmlFor="byCreditCart" className="radio">
-                          <input
-                            type="radio"
-                            name="payments-radio"
-                            id="byCreditCart"
-                            className="radio__input"
-                          />
-                          <div className="radio__radio"></div>
-                          Thanh toán trực tuyến
-                        </label>
                         <label htmlFor="byCash" className="radio">
                           <input
                             type="radio"
                             name="payments-radio"
                             id="byCash"
                             className="radio__input"
+                            value="cod"
+                            checked={paymentType === "cod"}
+                            onChange={(e) => setPaymentType(e.target.value)}
                           />
                           <div className="radio__radio"></div>
                           Thanh toán khi nhận hàng
                         </label>
+                        <label htmlFor="byCreditCart" className="radio">
+                          <input
+                            type="radio"
+                            name="payments-radio"
+                            id="byCreditCart"
+                            className="radio__input"
+                            value="card"
+                            checked={paymentType === "card"}
+                            onChange={(e) => setPaymentType(e.target.value)}
+                          />
+                          <div className="radio__radio" ></div>
+                          Thanh toán trực tuyến
+                        </label>
                       </div>
                       <div className="wrapper__body-info__btn row">
-                        <button className="btn-pay btn">Thanh toán</button>
+                        <button className="btn-pay btn" onClick={() => handlePayment()}>Thanh toán</button>
                       </div>
                     </div>
                   </div>

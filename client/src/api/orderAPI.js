@@ -13,5 +13,9 @@ const orderAPI = {
         const url = "/order/getOrders";
         return axios.post(url);
     },
+    paymentWithMomo: (amount) => {
+        const url = "/order/paymentWithMomo";
+        return axios.post(url, amount);
+    },
 };
 export default orderAPI;

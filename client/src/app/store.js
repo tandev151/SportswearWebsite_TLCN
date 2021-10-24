@@ -6,6 +6,8 @@ import brandReducer from "../features/brand/brandSlice";
 import productReducer from "../features/product/productSlice";
 import cartReducer from "../features/cart/cartSlice";
 import deliveryInfoReducer from "../features/deliveryInfo/deliveryInfoSlice";
+import orderReducer from "../features/order/orderSlice";
+
 
 export default configureStore({
   reducer: {
@@ -15,7 +17,8 @@ export default configureStore({
     brand: brandReducer,
     product: productReducer,
     cart: cartReducer,
-    deliveryInfo: deliveryInfoReducer
+    deliveryInfo: deliveryInfoReducer,
+    order: orderReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
