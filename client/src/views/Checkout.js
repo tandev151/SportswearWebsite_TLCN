@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Select, FormControl, MenuItem, InputLabel } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
-import { paymentWithMomo } from "../features/order/orderSlice"
+import { useHistory } from "react-router-dom";
+import { paymentWithMomo, addOrder } from "../features/order/orderSlice"
 
 const Checkout = (props) => {
   const orderItems = props.location.state;
@@ -17,6 +18,7 @@ const Checkout = (props) => {
   }, 0);
   const shippingFee = 30000;
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const setDefaultDeliveryInfo = () => {
     if (deliveryInfo.address) {
@@ -37,9 +39,36 @@ const Checkout = (props) => {
     const newAddress = deliveryInfo.address.find(add => add._id === e.target.value)
     setAddress(newAddress);
   };
+
+  const convertCartItemsToOrderItems = () => {
+    const items = []
+    orderItems.map(item => {
+      items.push({
+        productId: item.product._id,
+        sizeId: item.size._id,
+        payablePrice: (item.product.price - (item.product.discountPercent / 100) * item.product.price) * item.quantity,
+        purchaseQty: item.quantity
+      })
+    })
+    return items;
+  }
   const handlePayment = async () => {
     const amount = totalPrice + shippingFee;
-    if (paymentType === "card") {
+    const items = convertCartItemsToOrderItems();
+    const orderObj = {
+      addressId: address._id,
+      totalAmount: amount,
+      paymentStatus: "pending",
+      paymentType,
+      items
+    }
+    if (paymentType === "cod") {
+      const res = await dispatch(addOrder(orderObj)).unwrap();
+      if (res.status === 201) {
+        alert("Thanh toán thành công !")
+        history.replace('/')
+      }
+    } else if (paymentType === "card") {
       const resultAction = await dispatch(paymentWithMomo({ amount })).unwrap();
       console.log({ amount })
       const url = resultAction.data.url;

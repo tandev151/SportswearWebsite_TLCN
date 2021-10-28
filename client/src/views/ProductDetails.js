@@ -10,11 +10,11 @@ const ProductDetails = () => {
   let match = useRouteMatch();
   const { slug } = match.params;
   const dispatch = useDispatch();
+  const history = useHistory();
   const auth = useSelector((state) => state.auth);
   const { product } = useSelector((state) => state.product);
   const { cartItems } = useSelector((state) => state.cart);
   // useHistory be used to redirect page
-  const history = useHistory();
   const routeChange = (url) => {
     history.push(url);
   };
@@ -224,7 +224,7 @@ const ProductDetails = () => {
                     ₫
                     {new Intl.NumberFormat("de-DE").format(
                       product.price -
-                        (product.discountPercent / 100) * product.price
+                      (product.discountPercent / 100) * product.price
                     )}
                   </span>
                 </div>

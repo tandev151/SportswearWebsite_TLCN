@@ -2,7 +2,7 @@ import axios from "./axios";
 
 const orderAPI = {
     addOrder: (order) => {
-        const url = "/order/add'";
+        const url = "/order/add";
         return axios.post(url, order);
     },
     getOrderById: (orderId) => {

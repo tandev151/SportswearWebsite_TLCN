@@ -18,7 +18,7 @@ export const getOrderById = createAsyncThunk(
 );
 
 export const addOrder = createAsyncThunk(
-    "order/getAllOrders",
+    "order/addOrder",
     async (order) => {
         const response = await orderAPI.addOrder(order);
         return response;

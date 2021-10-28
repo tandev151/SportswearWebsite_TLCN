@@ -77,8 +77,11 @@ const Account = () => {
   const filteredAddressArr = (arr) => {
     const newArr = [...arr]
     const defaultAddress = newArr.find(address => address.isDefault === true);
-    const newArr2 = newArr.filter(address => address._id !== defaultAddress._id);
-    return [defaultAddress, ...newArr2]
+    if (defaultAddress) {
+      const newArr2 = newArr.filter(address => address._id !== defaultAddress._id);
+      return [defaultAddress, ...newArr2]
+    }
+    return arr;
   }
   return (
     <Layout>
