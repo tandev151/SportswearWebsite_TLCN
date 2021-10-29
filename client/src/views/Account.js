@@ -75,14 +75,16 @@ const Account = () => {
   };
 
   const filteredAddressArr = (arr) => {
-    const newArr = [...arr]
-    const defaultAddress = newArr.find(address => address.isDefault === true);
+    const newArr = [...arr];
+    const defaultAddress = newArr.find((address) => address.isDefault === true);
     if (defaultAddress) {
-      const newArr2 = newArr.filter(address => address._id !== defaultAddress._id);
-      return [defaultAddress, ...newArr2]
+      const newArr2 = newArr.filter(
+        (address) => address._id !== defaultAddress._id
+      );
+      return [defaultAddress, ...newArr2];
     }
     return arr;
-  }
+  };
   return (
     <Layout>
       <div className="account">
@@ -351,65 +353,67 @@ const Account = () => {
                     ) : (
                       <div className="account-wrapper__address__body">
                         {deliveryInfo.address ? (
-                          filteredAddressArr(deliveryInfo.address).map((address) => {
-                            return (
-                              <div className="address-item" key={address._id}>
-                                <div className="address-item__icon">
-                                  <svg
+                          filteredAddressArr(deliveryInfo.address).map(
+                            (address) => {
+                              return (
+                                <div className="address-item" key={address._id}>
+                                  <div className="address-item__icon">
+                                    <svg
+                                      style={
+                                        address.isDefault
+                                          ? { color: "green" }
+                                          : { color: "transparent" }
+                                      }
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      fill="currentColor"
+                                      class="bi bi-geo-alt-fill"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                                    </svg>
+                                  </div>
+                                  <div className="address-item__content">
+                                    <p>{address.address}</p>
+                                  </div>
+
+                                  <div
+                                    className="address-item__setup address-item__setup--config"
                                     style={
                                       address.isDefault
-                                        ? { color: "green" }
-                                        : { color: "transparent" }
+                                        ? {
+                                            cursor: "default",
+                                            visibility: "hidden",
+                                          }
+                                        : null
                                     }
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="currentColor"
-                                    class="bi bi-geo-alt-fill"
-                                    viewBox="0 0 16 16"
+                                    onClick={() =>
+                                      handleSetDefaultAddress(address._id)
+                                    }
                                   >
-                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
-                                  </svg>
+                                    Đặt làm mặc định
+                                  </div>
+                                  <div
+                                    style={
+                                      address.isDefault
+                                        ? {
+                                            cursor: "default",
+                                            visibility: "hidden",
+                                          }
+                                        : null
+                                    }
+                                    className="address-item__setup address-item__setup--delete"
+                                    onClick={() => {
+                                      handleDeleteAddress(address._id);
+                                    }}
+                                  >
+                                    Xóa
+                                  </div>
                                 </div>
-                                <div className="address-item__content">
-                                  <p>{address.address}</p>
-                                </div>
-
-                                <div
-                                  className="address-item__setup address-item__setup--config"
-                                  style={
-                                    address.isDefault
-                                      ? {
-                                        cursor: "default",
-                                        visibility: "hidden",
-                                      }
-                                      : null
-                                  }
-                                  onClick={() =>
-                                    handleSetDefaultAddress(address._id)
-                                  }
-                                >
-                                  Đặt làm mặc định
-                                </div>
-                                <div
-                                  style={
-                                    address.isDefault
-                                      ? {
-                                        cursor: "default",
-                                        visibility: "hidden",
-                                      }
-                                      : null
-                                  }
-                                  className="address-item__setup address-item__setup--delete"
-                                  onClick={() => {
-                                    handleDeleteAddress(address._id);
-                                  }}
-                                >
-                                  Xóa
-                                </div>
-                              </div>
-                            );
-                          })
+                              );
+                            }
+                          )
                         ) : (
                           <h1 style={{ margin: "20px" }}>
                             {" "}

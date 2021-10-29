@@ -1,8 +1,10 @@
 import React from "react";
 import { FormControl, TextField } from "@material-ui/core";
 import Layout from "../components/layout/Layout";
-
+import { ToastContainer, toast } from "react-toastify";
+import { settings } from "../components/toasts/settingToast";
 const Contact = () => {
+  const notify = () => toast.info("Tính năng đang được phát triển", settings);
   return (
     <Layout>
       {/* <ContactContainer /> */}
@@ -54,7 +56,7 @@ const Contact = () => {
                         <h3 className="wrapper-body__wonder-heading">
                           Bạn cần tư vấn ?
                         </h3>
-                        <form action="">
+                        <div action="">
                           <FormControl fullWidth sx={{ mt: 2 }}>
                             <div className="row">
                               <div className="col-6">
@@ -85,11 +87,14 @@ const Contact = () => {
                             />
                           </FormControl>
                           <div className="form-btn">
-                            <button className="btn wonder-btn">
+                            <button
+                              className="btn wonder-btn"
+                              onClick={() => notify()}
+                            >
                               Gửi cho chúng tôi
                             </button>
                           </div>
-                        </form>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -99,6 +104,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </Layout>
   );
 };

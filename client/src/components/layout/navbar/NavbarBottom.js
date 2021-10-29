@@ -1,7 +1,15 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
+import { settings } from "../../toasts/settingToast";
 const NavbarBottom = ({ categories, brands }) => {
+  const notityNews = () =>
+    toast.info("Tính năng này đang được phát triển !", settings);
+  const notityStoreSymtem = () =>
+    toast.info(
+      "Hiện tại tính năng chưa được xây dựng vì chỉ có 1 chi nhánh !",
+      settings
+    );
   return (
     <div className="navbar-bottom">
       <ul className="navbar-bottom__list">
@@ -133,9 +141,10 @@ const NavbarBottom = ({ categories, brands }) => {
         </li>
         <li className="navbar-bottom__list-item">
           <NavLink
-            to={``}
+            to={`#`}
             className="navbar-bottom__list-item-link"
             title="Tin tức"
+            onClick={notityNews}
           >
             Tin tức
           </NavLink>
@@ -143,9 +152,10 @@ const NavbarBottom = ({ categories, brands }) => {
 
         <li className="navbar-bottom__list-item">
           <NavLink
-            to={``}
+            to={`#`}
             className="navbar-bottom__list-item-link"
             title="Hệ thống cửa hàng"
+            onClick={notityStoreSymtem}
           >
             Hệ thống cửa hàng
           </NavLink>
@@ -178,6 +188,7 @@ const NavbarBottom = ({ categories, brands }) => {
           </NavLink>
         </li>
       </ul>
+      <ToastContainer />
     </div>
   );
 };

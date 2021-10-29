@@ -24,6 +24,7 @@ import ScrollToTop from "./components/scrollToTop/ScrollToTop";
 import MyOrder from "./views/MyOrder";
 import { getDeliveryInfo } from "./features/deliveryInfo/deliveryInfoSlice";
 import { getCartItems } from "./features/cart/cartSlice";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -39,12 +40,10 @@ function App() {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn());
     } else {
-      dispatch(getDeliveryInfo())
+      dispatch(getDeliveryInfo());
       dispatch(getCartItems());
     }
   }, [auth.authenticate]);
-
-
 
   return (
     <Router>

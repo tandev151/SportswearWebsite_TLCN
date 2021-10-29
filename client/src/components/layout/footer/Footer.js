@@ -15,7 +15,7 @@ const Footer = () => {
                 {CustomerCare.policy.map((item) => {
                   return (
                     <li className="footer-action__list-item">
-                      <Link to="" className="footer-action__list-item-link">
+                      <Link to="#" className="footer-action__list-item-link">
                         {item.name}
                       </Link>
                     </li>
@@ -32,9 +32,9 @@ const Footer = () => {
                 {About.list.map((item) => {
                   return (
                     <li className="footer-action__list-item">
-                      <a href="" className="footer-action__list-item-link">
+                      <Link to="#" className="footer-action__list-item-link">
                         {item.item}
-                      </a>
+                      </Link>
                     </li>
                   );
                 })}
@@ -48,8 +48,8 @@ const Footer = () => {
               <ul className="footer-action__list">
                 {SocialNetwork.media.map((item) => (
                   <li className="footer-action__list-item">
-                    <a
-                      href=""
+                    <Link
+                      to="#"
                       className="footer-action__list-item-link link-flex"
                     >
                       <span className="footer-action__list-item-link-icon">
@@ -58,7 +58,7 @@ const Footer = () => {
                       <p className="footer-action__list-item-link-text">
                         {item.name}
                       </p>
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

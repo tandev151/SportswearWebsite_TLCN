@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { settings } from "../components/toasts/settingToast";
 import {
   getCartItems,
   addToCart,
@@ -75,22 +75,12 @@ const Cart = () => {
       setSelected(newSelected);
     }
   };
-  console.log(selected);
 
   // Notify
-  const messages = {
-    emptyWarning: "Vui lòng chọn sản phẩm muốn thanh toán !",
-  };
+
   const notify = () =>
-    toast.warn(messages.emptyWarning, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    toast.warn("Vui lòng chọn sản phẩm muốn thanh toán !", settings);
+
   // Handle pass items which is selected to checkout form
   const handlePayment = (e) => {
     e.preventDefault();
@@ -101,7 +91,6 @@ const Cart = () => {
       return;
     }
     if (selected.length > 0) {
-      console.log(selected);
       history.push({
         pathname: "/checkout",
         state: selected,
@@ -112,7 +101,6 @@ const Cart = () => {
   };
   // Check length of selected ===  length of cartItems ?
   const isSelectedAll = cartItems.length === selected.length;
-  console.log(isSelectedAll);
 
   // Handle when user check to all item
   const itemSelected = (item) => {
