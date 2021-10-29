@@ -23,8 +23,8 @@ const ProductDetails = () => {
   };
 
   const [cartItem, setCartItem] = useState({
-    product: product._id,
-    size: "",
+    product,
+    size: {},
     quantity: 1,
   });
 
@@ -123,42 +123,36 @@ const ProductDetails = () => {
     else setOpenDescription(true);
   };
   // Handle change size
-  const handleChangeSize = (e) => {
-    const value = e.target.value;
-    setCartItem({ ...cartItem, size: value, product: product._id });
+  const handleChangeSize = (size) => {
+    setCartItem({ ...cartItem, size, product });
   };
   const handleChangeQuantity = (e) => {
     const value = e.target.value;
     if (value < 1) {
       alert("Số lượng tối thiểu là 1");
     } else {
-      setCartItem({ ...cartItem, quantity: value });
+      setCartItem({ ...cartItem, quantity: Number.parseInt(value) });
     }
   };
   // Handle pay now
   const handlePayNow = () => {
-    if (cartItem.size === "" || cartItem.quantity === 0) {
+    if (cartItem.size._id === undefined || cartItem.quantity === 0) {
       alert("Kiểm tra kích thước giày và số lượng muốn mua.");
     } else if (auth.authenticate === false) {
       routeChange("/login");
     } else {
-      const order = [
-        {
-          product,
-          size: { _id: cartItem.size, size: 40 },
-          quantity: Number.parseInt(cartItem.quantity),
-        },
-      ];
-      console.log(order);
+      const order = [cartItem];
+      console.log(cartItem);
       history.push({
         pathname: "/checkout",
         state: order,
       });
     }
   };
+  console.log(cartItem.size._id);
   // Handle add cart
   const handleAddCart = () => {
-    if (cartItem.size === "" || cartItem.quantity === 0) {
+    if (cartItem.size._id === undefined || cartItem.quantity === 0) {
       alert("Kiểm tra kích thước giày và số lượng muốn mua.");
     } else if (auth.authenticate === false) {
       routeChange("/login");
@@ -166,23 +160,33 @@ const ProductDetails = () => {
       // console.log(cart.cartItems[0].product, cartItems);
       const cartObject = cartItems.find(
         (item) =>
-          item.product?._id === cartItem.product &&
-          item.size?._id === cartItem.size
+          item.product?._id === cartItem.product._id &&
+          item.size?._id === cartItem.size._id
       );
-      const cart = { cartItems: [cartItem] };
+
       if (cartObject) {
         const cartExisted = {
           cartItems: [
             {
-              ...cartItem,
-              quantity:
-                Number.parseInt(cartItem.quantity) + cartObject.quantity,
+              product: cartObject.product._id,
+              size: cartObject.size._id,
+              quantity: cartItem.quantity + cartObject.quantity,
             },
           ],
         };
         dispatch(addToCart(cartExisted));
         pageRedirects();
       } else {
+        const cart = {
+          cartItems: [
+            {
+              product: cartItem.product._id,
+              size: cartItem.size._id,
+              quantity: cartItem.quantity,
+            },
+          ],
+        };
+        
         dispatch(addToCart(cart));
         pageRedirects();
       }
@@ -244,7 +248,7 @@ const ProductDetails = () => {
                     ₫
                     {new Intl.NumberFormat("de-DE").format(
                       product.price -
-                      (product.discountPercent / 100) * product.price
+                        (product.discountPercent / 100) * product.price
                     )}
                   </span>
                 </div>
@@ -270,7 +274,7 @@ const ProductDetails = () => {
                           id={size.size._id}
                           value={size.size._id}
                           required
-                          onChange={handleChangeSize}
+                          onChange={() => handleChangeSize(size.size)}
                         />
                         <div className="body-size__options-item__label">
                           {size.size.size}

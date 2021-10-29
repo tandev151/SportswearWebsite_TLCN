@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Select, FormControl, MenuItem, InputLabel } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { paymentWithMomo, addOrder } from "../features/order/orderSlice"
+import { paymentWithMomo, addOrder } from "../features/order/orderSlice";
 
 const Checkout = (props) => {
   const orderItems = props.location.state;
-  const { deliveryInfo } = useSelector(state => state.deliveryInfo);
-  const [address, setAddress] = useState(null)
-  const [paymentType, setPaymentType] = useState("cod")
+  const { deliveryInfo } = useSelector((state) => state.deliveryInfo);
+  const [address, setAddress] = useState(null);
+  const [paymentType, setPaymentType] = useState("cod");
+
   const totalPrice = orderItems.reduce((total, priceItem) => {
     total +=
       (priceItem.product?.price -
@@ -53,8 +54,7 @@ const Checkout = (props) => {
         sizeId: item.size._id,
         payablePrice:
           (item.product.price -
-            (item.product.discountPercent / 100) *
-            item.product.price) *
+            (item.product.discountPercent / 100) * item.product.price) *
           item.quantity,
         purchaseQty: item.quantity,
       });
@@ -79,12 +79,14 @@ const Checkout = (props) => {
         history.replace("/cart");
       }
     } else if (paymentType === "card") {
-      const res = await dispatch(paymentWithMomo({ totalAmount })).unwrap();
+      const res = await dispatch(
+        paymentWithMomo({ amount: totalAmount })
+      ).unwrap();
       const url = res.data.url;
       if (url) {
-        window.location.href = url
+        window.location.href = url;
       } else {
-        alert('Hiện tại không thể thanh toán bằng hình thức này !')
+        alert("Hiện tại không thể thanh toán bằng hình thức này !");
       }
     }
   };
@@ -214,8 +216,8 @@ const Checkout = (props) => {
                                 {new Intl.NumberFormat("de-DE").format(
                                   (orderItem.product.price -
                                     (orderItem.product.discountPercent / 100) *
-                                    orderItem.product.price) *
-                                  orderItem.quantity
+                                      orderItem.product.price) *
+                                    orderItem.quantity
                                 )}
                               </p>
                             </div>
