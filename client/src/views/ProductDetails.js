@@ -12,6 +12,9 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const { product } = useSelector((state) => state.product);
+  const [slideSub, setSlideSub] = useState();
+  const [slidePhotos, setSlidePhotos] = useState();
+  const [openDescription, setOpenDescription] = useState(false);
   const { cartItems } = useSelector((state) => state.cart);
   // useHistory be used to redirect page
   const history = useHistory();
@@ -26,9 +29,6 @@ const ProductDetails = () => {
     quantity: 1,
   });
 
-  const [slideSub, setSlideSub] = useState();
-  const [slidePhotos, setSlidePhotos] = useState();
-  const [openDescription, setOpenDescription] = useState(false);
   useEffect(() => {
     dispatch(getProductBySlug(slug));
     dispatch(getCartItems());
@@ -136,6 +136,27 @@ const ProductDetails = () => {
       setCartItem({ ...cartItem, quantity: value });
     }
   };
+  // Handle payment
+  const handlePayment = () => {
+    if (cartItem.size === "" || cartItem.quantity === 0) {
+      alert("Kiểm tra kích thước giày và số lượng muốn mua.");
+    } else if (auth.authenticate === false) {
+      routeChange("/login");
+    } else {
+      const order = [
+        {
+          product,
+          size: cartItem.size,
+          quantity: Number.parseInt(cartItem.quantity),
+        },
+      ];
+      console.log(order);
+      history.push({
+        pathname: "/checkout",
+        state: order,
+      });
+    }
+  };
   // Handle add cart
   const handleAddCart = () => {
     if (cartItem.size === "" || cartItem.quantity === 0) {
@@ -235,7 +256,7 @@ const ProductDetails = () => {
                 <div className="body-size">
                   <div className="body-size__label">
                     <p>Size</p>
-                    <Link to="#">(Hướng dẫn chọn size)</Link>
+                    <Link to="/size-choose">(Hướng dẫn chọn size)</Link>
                   </div>
                   <div className="body-size__options">
                     {product.sizes.map((size) => (
@@ -289,7 +310,12 @@ const ProductDetails = () => {
                 </div>
                 <div className="body-btn">
                   {/* Tạo disable khi sản phẩm hết hàng hay vì sự cố nào đó ( btn--disable)*/}
-                  <span className="btn body-btn__buy">Mua ngay</span>
+                  <span
+                    className="btn body-btn__buy"
+                    onClick={() => handlePayment()}
+                  >
+                    Mua ngay
+                  </span>
                   <span
                     type="submit"
                     className="btn body-btn__add-to-cart "

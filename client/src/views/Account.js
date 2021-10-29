@@ -264,7 +264,8 @@ const Account = () => {
                                   key={item.Id}
                                   sx={{
                                     "& .MuiList-root-MuiMenu-list": {
-                                      height: "200px",
+                                      maxHeight: "200px",
+                                      maxWidth: "540px",
                                     },
                                   }}
                                 >

@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Select, FormControl, MenuItem, InputLabel } from "@material-ui/core";
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router";
+import { useHistory } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { addOrder } from "../features/order/orderSlice";
 const Checkout = (props) => {
   const orderItems = props.location.state;
-  const { deliveryInfo } = useSelector(state => state.deliveryInfo);
-  const [address, setAddress] = useState(null)
+  const { deliveryInfo } = useSelector((state) => state.deliveryInfo);
+  const [address, setAddress] = useState(null);
+  const [paymentType, setPaymentType] = useState("cod");
+  const dispatch = useDispatch();
+  const history = useHistory();
   const setDefaultDeliveryInfo = () => {
     if (deliveryInfo.address) {
-      const defaultAddress = deliveryInfo.address.find(add => add.isDefault === true)
+      const defaultAddress = deliveryInfo.address.find(
+        (add) => add.isDefault === true
+      );
       if (defaultAddress) {
         setAddress(defaultAddress);
       } else {
-        setAddress(deliveryInfo.address[0])
+        setAddress(deliveryInfo.address[0]);
       }
     }
   };
 
   useEffect(() => {
-    setDefaultDeliveryInfo()
-  }, [setDefaultDeliveryInfo])
+    setDefaultDeliveryInfo();
+  }, [deliveryInfo]);
 
   const handleChange = (event) => {
-    const newAddress = deliveryInfo.address.find(add => add._id === event.target.value)
+    const newAddress = deliveryInfo.address.find(
+      (add) => add._id === event.target.value
+    );
     setAddress(newAddress);
   };
 
@@ -33,12 +41,49 @@ const Checkout = (props) => {
       priceItem.quantity;
     return total;
   }, 0);
+  const shippingFee = 30000;
+  const totalAmount = totalPrice + shippingFee;
+
+  const getItemsToPay = () => {
+    const items = [];
+    orderItems.map((orderItem) => {
+      items.push({
+        productId: orderItem.product._id,
+        sizeId: orderItem.size._id,
+        payablePrice:
+          (orderItem.product.price -
+            (orderItem.product.discountPercent / 100) *
+              orderItem.product.price) *
+          orderItem.quantity,
+        purchaseQty: orderItem.quantity,
+      });
+    });
+    return items;
+  };
+
+  // Handle payment
+  const handlePayment = async () => {
+    const order = {
+      addressId: address._id,
+      totalAmount,
+      paymentStatus: "pending",
+      paymentType,
+      items: getItemsToPay(),
+    };
+    if (paymentType === "cod") {
+      console.log(order);
+      const resp = await dispatch(addOrder(order)).unwrap();
+      if (resp.status === 201) {
+        alert("Đặt hàng thành công!");
+        history.replace("/cart");
+      }
+    }
+  };
 
   if (!deliveryInfo.address || !address) {
     return null;
   }
 
-  const shippingFee = 30000;
   return (
     <div className="checkout">
       <div className="container">
@@ -57,12 +102,9 @@ const Checkout = (props) => {
                         Thông tin giao hàng
                       </h5>
                       <div className="wrapper__body-info__body">
-                        <div className="photo">
-                          <img
-                            src={deliveryInfo.user.profilePicture}
-                            alt=""
-                          />
-                        </div>
+                        {/* <div className="photo">
+                          <img src={deliveryInfo.user.profilePicture} alt="" />
+                        </div> */}
                         <div className="information">
                           <div className="information-name">
                             Tên người nhận: {address.name}
@@ -82,16 +124,15 @@ const Checkout = (props) => {
                             id="address-user"
                             value={address._id}
                             onChange={handleChange}
-                            autoWidth
                             label={address.address}
+                            sx={{ width: 540 }}
+                            variant="standard"
                           >
-                            {
-                              deliveryInfo.address.map((info) =>
-                                <MenuItem value={info._id} sx={{ minWidth: 510 }}>
-                                  {info.address}
-                                </MenuItem>
-                              )
-                            }
+                            {deliveryInfo.address.map((info) => (
+                              <MenuItem value={info._id}>
+                                {info.address}
+                              </MenuItem>
+                            ))}
                           </Select>
                         </FormControl>
                       </div>
@@ -99,30 +140,38 @@ const Checkout = (props) => {
                         <h5 className="payments-title">
                           Phương thức thanh toán
                         </h5>
-
-                        <label htmlFor="byCreditCart" className="radio">
-                          <input
-                            type="radio"
-                            name="payments-radio"
-                            id="byCreditCart"
-                            className="radio__input"
-                          />
-                          <div className="radio__radio"></div>
-                          Thanh toán trực tuyến
-                        </label>
                         <label htmlFor="byCash" className="radio">
                           <input
                             type="radio"
                             name="payments-radio"
                             id="byCash"
                             className="radio__input"
+                            checked={paymentType === "cod"}
+                            onChange={() => setPaymentType("cod")}
                           />
                           <div className="radio__radio"></div>
                           Thanh toán khi nhận hàng
                         </label>
+                        <label htmlFor="byCreditCart" className="radio">
+                          <input
+                            type="radio"
+                            name="payments-radio"
+                            id="byCreditCart"
+                            className="radio__input"
+                            checked={paymentType === "card"}
+                            onChange={() => setPaymentType("card")}
+                          />
+                          <div className="radio__radio"></div>
+                          Thanh toán trực tuyến (Momo)
+                        </label>
                       </div>
                       <div className="wrapper__body-info__btn row">
-                        <button className="btn-pay btn">Thanh toán</button>
+                        <button
+                          className="btn-pay btn"
+                          onClick={() => handlePayment()}
+                        >
+                          Thanh toán
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -155,8 +204,9 @@ const Checkout = (props) => {
                                 ₫
                                 {new Intl.NumberFormat("de-DE").format(
                                   (orderItem.product.price -
-                                    (orderItem.product.discountPercent / 100) * orderItem.product.price) *
-                                  orderItem.quantity
+                                    (orderItem.product.discountPercent / 100) *
+                                      orderItem.product.price) *
+                                    orderItem.quantity
                                 )}
                               </p>
                             </div>
@@ -182,9 +232,8 @@ const Checkout = (props) => {
                         <p className="text">Tổng cộng</p>
                         <p className="price">
                           {" "}
-                          ₫
-                          {new Intl.NumberFormat("de-DE").format(
-                            totalPrice + shippingFee
+                          ₫{new Intl.NumberFormat("de-DE").format(
+                            totalAmount
                           )}{" "}
                         </p>
                       </div>

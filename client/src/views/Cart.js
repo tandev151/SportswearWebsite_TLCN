@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import Layout from "../components/layout/Layout";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   getCartItems,
   addToCart,
@@ -11,7 +13,7 @@ import {
 const Cart = () => {
   const [selected, setSelected] = useState([]);
   const { cartItems } = useSelector((state) => state.cart);
-  const { deliveryInfo } = useSelector(state => state.deliveryInfo);
+  const { deliveryInfo } = useSelector((state) => state.deliveryInfo);
   const dispatch = useDispatch();
   const history = useHistory();
   useEffect(() => {
@@ -75,12 +77,27 @@ const Cart = () => {
   };
   console.log(selected);
 
+  // Notify
+  const messages = {
+    emptyWarning: "Vui lòng chọn sản phẩm muốn thanh toán !",
+  };
+  const notify = () =>
+    toast.warn(messages.emptyWarning, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   // Handle pass items which is selected to checkout form
   const handlePayment = (e) => {
     e.preventDefault();
     if (!deliveryInfo.address) {
-      window.confirm('Bạn chưa có thông tin nhận hàng! Bạn có muốn chuyển hướng đến trang thêm thông tin ?')
-        && history.push("/account");
+      window.confirm(
+        "Bạn chưa có thông tin nhận hàng! Bạn có muốn chuyển hướng đến trang thêm thông tin ?"
+      ) && history.push("/account");
       return;
     }
     if (selected.length > 0) {
@@ -89,6 +106,8 @@ const Cart = () => {
         pathname: "/checkout",
         state: selected,
       });
+    } else {
+      notify();
     }
   };
   // Check length of selected ===  length of cartItems ?
@@ -211,8 +230,8 @@ const Cart = () => {
                                   {new Intl.NumberFormat("de-DE").format(
                                     (item.product?.price -
                                       (item.product?.discountPercent / 100) *
-                                      item.product?.price) *
-                                    item.quantity
+                                        item.product?.price) *
+                                      item.quantity
                                   )}
                                 </p>
                               </td>
@@ -316,6 +335,7 @@ const Cart = () => {
           )}
         </div>
       </div>
+      <ToastContainer />
     </Layout>
   );
 };
