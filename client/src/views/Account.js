@@ -74,6 +74,15 @@ const Account = () => {
     setFormAddressOpen(false);
   };
 
+  const filteredAddressArr = (arr) => {
+    const newArr = [...arr]
+    const defaultAddress = newArr.find(address => address.isDefault === true);
+    if (defaultAddress) {
+      const newArr2 = newArr.filter(address => address._id !== defaultAddress._id);
+      return [defaultAddress, ...newArr2]
+    }
+    return arr;
+  }
   return (
     <Layout>
       <div className="account">
@@ -342,7 +351,7 @@ const Account = () => {
                     ) : (
                       <div className="account-wrapper__address__body">
                         {deliveryInfo.address ? (
-                          deliveryInfo.address.map((address) => {
+                          filteredAddressArr(deliveryInfo.address).map((address) => {
                             return (
                               <div className="address-item" key={address._id}>
                                 <div className="address-item__icon">
@@ -371,9 +380,9 @@ const Account = () => {
                                   style={
                                     address.isDefault
                                       ? {
-                                          cursor: "default",
-                                          visibility: "hidden",
-                                        }
+                                        cursor: "default",
+                                        visibility: "hidden",
+                                      }
                                       : null
                                   }
                                   onClick={() =>
@@ -386,9 +395,9 @@ const Account = () => {
                                   style={
                                     address.isDefault
                                       ? {
-                                          cursor: "default",
-                                          visibility: "hidden",
-                                        }
+                                        cursor: "default",
+                                        visibility: "hidden",
+                                      }
                                       : null
                                   }
                                   className="address-item__setup address-item__setup--delete"

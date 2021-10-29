@@ -17,7 +17,7 @@ export default configureStore({
     product: productReducer,
     cart: cartReducer,
     deliveryInfo: deliveryInfoReducer,
-    order: orderReducer,
+    order: orderReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

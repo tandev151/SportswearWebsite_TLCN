@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Select, FormControl, MenuItem, InputLabel } from "@material-ui/core";
-import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { addOrder } from "../features/order/orderSlice";
+import { useHistory } from "react-router-dom";
+import { paymentWithMomo, addOrder } from "../features/order/orderSlice"
+
 const Checkout = (props) => {
   const orderItems = props.location.state;
-  const { deliveryInfo } = useSelector((state) => state.deliveryInfo);
-  const [address, setAddress] = useState(null);
-  const [paymentType, setPaymentType] = useState("cod");
+  const { deliveryInfo } = useSelector(state => state.deliveryInfo);
+  const [address, setAddress] = useState(null)
+  const [paymentType, setPaymentType] = useState("cod")
+  const totalPrice = orderItems.reduce((total, priceItem) => {
+    total +=
+      (priceItem.product?.price -
+        (priceItem.product?.discountPercent / 100) * priceItem.product?.price) *
+      priceItem.quantity;
+    return total;
+  }, 0);
+  const shippingFee = 30000;
+  const totalAmount = totalPrice + shippingFee;
   const dispatch = useDispatch();
   const history = useHistory();
+
   const setDefaultDeliveryInfo = () => {
     if (deliveryInfo.address) {
       const defaultAddress = deliveryInfo.address.find(
@@ -34,28 +45,26 @@ const Checkout = (props) => {
     setAddress(newAddress);
   };
 
-  const totalPrice = orderItems.reduce((total, priceItem) => {
+  const totalPrice = orderItems.reduce((total, item) => {
     total +=
-      (priceItem.product?.price -
-        (priceItem.product?.discountPercent / 100) * priceItem.product?.price) *
-      priceItem.quantity;
+      (item.product?.price -
+        (item.product?.discountPercent / 100) * item.product?.price) *
+      item.quantity;
     return total;
   }, 0);
-  const shippingFee = 30000;
-  const totalAmount = totalPrice + shippingFee;
 
   const getItemsToPay = () => {
     const items = [];
-    orderItems.map((orderItem) => {
+    orderItems.map((item) => {
       items.push({
-        productId: orderItem.product._id,
-        sizeId: orderItem.size._id,
+        productId: item.product._id,
+        sizeId: item.size._id,
         payablePrice:
-          (orderItem.product.price -
-            (orderItem.product.discountPercent / 100) *
-              orderItem.product.price) *
-          orderItem.quantity,
-        purchaseQty: orderItem.quantity,
+          (item.product.price -
+            (item.product.discountPercent / 100) *
+            item.product.price) *
+          item.quantity,
+        purchaseQty: item.quantity,
       });
     });
     return items;
@@ -76,6 +85,14 @@ const Checkout = (props) => {
       if (resp.status === 201) {
         alert("Đặt hàng thành công!");
         history.replace("/cart");
+      }
+    } else if (paymentType === "card") {
+      const resultAction = await dispatch(paymentWithMomo({ totalAmount })).unwrap();
+      const url = resultAction.data.url;
+      if (url) {
+        window.location.href = url
+      } else {
+        alert('Hiện tại không thể thanh toán bằng hình thức này !')
       }
     }
   };
@@ -123,7 +140,7 @@ const Checkout = (props) => {
                             labelId="address-user-label"
                             id="address-user"
                             value={address._id}
-                            onChange={handleChange}
+                            onChange={() => handleChange()}
                             label={address.address}
                             sx={{ width: 540 }}
                             variant="standard"
@@ -162,7 +179,7 @@ const Checkout = (props) => {
                             onChange={() => setPaymentType("card")}
                           />
                           <div className="radio__radio"></div>
-                          Thanh toán trực tuyến (Momo)
+                          Thanh toán trực tuyến(Momo)
                         </label>
                       </div>
                       <div className="wrapper__body-info__btn row">
@@ -205,8 +222,8 @@ const Checkout = (props) => {
                                 {new Intl.NumberFormat("de-DE").format(
                                   (orderItem.product.price -
                                     (orderItem.product.discountPercent / 100) *
-                                      orderItem.product.price) *
-                                    orderItem.quantity
+                                    orderItem.product.price) *
+                                  orderItem.quantity
                                 )}
                               </p>
                             </div>

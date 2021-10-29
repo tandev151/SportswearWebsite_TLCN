@@ -14,10 +14,21 @@ export const getOrderById = createAsyncThunk(
   }
 );
 
-export const addOrder = createAsyncThunk("order/addOrder", async (order) => {
-  const response = await orderAPI.addOrder(order);
-  return response;
-});
+export const addOrder = createAsyncThunk(
+  "order/addOrder",
+  async (order) => {
+    const response = await orderAPI.addOrder(order);
+    return response;
+  }
+);
+
+export const paymentWithMomo = createAsyncThunk(
+  "order/paymentWithMomo",
+  async (amount) => {
+    const response = await orderAPI.paymentWithMomo(amount);
+    return response;
+  }
+);
 
 export const orderSlice = createSlice({
   name: "order",
@@ -60,6 +71,16 @@ export const orderSlice = createSlice({
     [addOrder.fulfilled]: (state, action) => {
       state.loading = false;
       state.order = action.payload.data.order;
+    },
+    [paymentWithMomo.pending]: (state) => {
+      state.loading = true;
+    },
+    [paymentWithMomo.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    },
+    [paymentWithMomo.fulfilled]: (state) => {
+      state.loading = false;
     },
   },
 });
