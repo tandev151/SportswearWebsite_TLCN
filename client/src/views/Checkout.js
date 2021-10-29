@@ -38,20 +38,12 @@ const Checkout = (props) => {
     setDefaultDeliveryInfo();
   }, [deliveryInfo]);
 
-  const handleChange = (event) => {
+  const handleChange = (e) => {
     const newAddress = deliveryInfo.address.find(
-      (add) => add._id === event.target.value
+      (add) => add._id === e.target.value
     );
     setAddress(newAddress);
   };
-
-  const totalPrice = orderItems.reduce((total, item) => {
-    total +=
-      (item.product?.price -
-        (item.product?.discountPercent / 100) * item.product?.price) *
-      item.quantity;
-    return total;
-  }, 0);
 
   const getItemsToPay = () => {
     const items = [];
@@ -81,14 +73,14 @@ const Checkout = (props) => {
     };
     if (paymentType === "cod") {
       console.log(order);
-      const resp = await dispatch(addOrder(order)).unwrap();
-      if (resp.status === 201) {
+      const res = await dispatch(addOrder(order)).unwrap();
+      if (res.status === 201) {
         alert("Đặt hàng thành công!");
         history.replace("/cart");
       }
     } else if (paymentType === "card") {
-      const resultAction = await dispatch(paymentWithMomo({ totalAmount })).unwrap();
-      const url = resultAction.data.url;
+      const res = await dispatch(paymentWithMomo({ totalAmount })).unwrap();
+      const url = res.data.url;
       if (url) {
         window.location.href = url
       } else {
@@ -140,7 +132,7 @@ const Checkout = (props) => {
                             labelId="address-user-label"
                             id="address-user"
                             value={address._id}
-                            onChange={() => handleChange()}
+                            onChange={(e) => handleChange(e)}
                             label={address.address}
                             sx={{ width: 540 }}
                             variant="standard"

@@ -135,8 +135,8 @@ const ProductDetails = () => {
       setCartItem({ ...cartItem, quantity: value });
     }
   };
-  // Handle payment
-  const handlePayment = () => {
+  // Handle pay now
+  const handlePayNow = () => {
     if (cartItem.size === "" || cartItem.quantity === 0) {
       alert("Kiểm tra kích thước giày và số lượng muốn mua.");
     } else if (auth.authenticate === false) {
@@ -145,7 +145,7 @@ const ProductDetails = () => {
       const order = [
         {
           product,
-          size: cartItem.size,
+          size: { _id: cartItem.size, size: 40 },
           quantity: Number.parseInt(cartItem.quantity),
         },
       ];
@@ -311,7 +311,7 @@ const ProductDetails = () => {
                   {/* Tạo disable khi sản phẩm hết hàng hay vì sự cố nào đó ( btn--disable)*/}
                   <span
                     className="btn body-btn__buy"
-                    onClick={() => handlePayment()}
+                    onClick={() => handlePayNow()}
                   >
                     Mua ngay
                   </span>
