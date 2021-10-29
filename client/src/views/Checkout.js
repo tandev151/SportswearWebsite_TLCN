@@ -150,9 +150,8 @@ const Checkout = (props) => {
                             name="payments-radio"
                             id="byCash"
                             className="radio__input"
-                            value="cod"
                             checked={paymentType === "cod"}
-                            onChange={(e) => setPaymentType(e.target.value)}
+                            onChange={() => setPaymentType("cod")}
                           />
                           <div className="radio__radio"></div>
                           Thanh toán khi nhận hàng
@@ -163,9 +162,8 @@ const Checkout = (props) => {
                             name="payments-radio"
                             id="byCreditCart"
                             className="radio__input"
-                            value="card"
                             checked={paymentType === "card"}
-                            onChange={(e) => setPaymentType(e.target.value)}
+                            onChange={() => setPaymentType("card")}
                           />
                           <div className="radio__radio" ></div>
                           Thanh toán trực tuyến
