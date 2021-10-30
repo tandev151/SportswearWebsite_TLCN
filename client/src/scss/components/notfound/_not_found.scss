@@ -12,7 +12,8 @@ $main-color-fill: #ca5835;
     color: $main-color-fill;
     background-color: transparent;
     overflow: hidden;
-    width: 260px;
+    width: 240px;
+    text-align: center;
     display: block;
     &:hover {
       color: $white;

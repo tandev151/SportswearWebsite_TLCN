@@ -3,11 +3,16 @@ import { useHistory } from "react-router-dom";
 const NotFound = () => {
   const history = useHistory();
   const onGoBackPreviousPage = () => {
-    history.goBack()
-  }
+    history.goBack();
+  };
   return (
     <div className="wrapper-not-found">
-      <span className="btn roll-back-btn" onClick={() => onGoBackPreviousPage()}>Quay lại trang trước</span>
+      <span
+        className="btn roll-back-btn"
+        onClick={() => onGoBackPreviousPage()}
+      >
+        Quay lại
+      </span>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
         <title>404</title>
         <g id="Layer_12 yellow-back-fig" data-name="Layer 12">
