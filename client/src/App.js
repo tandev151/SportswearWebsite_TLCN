@@ -25,6 +25,7 @@ import MyOrder from "./views/MyOrder";
 import { getDeliveryInfo } from "./features/deliveryInfo/deliveryInfoSlice";
 import { getCartItems } from "./features/cart/cartSlice";
 import "react-toastify/dist/ReactToastify.css";
+import NotFound from "./views/NotFound";
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -65,6 +66,7 @@ function App() {
           <AuthRoute exact path="/register" component={Register} />
           <AuthRoute exact path="/forget" component={Forget} />
           <Route exact path="/size-choose" component={Size} />
+          <Route exact path="/not-found" component={NotFound} />
         </Switch>
       </ScrollToTop>
     </Router>
