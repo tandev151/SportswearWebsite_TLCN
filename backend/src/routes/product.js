@@ -1,30 +1,23 @@
 const express = require('express');
-const { addProduct, getProductsBySlug, getProductById, deleteProductById, getProducts , updateProduct, updateQty, updateSizes} = require('../controller/product');
-const { requireSignin, adminMiddleware } = require('../common-middleware');
-
+const { addProduct, getProductsBySlug,
+    getProductById, getProductDetailsBySlug,
+    deleteProductById, getProducts,
+    updateProduct, updateQty, updateSizes,
+    searchByProductName,
+    updateDiscountPercent } = require('../controller/product');
+const { requireSignin, adminMiddleware, uploadCloud } = require('../common-middleware');
 const router = express.Router();
-const shortid = require("shortid");
-const path = require("path");
-const multer = require("multer");
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(path.dirname(__dirname), "uploads"));
-    },
-    filename: function (req, file, cb) {
-        cb(null, shortid.generate() + "-" + file.originalname);
-    },
-});
-const upload = multer({ storage });
-
-
-router.post('/product/add', requireSignin, adminMiddleware, upload.array("productPicture"), addProduct);
+router.post('/product/add', requireSignin, adminMiddleware, uploadCloud.array("productPicture"), addProduct);
 router.get('/product/:type/:slug', getProductsBySlug);
-router.get('/product/:id', getProductById);
+router.get('/product/:slug', getProductDetailsBySlug);
+router.post('/product/searchByProductName', searchByProductName);
+router.post('/product/getById', getProductById);
 router.delete('/product/deleteProductById', requireSignin, adminMiddleware, deleteProductById);
-router.post('/product/getProducts', requireSignin, adminMiddleware, getProducts);
+router.post('/product/getProducts', getProducts);
 router.post('/product/update', requireSignin, adminMiddleware, updateProduct);
 router.post('/product/updateQty', requireSignin, adminMiddleware, updateQty);
 router.post('/product/updateSizes', requireSignin, adminMiddleware, updateSizes);
+router.post('/product/updateDiscountPercent', requireSignin, adminMiddleware, updateDiscountPercent);
 
 module.exports = router;

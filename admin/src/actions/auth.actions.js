@@ -7,15 +7,22 @@ export const login = (user) => {
         const res = await axios.post(`/signin`, { ...user });
 
         if (res.status === 200) {
-            const {token, user } = res.data;
-            localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem('token', token);
-            dispatch({
-                type: authConstants.LOGIN_SUCCESS,
-                payload: {
-                    token, user
-                }
-            });
+            const { token, user } = res.data;
+            if (user.role === "admin") {
+                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('token', token);
+                dispatch({
+                    type: authConstants.LOGIN_SUCCESS,
+                    payload: {
+                        token, user
+                    }
+                });
+            } else {
+                dispatch({
+                    type: authConstants.LOGIN_FAILURE,
+                    payload: { error: "Username or password is incorrect" }
+                });
+            }
         } else {
             if (res.status === 400) {
                 dispatch({
@@ -49,7 +56,7 @@ export const signout = () => {
     return async dispatch => {
         dispatch({ type: authConstants.LOGOUT_REQUEST });
         const res = await axios.post(`/signout`);
-        if (res.status === 200) {   
+        if (res.status === 200) {
             localStorage.clear();
             dispatch({ type: authConstants.LOGOUT_SUCCESS })
         } else {

@@ -11,95 +11,98 @@ function runUpdate(condition, updateData) {
 
 exports.addToCart = (req, res) => {
     const { cartItems } = req.body;
-    Cart.findOne({ user: req.user._id }).exec((error, cart) => {
-        if (error) return res.status(400).json({ error });
-        // neu cart ton tai thi add CartItems vao nguoc lai thi khoi tao cart
-        if (cart) {
-            let promiseArray = [];
-            cartItems.forEach((cartItem) => {
-                const product = cartItem.product;
-                const item = cart.cartItems.find(c => c.product == product);
-                let condition, update;
-                if (item) {
-                    condition = { user: req.user._id, "cartItems.product": product };
-                    update = {
-                        $set: {
-                            "cartItems.$": cartItem
+    if (cartItems) {
+        Cart.findOne({ user: req.user._id }).exec((error, cart) => {
+            if (error) return res.status(400).json({ error });
+            // neu cart ton tai thi add CartItems vao nguoc lai thi khoi tao cart
+            if (cart) {
+                let promiseArray = [];
+                cartItems.forEach((cartItem) => {
+                    const product = cartItem.product;
+                    const size = cartItem.size;
+                    const item = cart.cartItems.find(c => c.product == product && c.size == size);
+                    let condition, update;
+                    if (item) {
+                        condition = { user: req.user._id, "cartItems.product": product };
+                        update = {
+                            $set: {
+                                "cartItems.$": cartItem
+                            }
+                        }
+                    } else {
+                        condition = { user: req.user._id };
+                        update = {
+                            $push: {
+                                cartItems: cartItem
+                            }
                         }
                     }
-                } else {
-                    condition = { user: req.user._id };
-                    update = {
-                        $push: {
-                            cartItems: cartItem
-                        }
+                    promiseArray.push(runUpdate(condition, update));
+                })
+                Promise.all(promiseArray)
+                    .then(result => res.status(201).json({ message: "add to cart successfully" }))
+                    .catch(error => res.status(400).json({ error }))
+
+            } else {
+                const cart = new Cart({
+                    user: req.user._id,
+                    cartItems
+                });
+                cart.save((error, cart) => {
+                    if (error) return res.status(400).json({ error });
+                    if (cart) {
+                        res.status(201).json({ message: "add to cart successfully" });
                     }
-                }
-                promiseArray.push(runUpdate(condition, update));
-            })
-            Promise.all(promiseArray)
-                .then(result => res.status(201).json({ message: "add to cart successfully"}))
-                .catch(error => res.status(400).json({ error }))
-
-        } else {
-            const cart = new Cart({
-                user: req.user._id,
-                cartItems
-            });
-            cart.save((error, cart) => {
-                if (error) return res.status(400).json({ error });
-                if (cart) {
-                    return res.status(201).json({ cart });
-                }
-            })
-        }
-
-    })
+                })
+            }
+        })
+    } else {
+        return res.status(400).json({ error: "CartItems is not allowed to be null" });
+    }
 }
 
 exports.getCartItems = (req, res) => {
     Cart.findOne({ user: req.user._id })
-        .populate("cartItems.product", "_id name price productPictures")
+        .populate("cartItems.product", "_id name slug price discountPercent productPictures")
         .populate("cartItems.size", "_id size")
         .exec((error, cart) => {
             if (error) return res.status(400).json({ error })
             if (cart) {
-                let cartItems = {};
+                let cartItems = [];
                 cart.cartItems.forEach((item) => {
-                    cartItems[item.product._id.toString()] = {
-                        _id: item.product._id.toString(),
-                        name: item.product.name,
-                        price: item.product.price,
-                        img: item.product.productPictures[0].img,
-                        quantity: item.quantity,
-                    }
-                    cartItems[item.size._id.toString()] = {
-                        _id: item.size._id.toString(),
-                        size: item.size.size,
-                    }
+                    cartItems.push({
+                        product: item.product,
+                        size: item.size,
+                        quantity: item.quantity
+                    })
                 })
                 res.status(200).json({ cartItems });
+            } else {
+                res.status(400).json({ error: "something went wrong" })
             }
         })
 }
 
 // Xoa 1 san pham trong CartItems
 exports.removeCartItems = (req, res) => {
-    const { productId } = req.body.payload;
-    console.log(productId)
-    if (productId) {
-        Cart.updateMany({ user: req.user._id },
+    const { cartItem } = req.body;
+    if (cartItem) {
+        Cart.updateOne({ user: req.user._id },
             {
                 $pull: {
                     cartItems: {
-                        product: productId
+                        product: cartItem.product,
+                        size: cartItem.size
                     }
                 }
             }).exec((error, result) => {
                 if (error) return res.status(400).json({ error });
                 if (result) {
-                    res.status(202).json({ result });
+                    return res.status(202).json({ result });
                 }
+                return res.status(400).json({ error: "something went wrong" });
             })
+    } else {
+        res.status(400).json({ error: "Item  is not allowed to be null" });
     }
 }

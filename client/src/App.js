@@ -53,7 +53,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route
-            path={[`/collections/category/:slug`, `/collections/brand/:slug`, `/collections/search`]}
+            path={[`/collections/:type/:slug`, `/collections/search`]}
             component={Collections}
           />
           <Route path={`/product/:slug`} component={ProductDetails} />

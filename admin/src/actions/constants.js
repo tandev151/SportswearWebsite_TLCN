@@ -74,6 +74,10 @@ export const productConstants = {
     ADD_PRODUCT_REQUEST: "ADD_PRODUCT_REQUEST",
     ADD_PRODUCT_SUCCESS: "ADD_PRODUCT_SUCCESS",
     ADD_PRODUCT_FAILURE: "ADD_PRODUCT_FAILURE",
+
+    UPDATE_DISCOUNT_REQUEST: "UPDATE_DISCOUNT_REQUEST",
+    UPDATE_DISCOUNT_SUCCESS: "UPDATE_DISCOUNT_SUCCESS",
+    UPDATE_DISCOUNT_FAILURE: "UPDATE_DISCOUNT_FAILURE",
 }
 
 export const orderConstants = {
@@ -99,4 +103,4 @@ export const sizeConstants = {
     UPDATE_SIZE_SUCCESS: "UPDATE_SIZE_SUCCESS",
     UPDATE_SIZE_FAILURE: "UPDATE_SIZE_FAILURE"
 }
-export const API_URL = "http://localhost:5000";
+export const API_URL = "https://api-sportswear.herokuapp.com";

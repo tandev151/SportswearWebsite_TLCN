@@ -15,7 +15,6 @@ import Input from '../../components/UI/Input';
 import EditUserModal from './components/EditUserModal';
 import { useDispatch, useSelector } from 'react-redux';
 import "./style.scss";
-import { API_URL } from "../../actions/constants";
 import { updateUser, deleteUserById } from "../../actions";
 
 
@@ -94,7 +93,7 @@ export default function User() {
                             <td>{user.email}</td>
                             <td>
                                 <img className="img-profile"
-                                    src={user.profilePicture ? `${API_URL}/images/${user.profilePicture}` : `${API_URL}/images/non-avatar.png`}
+                                    src={user.profilePicture ? user.profilePicture : `https://res.cloudinary.com/dmtopd6ps/image/upload/v1632883166/non-avatar_yg1nky.png`}
                                     alt="no profile picture" />
                             </td>
                             <td>{user.role}</td>

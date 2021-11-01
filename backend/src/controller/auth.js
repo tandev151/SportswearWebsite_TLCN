@@ -2,7 +2,10 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const shortid = require('shortid');
-
+require('dotenv').config()
+const { OAuth2Client } = require('google-auth-library')
+const client_id = process.env.GOOGLE_CLIENT_ID
+const client = new OAuth2Client(client_id)
 
 const generateJwtToken = (_id, role) => {
     return jwt.sign({ _id, role }, process.env.JWT_SECRET, {
@@ -16,7 +19,7 @@ exports.signup = (req, res) => {
             async (error, user) => {
                 if (user) {
                     return res.status(400).json({
-                        message: "User already registered"
+                        error: "User already registered"
                     })
                 }
                 const { name, email, password } = req.body;
@@ -25,7 +28,7 @@ exports.signup = (req, res) => {
                     name,
                     email,
                     password: hash_password,
-                    username: "NM" + shortid.generate()
+                    username: "NM" + shortid.generate(),
                 })
 
                 _user.save((error, user) => {
@@ -60,10 +63,10 @@ exports.signin = (req, res) => {
                 const isPassword = await user.authenticate(req.body.password);
                 if (isPassword) {
                     const token = generateJwtToken(user._id, user.role);
-                    const { _id, name, email, role } = user;
+                    const { _id, name, email, role, profilePicture } = user;
                     res.status(200).json({
                         token,
-                        user: { _id, name, email, role },
+                        user: { _id, name, email, role, profilePicture },
                     })
                 } else {
                     return res.status(400).json({
@@ -81,13 +84,35 @@ exports.signin = (req, res) => {
     )
 }
 
-exports.signout = (req, res) =>{
+exports.signout = (req, res) => {
     res.clearCookie("token");
     res.status(200).json({
         message: "Signout successfully ....!"
     })
 }
 
-exports.signinWithGoogle = (req, res) => {
-    //signinWithGoogle
+exports.signinWithGoogle = async (req, res) => {
+    const { token } = req.body
+    const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: client_id
+    });
+    const { name, email, picture } = ticket.getPayload();
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        const { _id, name, email, role, profilePicture } = existingUser;
+        const token = generateJwtToken(_id, role);
+        const user = { _id, name, email, role, profilePicture };
+        res.status(201).json({ user, token })
+    } else {
+        const newUser = {
+            name,
+            email,
+            username: "GG" + shortid.generate(),
+            profilePicture: picture
+        }
+        let user = await new User(newUser).save();
+        const token = generateJwtToken(user._id, user.role);
+        res.status(201).json({ user, token })
+    }
 }

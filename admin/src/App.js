@@ -12,6 +12,7 @@ import Order from './containers/Order';
 import Brand from './containers/Brand';
 import PrivateRoute from './components/HOC/PrivateRoute';
 import User from './containers/User';
+import Statistic from './containers/Statistic';
 
 
 
@@ -37,7 +38,7 @@ function App() {
           <PrivateRoute path="/brand" component={Brand} />
           <PrivateRoute path="/user" component={User} />
           <PrivateRoute path="/order" component={Order} />
-          <PrivateRoute path="/statistic" component={Order} />
+          <PrivateRoute path="/statistic" component={Statistic} />
 
 
           <Route path="/signin" component={Signin} />
