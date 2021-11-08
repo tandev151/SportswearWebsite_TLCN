@@ -36,6 +36,14 @@ export const isUserLoggedIn = createAsyncThunk(
   }
 );
 
+export const sendOtpToEmail = createAsyncThunk(
+  "auth/sendOtpToEmail",
+  async () => {
+    const response = await authAPI.sendOtpToEmail();
+    return response;
+  }
+);
+
 const initialState = {
   user: null,
   authenticate: false,
