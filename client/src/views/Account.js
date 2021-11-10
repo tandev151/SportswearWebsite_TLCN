@@ -26,6 +26,14 @@ const Account = () => {
   const [newDeliveryInfo, setNewDeliveryInfo] = useState({});
   const [formAddressOpen, setFormAddressOpen] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    name: user?.name,
+    profilePicture:
+      user?.profilePicture ||
+      require("../assets/images/account/images.png").default,
+    password: "",
+  });
+  const [confirmPassword, setConfirmPassword] = useState("");
   // Dùng để kích hoạt chọn ở selectbox
 
   const dispatch = useDispatch();
@@ -59,6 +67,7 @@ const Account = () => {
     const payload = {
       addressId,
     };
+
     dispatch(setDefaultDeliveryInfo({ payload }));
   };
 
@@ -85,6 +94,24 @@ const Account = () => {
     }
     return arr;
   };
+
+  const handleUpdateUserInfo = (e) => {
+    e.preventDefault();
+    console.log(userInfo, confirmPassword);
+  };
+
+  const handleSelectImage = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setUserInfo({ ...userInfo, profilePicture: reader.result });
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+    console.log(e.target.files[0]);
+    // setUserInfo({ ...userInfo, profilePicture: e.target.files[0] });
+  };
+
   return (
     <Layout>
       <div className="account">
@@ -98,11 +125,23 @@ const Account = () => {
                       Thông tin cá nhân
                     </h3>
                     <div className="account-wrapper__information__body">
-                      <form action="">
+                      <form onSubmit={(e) => handleUpdateUserInfo(e)}>
                         <div className="form-header">
                           <div className="form-header__img">
-                            <img src={user?.profilePicture} alt="" />
-                            <span className="form-header__img-edit">
+                            <img src={userInfo.profilePicture} alt="" />
+
+                            <label
+                              htmlFor="img"
+                              className="form-header__img-edit"
+                            >
+                              <input
+                                type="file"
+                                id="img"
+                                name="img-btn"
+                                accept="image/*"
+                                className="form-header__img-edit-btn"
+                                onChange={(e) => handleSelectImage(e)}
+                              />
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -117,7 +156,7 @@ const Account = () => {
                                   d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
                                 />
                               </svg>
-                            </span>
+                            </label>
                           </div>
                           <div className="form-header__username">
                             <h5>Tài khoản: {user?.email}</h5>
@@ -128,7 +167,10 @@ const Account = () => {
                           <TextField
                             label="Họ và tên"
                             variant="outlined"
-                            value={user?.name}
+                            value={userInfo.name}
+                            onChange={(e) =>
+                              setUserInfo({ ...userInfo, name: e.target.value })
+                            }
                           />
                         </FormControl>
                         <FormControl
@@ -154,6 +196,13 @@ const Account = () => {
                                 type="password"
                                 label="Mật khẩu mới"
                                 variant="outlined"
+                                value={userInfo.password}
+                                onChange={(e) =>
+                                  setUserInfo({
+                                    ...userInfo,
+                                    password: e.target.value,
+                                  })
+                                }
                               />
                             </FormControl>
                             <FormControl
@@ -164,6 +213,10 @@ const Account = () => {
                                 type="password"
                                 label="Xác nhận mật khẩu"
                                 variant="outlined"
+                                value={confirmPassword}
+                                onChange={(e) =>
+                                  setConfirmPassword(e.target.value)
+                                }
                               />
                             </FormControl>
                             <FormControl>
