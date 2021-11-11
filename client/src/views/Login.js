@@ -6,9 +6,7 @@ import { Link } from "react-router-dom";
 import { login, loginByGoogle } from "../features/auth/authSlice";
 import { emailSchema, passwordSchema } from "../validation/authValidations";
 
-
 const Login = () => {
-
   const [passwordShown, setPasswordShown] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +28,7 @@ const Login = () => {
       .then(() => setPasswordValid(true))
       .catch(() => setPasswordValid(false));
   };
-const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = () => {
     setPasswordShown(passwordShown ? false : true);
   };
 
@@ -49,15 +47,8 @@ const togglePasswordVisibility = () => {
       alert("Vui lòng kiểm tra thông tin đăng nhập");
     } else {
       const user = { email, password };
-<<<<<<< HEAD
       const resp = await dispatch(login(user)).unwrap();
-
       if (resp.error) {
-=======
-      const res = await dispatch(login(user)).unwrap();
-      console.log(res)
-      if (res.error) {
->>>>>>> 217ef2e03b866dee320ae4aa03239890f1efd6bb
         alert("Thông tin đăng nhập không đúng!");
       }
     }

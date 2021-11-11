@@ -16,6 +16,10 @@ import {
   deleteDeliveryInfo,
   setDefaultDeliveryInfo,
 } from "../features/deliveryInfo/deliveryInfoSlice";
+import { sendOtpToEmail } from "../features/auth/authSlice";
+import { ToastContainer, toast } from "react-toastify";
+import { settings } from "../components/toasts/settingToast";
+
 const Account = () => {
   const { user } = useSelector((state) => state.auth);
   const { deliveryInfo } = useSelector((state) => state.deliveryInfo);
@@ -26,6 +30,7 @@ const Account = () => {
   const [newDeliveryInfo, setNewDeliveryInfo] = useState({});
   const [formAddressOpen, setFormAddressOpen] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [isDisabled, setDisabled] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: user?.name,
     profilePicture:
@@ -112,6 +117,20 @@ const Account = () => {
     // setUserInfo({ ...userInfo, profilePicture: e.target.files[0] });
   };
 
+  const notifySendOTP = () =>
+    toast.info("Mã OTP đã được gửi về email của bạn !", settings);
+  const sendOTPToEmail = async (e) => {
+    e.preventDefault();
+    setDisabled(true);
+    e.target.disabled = true;
+    const resp = await dispatch(sendOtpToEmail()).unwrap();
+    notifySendOTP();
+    setTimeout(() => {
+      e.target.disabled = false;
+      setDisabled(false);
+    }, 60000);
+    console.log(resp);
+  };
   return (
     <Layout>
       <div className="account">
@@ -222,7 +241,17 @@ const Account = () => {
                             <FormControl>
                               <div style={{ display: "flex" }}>
                                 <TextField label="Mã OTP" variant="outlined" />
-                                <button className="btn btn-otp">Lấy mã</button>
+                                <button
+                                  className={
+                                    isDisabled
+                                      ? `btn btn-otp btn-otp--disbaled`
+                                      : `btn btn-otp `
+                                  }
+                                  onClick={(e) => sendOTPToEmail(e)}
+                                  disabled={isDisabled}
+                                >
+                                  Lấy mã
+                                </button>
                               </div>
                             </FormControl>
                           </>
@@ -482,6 +511,7 @@ const Account = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </Layout>
   );
 };

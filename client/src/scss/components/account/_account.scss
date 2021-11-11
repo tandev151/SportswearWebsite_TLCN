@@ -112,6 +112,10 @@
                 #cf3c17 90%
               );
             }
+            &--disbaled {
+              cursor: no-drop;
+              opacity: 0.6;
+            }
           }
         }
       }
