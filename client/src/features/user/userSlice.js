@@ -16,9 +16,7 @@ export const userSlice = createSlice({
     loading: false,
     error: null,
   },
-  extraReducers: {
-  }
+  extraReducers: {},
 });
-
 
 export default userSlice.reducer;
