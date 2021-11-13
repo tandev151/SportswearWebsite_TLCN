@@ -38,7 +38,6 @@ const Forget = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (emailValid !== false) {
-      console.log(emailValid);
     }
   };
 
