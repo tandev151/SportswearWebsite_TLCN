@@ -47,8 +47,9 @@ const Login = () => {
       alert("Vui lòng kiểm tra thông tin đăng nhập");
     } else {
       const user = { email, password };
-      const resp = await dispatch(login(user)).unwrap();
-      if (resp.error) {
+      try {
+        await dispatch(login(user)).unwrap();
+      } catch (e) {
         alert("Thông tin đăng nhập không đúng!");
       }
     }

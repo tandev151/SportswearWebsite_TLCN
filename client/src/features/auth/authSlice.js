@@ -124,10 +124,9 @@ export const authSlice = createSlice({
     },
     [isUserLoggedIn.fulfilled]: (state, action) => {
       state.loading = false;
-      const user = JSON.parse(localStorage.getItem("user"));
-      state.user = user;
+      state.user = action.payload.data.user;
       state.token = localStorage.getItem("token");
-      state.authenticate = action.payload.data.authenticate;
+      state.authenticate = true;
     },
   },
 });

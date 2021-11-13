@@ -21,7 +21,7 @@ import { sendOtpToEmail } from "../features/auth/authSlice";
 import { ToastContainer, toast } from "react-toastify";
 import { settings } from "../components/toasts/settingToast";
 import { passwordSchema, nameSchema } from "../validation/authValidations";
-import { color } from "@material-ui/system";
+import noImage from "../assets/images/account/images.png";
 
 const Account = () => {
   const { user } = useSelector((state) => state.auth);
@@ -35,12 +35,25 @@ const Account = () => {
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [isDisabled, setDisabled] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    name: user?.name,
-    profilePicture:
-      user?.profilePicture ||
-      require("../assets/images/account/images.png").default,
+    name: "",
+    profilePicture: null,
+    profilePictureToChange: null,
     password: "",
+    email: "",
+    otp: ""
   });
+
+  useEffect(() => {
+    if (user) {
+      setUserInfo({
+        ...userInfo,
+        name: user.name,
+        profilePicture: user.profilePicture,
+        email: user.email
+      })
+    }
+  }, [user])
+
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordValid, setPasswordValid] = useState(true);
 
@@ -121,35 +134,39 @@ const Account = () => {
 
   const handleUpdateUserInfo = async (e) => {
     e.preventDefault();
-    const fd = new FormData();
-    // if (userInfo.profilePicture) {
-    //   fd.append("profilePicture", userInfo.profilePicture);
-    // }
-    fd.append("name", userInfo.name);
-    // if (showChangePassword) {
-    //   if (
-    //     userInfo.password.length !== 0 &&
-    //     userInfo.password === confirmPassword
-    //   )
-    //     fd.append("password", userInfo.password);
-    // }
-    console.log(showChangePassword);
-    console.log(userInfo.name);
-    const resp = await dispatch(updateUserInfo(fd));
-    console.log(resp);
+    const form = new FormData();
+    form.append("name", userInfo.name);
+    if (userInfo.profilePictureToChange) {
+      form.append("profilePicture", userInfo.profilePictureToChange);
+    }
+    if (showChangePassword) {
+      if (userInfo.password.length !== 0 &&
+        userInfo.password === confirmPassword
+        && userInfo.otp) {
+        form.append("password", userInfo.password);
+        form.append("otp", userInfo.otp);
+      } else {
+        alert("Vui lòng kiểm tra lại OTP và mật khẩu !")
+        return;
+      }
+    }
+    try {
+      const res = await dispatch(updateUserInfo(form)).unwrap();
+      if (res.status === 202)
+        alert("Cập nhật thông tin thành công !")
+    } catch (err) {
+      alert("Vui lòng kiểm tra lại các thông tin cho chính xác !")
+    }
   };
 
-  console.log(userInfo);
   const handleSelectImage = (e) => {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setUserInfo({ ...userInfo, profilePicture: reader.result });
+        setUserInfo({ ...userInfo, profilePicture: reader.result, profilePictureToChange: e.target.files[0] });
       }
     };
     reader.readAsDataURL(e.target.files[0]);
-    console.log(e.target.files[0]);
-    // setUserInfo({ ...userInfo, profilePicture: e.target.files[0] });
   };
 
   const notifySendOTP = () =>
@@ -165,7 +182,6 @@ const Account = () => {
       e.target.disabled = false;
       setDisabled(false);
     }, 60000);
-    console.log(resp);
   };
   return (
     <Layout>
@@ -183,7 +199,7 @@ const Account = () => {
                       <form onSubmit={(e) => handleUpdateUserInfo(e)}>
                         <div className="form-header">
                           <div className="form-header__img">
-                            <img src={userInfo.profilePicture} alt="" />
+                            <img src={userInfo.profilePicture || noImage} alt="" />
 
                             <label
                               htmlFor="img"
@@ -214,7 +230,7 @@ const Account = () => {
                             </label>
                           </div>
                           <div className="form-header__username">
-                            <h5>Tài khoản: {user?.email}</h5>
+                            <h5>Tài khoản: {userInfo.email}</h5>
                           </div>
                         </div>
                         {/* <div className="form-control"> */}
@@ -290,7 +306,8 @@ const Account = () => {
                             </FormControl>
                             <FormControl>
                               <div style={{ display: "flex" }}>
-                                <TextField label="Mã OTP" variant="outlined" />
+                                <TextField label="Mã OTP" variant="outlined" value={userInfo.otp}
+                                  onChange={(e) => setUserInfo({ ...userInfo, otp: e.target.value })} />
                                 <button
                                   className={
                                     isDisabled
@@ -515,9 +532,9 @@ const Account = () => {
                                     style={
                                       address.isDefault
                                         ? {
-                                            cursor: "default",
-                                            visibility: "hidden",
-                                          }
+                                          cursor: "default",
+                                          visibility: "hidden",
+                                        }
                                         : null
                                     }
                                     onClick={() =>
@@ -530,9 +547,9 @@ const Account = () => {
                                     style={
                                       address.isDefault
                                         ? {
-                                            cursor: "default",
-                                            visibility: "hidden",
-                                          }
+                                          cursor: "default",
+                                          visibility: "hidden",
+                                        }
                                         : null
                                     }
                                     className="address-item__setup address-item__setup--delete"
