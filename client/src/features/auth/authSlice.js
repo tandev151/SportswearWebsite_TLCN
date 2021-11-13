@@ -38,8 +38,16 @@ export const isUserLoggedIn = createAsyncThunk(
 
 export const sendOtpToEmail = createAsyncThunk(
   "auth/sendOtpToEmail",
-  async () => {
-    const response = await authAPI.sendOtpToEmail();
+  async (email) => {
+    const response = await authAPI.sendOtpToEmail(email);
+    return response;
+  }
+);
+
+export const updateForgetPassword = createAsyncThunk(
+  "auth/updateForgetPassword",
+  async (payload) => {
+    const response = await authAPI.updateForgetPassword(payload);
     return response;
   }
 );

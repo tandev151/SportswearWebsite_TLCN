@@ -176,7 +176,7 @@ const Account = () => {
     e.preventDefault();
     setDisabled(true);
     e.target.disabled = true;
-    const resp = await dispatch(sendOtpToEmail()).unwrap();
+    const resp = await dispatch(sendOtpToEmail({ email: userInfo.email })).unwrap();
     notifySendOTP();
     setTimeout(() => {
       e.target.disabled = false;

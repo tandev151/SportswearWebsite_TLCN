@@ -3,6 +3,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import { emailSchema, passwordSchema } from "../validation/authValidations";
+import { sendOtpToEmail, updateForgetPassword } from "../features/auth/authSlice";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+
+
 const Forget = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -14,6 +19,8 @@ const Forget = () => {
   const [passwordShown, setPasswordShown] = useState(false);
   const [confirmShown, setConfirmShown] = useState(false);
 
+  const dispatch = useDispatch();
+  const history = useHistory();
   const togglePasswordVisibility = () => {
     setPasswordShown(passwordShown ? false : true);
   };
@@ -35,15 +42,35 @@ const Forget = () => {
       .catch(() => setPasswordValid(false));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (emailValid !== false) {
-      console.log(emailValid);
+    try {
+      const payload = { password, otp, email }
+      const res = await dispatch(updateForgetPassword(payload)).unwrap();
+      if (res.status === 202) {
+        alert("Đổi mật khẩu thành công !")
+        history.replace("/login")
+      } else {
+        alert("Đã có lỗi xảy ra !");
+      }
+    } catch (err) {
+      alert("Vui lòng kiểm tra lại !");
     }
   };
 
-  const handleSendRequest = (e) => {
-    setShowResetPassword(true);
+  const handleSendRequest = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await dispatch(sendOtpToEmail({ email })).unwrap();
+      if (res.status === 201) {
+        alert("Mã OTP đã được gửi về email!");
+        setShowResetPassword(true);
+      } else {
+        alert("Đã có lỗi xảy ra!");
+      }
+    } catch (err) {
+      alert("Email không tồn tại trong hệ thống!");
+    }
   };
   return (
     <Layout>
@@ -250,8 +277,7 @@ const Forget = () => {
                   ) : (
                     <button
                       className="btn form-control__btn"
-                      type="submit"
-                      onClick={(e) => handleSendRequest()}
+                      onClick={(e) => handleSendRequest(e)}
                     >
                       Gửi yêu cầu
                     </button>
