@@ -136,7 +136,7 @@ const Account = () => {
     e.preventDefault();
     const form = new FormData();
     form.append("name", userInfo.name);
-    if (userInfo.profilePicture) {
+    if (userInfo.profilePictureToChange) {
       form.append("profilePicture", userInfo.profilePictureToChange);
     }
     if (showChangePassword) {
