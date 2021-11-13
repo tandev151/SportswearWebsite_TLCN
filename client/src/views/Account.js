@@ -16,9 +16,12 @@ import {
   deleteDeliveryInfo,
   setDefaultDeliveryInfo,
 } from "../features/deliveryInfo/deliveryInfoSlice";
+import { updateUserInfo } from "../features/user/userSlice";
 import { sendOtpToEmail } from "../features/auth/authSlice";
 import { ToastContainer, toast } from "react-toastify";
 import { settings } from "../components/toasts/settingToast";
+import { passwordSchema, nameSchema } from "../validation/authValidations";
+import { color } from "@material-ui/system";
 
 const Account = () => {
   const { user } = useSelector((state) => state.auth);
@@ -39,7 +42,23 @@ const Account = () => {
     password: "",
   });
   const [confirmPassword, setConfirmPassword] = useState("");
-  // Dùng để kích hoạt chọn ở selectbox
+  const [passwordValid, setPasswordValid] = useState(true);
+
+  const [nameValid, setNameValid] = useState(true);
+  const checkNameValidation = (value) => {
+    nameSchema
+      .validate({ name: value })
+      .then(() => setNameValid(true))
+      .catch(() => setNameValid(false));
+    console.log(nameValid);
+  };
+
+  const checkPasswordValidation = (value) => {
+    passwordSchema
+      .validate({ password: value })
+      .then(() => setPasswordValid(true))
+      .catch(() => setPasswordValid(false));
+  };
 
   const dispatch = useDispatch();
 
@@ -100,11 +119,27 @@ const Account = () => {
     return arr;
   };
 
-  const handleUpdateUserInfo = (e) => {
+  const handleUpdateUserInfo = async (e) => {
     e.preventDefault();
-    console.log(userInfo, confirmPassword);
+    const fd = new FormData();
+    // if (userInfo.profilePicture) {
+    //   fd.append("profilePicture", userInfo.profilePicture);
+    // }
+    fd.append("name", userInfo.name);
+    // if (showChangePassword) {
+    //   if (
+    //     userInfo.password.length !== 0 &&
+    //     userInfo.password === confirmPassword
+    //   )
+    //     fd.append("password", userInfo.password);
+    // }
+    console.log(showChangePassword);
+    console.log(userInfo.name);
+    const resp = await dispatch(updateUserInfo(fd));
+    console.log(resp);
   };
 
+  console.log(userInfo);
   const handleSelectImage = (e) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -119,6 +154,7 @@ const Account = () => {
 
   const notifySendOTP = () =>
     toast.info("Mã OTP đã được gửi về email của bạn !", settings);
+
   const sendOTPToEmail = async (e) => {
     e.preventDefault();
     setDisabled(true);
@@ -190,7 +226,13 @@ const Account = () => {
                             onChange={(e) =>
                               setUserInfo({ ...userInfo, name: e.target.value })
                             }
+                            onBlur={(e) => checkNameValidation(e.target.value)}
                           />
+                          {nameValid ? null : (
+                            <div className="error-input">
+                              Họ tên cần được điền !
+                            </div>
+                          )}
                         </FormControl>
                         <FormControl
                           fullWidth
@@ -222,7 +264,15 @@ const Account = () => {
                                     password: e.target.value,
                                   })
                                 }
+                                onBlur={(e) =>
+                                  checkPasswordValidation(e.target.value)
+                                }
                               />
+                              {passwordValid ? null : (
+                                <div className="error-input">
+                                  Mật khẩu hợp lệ chỉ chứa từ 8-50 ký tự!
+                                </div>
+                              )}
                             </FormControl>
                             <FormControl
                               fullWidth
