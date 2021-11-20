@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import { emailSchema, passwordSchema } from "../validation/authValidations";
-import { sendOtpToEmail, updateForgetPassword } from "../features/auth/authSlice";
+import {
+  sendOtpToEmail,
+  updateForgetPassword,
+} from "../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-
 
 const Forget = () => {
   const [email, setEmail] = useState("");
@@ -44,33 +46,34 @@ const Forget = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-<<<<<<< HEAD
-    if (emailValid !== false) {
-=======
     try {
-      const payload = { password, otp, email }
+      const payload = { password, otp, email };
       const res = await dispatch(updateForgetPassword(payload)).unwrap();
       if (res.status === 202) {
-        alert("Đổi mật khẩu thành công !")
-        history.replace("/login")
+        alert("Đổi mật khẩu thành công !");
+        history.replace("/login");
       } else {
         alert("Đã có lỗi xảy ra !");
       }
     } catch (err) {
       alert("Vui lòng kiểm tra lại !");
->>>>>>> 680fc016a53f77cb2d6d707f6484a0b19d3efa79
     }
   };
 
   const handleSendRequest = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await dispatch(sendOtpToEmail({ email })).unwrap();
-      if (res.status === 201) {
-        alert("Mã OTP đã được gửi về email!");
-        setShowResetPassword(true);
+      if (!emailValid && email === "") {
+        alert("Vui lòng điền email hợp lệ!");
       } else {
-        alert("Đã có lỗi xảy ra!");
+        const res = await dispatch(sendOtpToEmail({ email })).unwrap();
+        if (res.status === 201) {
+          alert("Mã OTP đã được gửi về email!");
+          setShowResetPassword(true);
+        } else {
+          alert("Đã có lỗi xảy ra!");
+        }
       }
     } catch (err) {
       alert("Email không tồn tại trong hệ thống!");

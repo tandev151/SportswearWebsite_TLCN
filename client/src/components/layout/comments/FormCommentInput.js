@@ -2,7 +2,7 @@ import React from "react";
 
 const FormCommentInput = () => {
   return (
-    <div className="comments-body__form mgb-45">
+    <div className="comments-body__form ">
       <div className="form-input">
         <img
           src={require("../../../assets/images/account/images.png").default}

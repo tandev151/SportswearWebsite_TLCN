@@ -17,7 +17,7 @@ const ProductDetails = () => {
   const { product } = useSelector((state) => state.product);
   const [slideSub, setSlideSub] = useState();
   const [slidePhotos, setSlidePhotos] = useState();
-  const [openDescription, setOpenDescription] = useState(false);
+  const [openDescription, setOpenDescription] = useState(true);
   const { cartItems } = useSelector((state) => state.cart);
   // useHistory be used to redirect page
   const routeChange = (url) => {
@@ -121,8 +121,7 @@ const ProductDetails = () => {
 
   // Open/Close description
   const handleOpenDescription = () => {
-    if (openDescription === true) setOpenDescription(false);
-    else setOpenDescription(true);
+    setOpenDescription(!openDescription);
   };
   // Handle change size
   const handleChangeSize = (size) => {

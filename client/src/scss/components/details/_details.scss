@@ -332,7 +332,7 @@
             color: $red-o;
           }
           & input:checked ~ label {
-            color: crimson;
+            color: $red-o;
           }
         }
       }
@@ -382,6 +382,84 @@
             &:hover {
               opacity: 0.8;
             }
+          }
+        }
+      }
+      &__list {
+        margin-top: 100px;
+        border: 1px solid #ccc;
+        box-shadow: 0px 1px 5px #ccc;
+        padding: 12px;
+        border-radius: 4px;
+
+        &-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+          padding-left: 12px;
+          & h3 {
+            font-size: 1.5rem;
+          }
+        }
+        &-body {
+          padding: 12px;
+
+          & .comment-item {
+            padding: 12px;
+            display: flex;
+            box-shadow: 0px 1px 5px #ccc;
+            border: 1px solid #ccc;
+            background-color: #f5fffc;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            & .info {
+              display: flex;
+              margin-right: 24px;
+
+              & img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+              }
+              & .info-name {
+                margin-left: 4px;
+                margin-top: 8px;
+              }
+            }
+            & .content {
+              flex: 1;
+              padding-right: 30px;
+              & .rating {
+                & i {
+                  color: $red-o;
+                  margin: 5px 0;
+                  padding-right: 5px;
+                  cursor: pointer;
+                }
+                & i:nth-child(5) {
+                  padding-right: 0;
+                }
+                & .star {
+                  position: relative;
+                }
+                & .star-1 {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 111px;
+                  overflow: hidden;
+                }
+              }
+              &-body {
+                min-height: 28px;
+              }
+            }
+          }
+          & .create-date {
+            width: 150px;
+            font-size: 1rem;
+            padding-left: 12px;
           }
         }
       }

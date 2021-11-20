@@ -1,4 +1,5 @@
 import React from "react";
+import CommentItem from "./CommentItem";
 import FormCommentInput from "./FormCommentInput";
 const Comments = () => {
   return (
@@ -24,7 +25,17 @@ const Comments = () => {
           </div>
         </div>
         <FormCommentInput />
-        <div className="comments-body__list"></div>
+        <div className="comments-body__list">
+          <div className="comments-body__list-header">
+            <h3>Bình luận (2)</h3>
+          </div>
+          <div className="comments-body__list-body">
+            <CommentItem />
+            <CommentItem />
+            <CommentItem />
+            <CommentItem />
+          </div>
+        </div>
       </div>
     </div>
   );
