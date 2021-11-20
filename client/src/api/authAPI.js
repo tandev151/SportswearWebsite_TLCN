@@ -20,8 +20,11 @@ const authAPI = {
   loginByGoogle: (token) => {
     return axios.post("/v1/auth/google", token);
   },
-  sendOtpToEmail: () => {
-    return axios.post("/sendOtpToEmail");
+  sendOtpToEmail: (email) => {
+    return axios.post("/sendOtpToEmail", email);
+  },
+  updateForgetPassword: (payload) => {
+    return axios.post("/updateForgetPassword", payload);
   }
 };
 export default authAPI;
