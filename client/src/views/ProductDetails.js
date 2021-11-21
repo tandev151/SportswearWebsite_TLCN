@@ -4,15 +4,18 @@ import Slider from "react-slick";
 import Layout from "../components/layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductBySlug } from "../features/product/productSlice";
-import { addToCart, getCartItems } from "../features/cart/cartSlice";
+import { addToCart } from "../features/cart/cartSlice";
 import { confirmAlert } from "react-confirm-alert";
+import Loading from "../components/layout/loading/Loading";
 const ProductDetails = () => {
+
   let match = useRouteMatch();
-  const { slug } = match.params;
   const dispatch = useDispatch();
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
-  const { product } = useSelector((state) => state.product);
+  const [product, setProduct] = useState({
+    _id: "", discountPercent: "",name:"",slug:"",price:"",description:"",
+  });
   const [slideSub, setSlideSub] = useState();
   const [slidePhotos, setSlidePhotos] = useState();
   const [openDescription, setOpenDescription] = useState(false);
@@ -29,9 +32,13 @@ const ProductDetails = () => {
   });
 
   useEffect(() => {
-    dispatch(getProductBySlug(slug));
-    dispatch(getCartItems());
-  }, [slug]);
+    const fetchProductBySlug = async () => {
+      const { slug } = match.params;
+      const res = await dispatch(getProductBySlug(slug)).unwrap();
+      setProduct(res.data.product)
+    }
+    fetchProductBySlug()
+  }, []);
 
   const photoSettings = {
     arrows: false,
@@ -186,7 +193,7 @@ const ProductDetails = () => {
             },
           ],
         };
-        
+
         dispatch(addToCart(cart));
         pageRedirects();
       }
@@ -194,9 +201,9 @@ const ProductDetails = () => {
   };
   // Show confirm alert to redirect
 
-  if (Object.keys(product).length === 0) {
-    return null;
-  }
+  // if (Object.keys(product).length === 0) {
+  //   return <Loading />;
+  // }
 
   return (
     <Layout>
@@ -213,7 +220,7 @@ const ProductDetails = () => {
                         ref={(slide) => setSlidePhotos(slide)}
                         {...subPhotoSettings}
                       >
-                        {product.productPictures.map((image) => (
+                        {product.productPictures?.map((image) => (
                           <img src={image.img} alt="" />
                         ))}
                       </Slider>
@@ -226,7 +233,7 @@ const ProductDetails = () => {
                         ref={(slide) => setSlideSub(slide)}
                         {...photoSettings}
                       >
-                        {product.productPictures.map((image) => (
+                        {product.productPictures?.map((image) => (
                           <img src={image.img} alt={product.name} />
                         ))}
                       </Slider>
@@ -238,7 +245,7 @@ const ProductDetails = () => {
             <div className="col-6">
               <form className="body">
                 <div className="body-heading">
-                  <h3>{product.name}</h3>
+                  <h3>{product?.name}</h3>
                 </div>
                 <div className="body-price">
                   <span className="body-price__old">
@@ -248,13 +255,13 @@ const ProductDetails = () => {
                     ₫
                     {new Intl.NumberFormat("de-DE").format(
                       product.price -
-                        (product.discountPercent / 100) * product.price
+                      (product.discountPercent / 100) * product.price
                     )}
                   </span>
                 </div>
                 <div className="body-brand">
                   <span className="body-brand__label">Thương hiệu: </span>
-                  <p className="body-brand__name">{product.brand.name}</p>
+                  <p className="body-brand__name">{product.brand?.name}</p>
                 </div>
                 <div className="body-size">
                   <div className="body-size__label">
@@ -262,7 +269,7 @@ const ProductDetails = () => {
                     <Link to="/size-choose">(Hướng dẫn chọn size)</Link>
                   </div>
                   <div className="body-size__options">
-                    {product.sizes.map((size) => (
+                    {product.sizes?.map((size) => (
                       <label
                         htmlFor={size.size._id}
                         className="body-size__options-item"
