@@ -6,7 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProductBySlug } from "../features/product/productSlice";
 import { addToCart } from "../features/cart/cartSlice";
 import { confirmAlert } from "react-confirm-alert";
+<<<<<<< HEAD
 import Loading from "../components/layout/loading/Loading";
+=======
+import Comments from "../components/layout/comments/Comments";
+
+>>>>>>> 589c2448576d82b5329e5cf4828e02541f7e5fbd
 const ProductDetails = () => {
 
   let match = useRouteMatch();
@@ -18,7 +23,7 @@ const ProductDetails = () => {
   });
   const [slideSub, setSlideSub] = useState();
   const [slidePhotos, setSlidePhotos] = useState();
-  const [openDescription, setOpenDescription] = useState(false);
+  const [openDescription, setOpenDescription] = useState(true);
   const { cartItems } = useSelector((state) => state.cart);
   // useHistory be used to redirect page
   const routeChange = (url) => {
@@ -126,8 +131,7 @@ const ProductDetails = () => {
 
   // Open/Close description
   const handleOpenDescription = () => {
-    if (openDescription === true) setOpenDescription(false);
-    else setOpenDescription(true);
+    setOpenDescription(!openDescription);
   };
   // Handle change size
   const handleChangeSize = (size) => {
@@ -149,14 +153,12 @@ const ProductDetails = () => {
       routeChange("/login");
     } else {
       const order = [cartItem];
-      console.log(cartItem);
       history.push({
         pathname: "/checkout",
         state: order,
       });
     }
   };
-  console.log(cartItem.size._id);
   // Handle add cart
   const handleAddCart = () => {
     if (cartItem.size._id === undefined || cartItem.quantity === 0) {
@@ -164,7 +166,6 @@ const ProductDetails = () => {
     } else if (auth.authenticate === false) {
       routeChange("/login");
     } else {
-      // console.log(cart.cartItems[0].product, cartItems);
       const cartObject = cartItems.find(
         (item) =>
           item.product?._id === cartItem.product._id &&
@@ -315,7 +316,6 @@ const ProductDetails = () => {
                   <ul className="body-promotion__content">
                     <li>1 Balo đựng giày </li>
                     <li>1 Đôi vớ chống trượt</li>
-                    <li>Voucher giảm 10% cho lần mua tiếp theo</li>
                   </ul>
                 </div>
                 <div className="body-btn">
@@ -359,6 +359,11 @@ const ProductDetails = () => {
                   </div>
                 ) : null}
               </div>
+            </div>
+          </div>
+          <div className="row mgt-20">
+            <div className="col-12">
+              <Comments />
             </div>
           </div>
         </div>
