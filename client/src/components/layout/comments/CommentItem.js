@@ -1,14 +1,28 @@
 import React from "react";
 
-const CommentItem = () => {
+const CommentItem = ({ review }) => {
+
+  const renderedRating = (rating) => {
+    const ratingArr = []
+    for (let i = 0; i < review.rating; i++) {
+      ratingArr.push(<i className="fas fa-star"></i>)
+    }
+    return <>{ratingArr}</>
+  }
+
+  const convertDate = (strDate) => {
+    const date = new Date(strDate);
+    const sDate = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
+    return sDate;
+  }
   return (
     <div className="comment-item">
       <div className="info">
         <img
-          src={require("../../../assets/images/account/user.jpg").default}
-          alt=""
+          src={review.user.profilePicture}
+          alt="no img"
         />
-        <p className="info-name">Mohamed Salad</p>
+        <p className="info-name">{review.user.name}</p>
       </div>
       <div className="content">
         <div className="rating">
@@ -19,24 +33,18 @@ const CommentItem = () => {
             <i className="far fa-star"></i>
             <i className="far fa-star"></i>
             <div className="star-1">
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
+              {
+                renderedRating(review.rating)
+              }
             </div>
           </div>
         </div>
         <p className="content-body">
-          Sản phẩm này cực phù hợp với đôi chân thiên tài của tui Sản phẩm này
-          Sản phẩm này cực phù hợp với đôi chân thiên tài của tui Sản phẩm này
-          Sản phẩm này cực phù hợp với đôi chân thiên tài của tui Sản phẩm này
-          Sản phẩm này cực phù hợp với đôi chân thiên tài của tui Sản phẩm này
-          Sản phẩm này cực phù hợp với đôi chân thiên tài của tui Sản phẩm này
+          {review.comment}
         </p>
       </div>
       <div className="create-date">
-        <span>Tạo lúc: 20/11/2021</span>
+        <span>Tạo lúc: {convertDate(review.createdAt)}</span>
       </div>
     </div>
   );

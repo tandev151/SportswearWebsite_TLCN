@@ -6,12 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProductBySlug } from "../features/product/productSlice";
 import { addToCart } from "../features/cart/cartSlice";
 import { confirmAlert } from "react-confirm-alert";
-<<<<<<< HEAD
-import Loading from "../components/layout/loading/Loading";
-=======
 import Comments from "../components/layout/comments/Comments";
 
->>>>>>> 589c2448576d82b5329e5cf4828e02541f7e5fbd
 const ProductDetails = () => {
 
   let match = useRouteMatch();
@@ -19,7 +15,7 @@ const ProductDetails = () => {
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
   const [product, setProduct] = useState({
-    _id: "", discountPercent: "",name:"",slug:"",price:"",description:"",
+    _id: "", discountPercent: "", name: "", slug: "", price: "", description: "", reviews: []
   });
   const [slideSub, setSlideSub] = useState();
   const [slidePhotos, setSlidePhotos] = useState();
@@ -202,9 +198,9 @@ const ProductDetails = () => {
   };
   // Show confirm alert to redirect
 
-  // if (Object.keys(product).length === 0) {
-  //   return <Loading />;
-  // }
+  if (Object.keys(product).length === 0) {
+    return null;
+  }
 
   return (
     <Layout>
@@ -363,7 +359,7 @@ const ProductDetails = () => {
           </div>
           <div className="row mgt-20">
             <div className="col-12">
-              <Comments />
+              <Comments reviews={product.reviews} />
             </div>
           </div>
         </div>

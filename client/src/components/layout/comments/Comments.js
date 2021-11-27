@@ -1,7 +1,8 @@
 import React from "react";
 import CommentItem from "./CommentItem";
 import FormCommentInput from "./FormCommentInput";
-const Comments = () => {
+const Comments = ({ reviews }) => {
+  console.log(reviews)
   return (
     <div className="comments">
       <div className="comments-header">
@@ -27,13 +28,13 @@ const Comments = () => {
         <FormCommentInput />
         <div className="comments-body__list">
           <div className="comments-body__list-header">
-            <h3>Bình luận (2)</h3>
+            <h3>Bình luận ({reviews.length})</h3>
           </div>
           <div className="comments-body__list-body">
-            <CommentItem />
-            <CommentItem />
-            <CommentItem />
-            <CommentItem />
+            {
+              reviews.map((review) =>
+                <CommentItem review={review} />)
+            }
           </div>
         </div>
       </div>
