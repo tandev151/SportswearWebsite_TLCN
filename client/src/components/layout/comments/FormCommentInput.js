@@ -4,7 +4,6 @@ import { addProductReview } from "../../../features/product/productSlice";
 import { useDispatch } from "react-redux";
 
 const FormCommentInput = ({ rating, productId, isAddedComment, setIsAddedComment }) => {
-  console.log(isAddedComment)
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [review, setReview] = useState({

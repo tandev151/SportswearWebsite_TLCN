@@ -45,7 +45,7 @@ const Comments = ({ product, isAddedComment, setIsAddedComment }) => {
               type="radio"
               name="rate"
               id="rd-1"
-              onChange={(e) => setRating(1)}
+              onChange={() => setRating(1)}
             />
             <label htmlFor="rd-1" className="fas fa-star"></label>
           </div>
