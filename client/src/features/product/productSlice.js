@@ -51,6 +51,7 @@ export const productSlice = createSlice({
   name: "product",
   initialState: {
     title: "",
+    hotProducts: [],
     products: [],
     sizes: [],
     loading: false,
@@ -65,6 +66,7 @@ export const productSlice = createSlice({
       state.error = action.error;
     },
     [getProducts.fulfilled]: (state, action) => {
+      state.hotProducts = action.payload.data.products;
       state.loading = false;
     },
     [getProductBySlug.pending]: (state) => {
