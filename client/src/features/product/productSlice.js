@@ -34,10 +34,15 @@ export const getProductsBySearchText = createAsyncThunk(
   }
 );
 
-export const getSizes = createAsyncThunk(
-  "product/getSizes",
-  async () => {
-    const response = await productAPI.getSizes();
+export const getSizes = createAsyncThunk("product/getSizes", async () => {
+  const response = await productAPI.getSizes();
+  return response;
+});
+
+export const addProductReview = createAsyncThunk(
+  "/product/addProductReview",
+  async (comment) => {
+    const response = await productAPI.addProductReview(comment);
     return response;
   }
 );
@@ -111,6 +116,13 @@ export const productSlice = createSlice({
     [getSizes.fulfilled]: (state, action) => {
       state.loading = false;
       state.sizes = action.payload.data.sizes;
+    },
+    [addProductReview.loading]: (state) => {
+      state.loading = true;
+    },
+    [addProductReview.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
     },
   },
 });

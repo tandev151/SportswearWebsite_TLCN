@@ -353,7 +353,7 @@ const ProductDetails = () => {
           </div>
           <div className="row mgt-20">
             <div className="col-12">
-              <Comments />
+              <Comments product={product} />
             </div>
           </div>
         </div>

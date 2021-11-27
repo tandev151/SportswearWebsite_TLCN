@@ -355,8 +355,10 @@
             color: rgb(138, 88, 88);
           }
           &__text {
-            width: 400px;
-            height: 90px;
+            min-width: 400px;
+            max-width: 400px;
+            min-height: 90px;
+            max-height: 90px;
             padding: 8px;
             font-size: 1.1rem;
             line-height: 1.5;
@@ -416,7 +418,7 @@
             & .info {
               display: flex;
               margin-right: 24px;
-
+              width: 200px;
               & img {
                 width: 40px;
                 height: 40px;
@@ -447,7 +449,7 @@
                   position: absolute;
                   top: 0;
                   left: 0;
-                  width: 111px;
+                  width: 84px;
                   overflow: hidden;
                 }
               }
@@ -457,7 +459,7 @@
             }
           }
           & .create-date {
-            width: 150px;
+            width: 180px;
             font-size: 1rem;
             padding-left: 12px;
           }
