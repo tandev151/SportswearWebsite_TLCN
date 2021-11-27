@@ -3,18 +3,19 @@ import { useSelector } from "react-redux";
 import { addProductReview } from "../../../features/product/productSlice";
 import { useDispatch } from "react-redux";
 
-const FormCommentInput = ({ rating, productId }) => {
+const FormCommentInput = ({ rating, productId, isAddedComment, setIsAddedComment }) => {
+  console.log(isAddedComment)
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [review, setReview] = useState({
-    rating: rating,
+    rating: 0,
     comment: "",
-    productId: productId,
+    productId: "",
   });
 
   useEffect(() => {
-    setReview({ ...review, rating });
-  }, [rating]);
+    setReview({ ...review, rating, productId });
+  }, [rating, productId]);
 
   const handleSubmitReview = async () => {
     if (!auth) {
@@ -24,10 +25,12 @@ const FormCommentInput = ({ rating, productId }) => {
         alert("Vui lòng đánh giá và nhận xét sản phẩm trước khi gửi!");
       else {
         try {
-          const resp = await dispatch(addProductReview(review)).unwrap();
-          if (resp.status === 202) {
+          console.log(review)
+          const res = await dispatch(addProductReview(review)).unwrap();
+          if (res.status === 202) {
             alert("Gửi đánh giá thành công!");
-            setReview({ rating: 0, comment: "", productId: productId });
+            setReview({ rating: 0, comment: "", productId: "" });
+            setIsAddedComment(!isAddedComment);
           } else alert("Gửi đánh giá không thành công !");
         } catch (e) {
           alert("Gửi đánh giá không thành công");

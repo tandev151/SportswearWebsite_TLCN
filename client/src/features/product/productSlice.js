@@ -50,7 +50,6 @@ export const addProductReview = createAsyncThunk(
 export const productSlice = createSlice({
   name: "product",
   initialState: {
-    product: {},
     title: "",
     products: [],
     sizes: [],
@@ -67,18 +66,15 @@ export const productSlice = createSlice({
     },
     [getProducts.fulfilled]: (state, action) => {
       state.loading = false;
-      state.products = action.payload.data.products;
     },
     [getProductBySlug.pending]: (state) => {
       state.loading = true;
     },
     [getProductBySlug.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error;
     },
     [getProductBySlug.fulfilled]: (state, action) => {
       state.loading = false;
-      state.product = action.payload.data.product;
     },
 
     // Get product by type (category/brand) and slug

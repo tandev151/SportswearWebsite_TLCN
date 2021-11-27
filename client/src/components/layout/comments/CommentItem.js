@@ -2,7 +2,6 @@ import React from "react";
 
 const CommentItem = ({ review }) => {
   const rate = 100 - review.rating * 20;
-  console.log(rate);
   const starStyle = {
     clipPath: `inset(0 ${rate}% 0 0)`,
   };

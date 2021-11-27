@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CommentItem from "./CommentItem";
 import FormCommentInput from "./FormCommentInput";
-const Comments = ({ product }) => {
+const Comments = ({ product, isAddedComment, setIsAddedComment }) => {
   const [rating, setRating] = useState(0);
   return (
     <div className="comments">
@@ -50,7 +50,7 @@ const Comments = ({ product }) => {
             <label htmlFor="rd-1" className="fas fa-star"></label>
           </div>
         </div>
-        <FormCommentInput rating={rating} productId={product._id} />
+        <FormCommentInput rating={rating} productId={product._id} isAddedComment={isAddedComment} setIsAddedComment={setIsAddedComment} />
         <div className="comments-body__list">
           <div className="comments-body__list-header">
             <h3>Bình luận : {product.reviews.length}</h3>
