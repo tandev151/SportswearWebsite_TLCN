@@ -24,13 +24,12 @@ const FormCommentInput = ({ rating, productId, isAddedComment, setIsAddedComment
         alert("Vui lòng đánh giá và nhận xét sản phẩm trước khi gửi!");
       else {
         try {
-          console.log(review)
           const res = await dispatch(addProductReview(review)).unwrap();
           if (res.status === 202) {
             alert("Gửi đánh giá thành công!");
             setReview({ rating: 0, comment: "", productId: "" });
             setIsAddedComment(!isAddedComment);
-          } else alert("Gửi đánh giá không thành công !");
+          } else alert("Bạn chỉ được đánh giá sản phẩm 1 lần !");
         } catch (e) {
           alert("Gửi đánh giá không thành công");
         }
