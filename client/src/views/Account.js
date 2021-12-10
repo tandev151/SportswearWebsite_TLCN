@@ -179,9 +179,7 @@ const Account = () => {
     e.preventDefault();
     setDisabled(true);
     e.target.disabled = true;
-    const resp = await dispatch(
-      sendOtpToEmail({ email: userInfo.email })
-    ).unwrap();
+    await dispatch(sendOtpToEmail({ email: userInfo.email })).unwrap();
     notifySendOTP();
     setTimeout(() => {
       e.target.disabled = false;
@@ -549,9 +547,9 @@ const Account = () => {
                                     style={
                                       address.isDefault
                                         ? {
-                                            cursor: "default",
-                                            visibility: "hidden",
-                                          }
+                                          cursor: "default",
+                                          visibility: "hidden",
+                                        }
                                         : null
                                     }
                                     onClick={() =>
@@ -564,9 +562,9 @@ const Account = () => {
                                     style={
                                       address.isDefault
                                         ? {
-                                            cursor: "default",
-                                            visibility: "hidden",
-                                          }
+                                          cursor: "default",
+                                          visibility: "hidden",
+                                        }
                                         : null
                                     }
                                     className="address-item__setup address-item__setup--delete"
