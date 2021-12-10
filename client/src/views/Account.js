@@ -167,7 +167,7 @@ const Account = () => {
           profilePicture: reader.result,
           profilePictureToChange: e.target.files[0],
         });
-      }
+      } else return;
     };
     reader.readAsDataURL(e.target.files[0]);
   };
@@ -179,7 +179,9 @@ const Account = () => {
     e.preventDefault();
     setDisabled(true);
     e.target.disabled = true;
-    const resp = await dispatch(sendOtpToEmail({ email: userInfo.email })).unwrap();
+    const resp = await dispatch(
+      sendOtpToEmail({ email: userInfo.email })
+    ).unwrap();
     notifySendOTP();
     setTimeout(() => {
       e.target.disabled = false;
