@@ -44,7 +44,7 @@ const Collections = () => {
 
     const getProductsByPrice = (products) => {
         const productArr = [];
-        filter.price.map(type => {
+        filter.price.forEach(type => {
             const pArr = products.filter(p => {
                 const currentPrice = p.price - (p.discountPercent / 100) * p.price;
                 if (type === "from0to1" && currentPrice > 0 && currentPrice < 1000000)
