@@ -33,7 +33,6 @@ const HotProduct = () => {
       return dateA < dateB ? 1 : -1; // ? -1 : 1 for ascending/increasing order
     })
     .slice(0, 10);
-
   useEffect(() => {
     if (window.innerWidth > 765) setSlide(settings);
     else setSlide(settings765);

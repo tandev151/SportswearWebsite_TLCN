@@ -3,6 +3,7 @@ const cloudinary = require('cloudinary').v2
 const { CloudinaryStorage } = require('multer-storage-cloudinary')
 const multer = require('multer')
 const shortid = require('shortid')
+
 require('dotenv').config()
 // image upload to cloudinary storage
 cloudinary.config({
@@ -20,8 +21,6 @@ const storage = new CloudinaryStorage({
 });
 
 exports.uploadCloud = multer({ storage });
-
-
 
 
 // Auth User
@@ -53,3 +52,4 @@ exports.adminMiddleware = (req, res, next) => {
     }
     next();
 }
+

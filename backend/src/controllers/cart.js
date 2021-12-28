@@ -23,7 +23,7 @@ exports.addToCart = (req, res) => {
                     const item = cart.cartItems.find(c => c.product == product && c.size == size);
                     let condition, update;
                     if (item) {
-                        condition = { user: req.user._id, "cartItems.product": product };
+                        condition = { user: req.user._id, "cartItems.product": product, "cartItems.size": size };
                         update = {
                             $set: {
                                 "cartItems.$": cartItem
@@ -76,10 +76,9 @@ exports.getCartItems = (req, res) => {
                         quantity: item.quantity
                     })
                 })
-                res.status(200).json({ cartItems });
-            } else {
-                res.status(400).json({ error: "something went wrong" })
+                return res.status(200).json({ cartItems });
             }
+            res.status(400).json({ error: "Something went wrong" });
         })
 }
 
