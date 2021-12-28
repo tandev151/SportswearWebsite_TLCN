@@ -5,3 +5,13 @@
 **Nhóm sinh viên thực hiện (Hệ đại trà)**
 1. Lê Đức Tân - 18110360
 2. Nguyễn Văn Tân - 18110361
+
+**Cài đặt project**
+Đầu tiền clone repository này về máy sau đó ứng với mỗi phần ta làm như sau:
+Vào thư mục vừa clone repository này về .
+1. Backend
+2. Admin
+3. Client
+  - Trỏ tới thư mục client : cd client
+  - Cài đặt tất cả các thư viên, package được dùng: npm install
+  - Start client : npm start
