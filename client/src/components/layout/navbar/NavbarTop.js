@@ -37,6 +37,7 @@ const NavbarTop = () => {
 
   const searchTextByOnChange = (e) => {
     setSearchText(e)
+    console.log(products);
     let searchKey = e.toLowerCase().trim();
     if(products && products.hotProducts){
       let recommendProducts = products.hotProducts.filter(item => searchProductBySearchText(item,searchKey))
