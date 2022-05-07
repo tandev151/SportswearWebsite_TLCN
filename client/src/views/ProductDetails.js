@@ -7,15 +7,22 @@ import { getProductBySlug } from "../features/product/productSlice";
 import { addToCart } from "../features/cart/cartSlice";
 import { confirmAlert } from "react-confirm-alert";
 import Comments from "../components/layout/comments/Comments";
-
+import axios from "axios";
 const ProductDetails = () => {
-
+  //GET https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/294?
+  // input={itemId}&key=cwOn1PX5cDqPtNcauxEUFphUxGvHLUdAAvrOL7hJ1IklgdkeZ6xTEzMe6rTEFJIKy1kvCv21OmjSxdnd8Cw6SVGTSZAJUrJlZ1cH
   let match = useRouteMatch();
   const dispatch = useDispatch();
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
   const [product, setProduct] = useState({
-    _id: "", discountPercent: "", name: "", slug: "", price: "", description: "", reviews: []
+    _id: "",
+    discountPercent: "",
+    name: "",
+    slug: "",
+    price: "",
+    description: "",
+    reviews: [],
   });
   const [slideSub, setSlideSub] = useState();
   const [slidePhotos, setSlidePhotos] = useState();
@@ -34,13 +41,20 @@ const ProductDetails = () => {
     quantity: 1,
   });
 
+  let data =  axios
+    .get(
+      `https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/294?input=${product._id}&key=cwOn1PX5cDqPtNcauxEUFphUxGvHLUdAAvrOL7hJ1IklgdkeZ6xTEzMe6rTEFJIKy1kvCv21OmjSxdnd8Cw6SVGTSZAJUrJlZ1cH`
+    )
+    .then((res) => console.log(res));
+  console.log(data)
   useEffect(() => {
     const fetchProductBySlug = async () => {
       const { slug } = match.params;
       const res = await dispatch(getProductBySlug(slug)).unwrap();
-      setProduct(res.data.product)
-    }
-    fetchProductBySlug()
+      setProduct(res.data.product);
+      console.log(product);
+    };
+    fetchProductBySlug();
   }, [isAddedComment]);
 
   const photoSettings = {
@@ -254,7 +268,7 @@ const ProductDetails = () => {
                     ₫
                     {new Intl.NumberFormat("de-DE").format(
                       product.price -
-                      (product.discountPercent / 100) * product.price
+                        (product.discountPercent / 100) * product.price
                     )}
                   </span>
                 </div>
@@ -361,7 +375,11 @@ const ProductDetails = () => {
           </div>
           <div className="row mgt-20">
             <div className="col-12">
-              <Comments product={product} isAddedComment={isAddedComment} setIsAddedComment={setIsAddedComment} />
+              <Comments
+                product={product}
+                isAddedComment={isAddedComment}
+                setIsAddedComment={setIsAddedComment}
+              />
             </div>
           </div>
         </div>
