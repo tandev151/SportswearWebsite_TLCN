@@ -7,6 +7,8 @@ import { getProductBySlug } from "../features/product/productSlice";
 import { addToCart } from "../features/cart/cartSlice";
 import { confirmAlert } from "react-confirm-alert";
 import Comments from "../components/layout/comments/Comments";
+import behaviorAPI from "../api/behaviorAPI";
+
 import axios from "axios";
 const ProductDetails = () => {
   //GET https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/294?
@@ -52,7 +54,7 @@ const ProductDetails = () => {
       const { slug } = match.params;
       const res = await dispatch(getProductBySlug(slug)).unwrap();
       setProduct(res.data.product);
-      console.log(product);
+      behaviorAPI.addBehavior({ product: res.data.product._id, type: "view" })
     };
     fetchProductBySlug();
   }, [isAddedComment]);
@@ -195,6 +197,7 @@ const ProductDetails = () => {
           ],
         };
         dispatch(addToCart(cartExisted));
+        behaviorAPI.addBehavior({ product: cartObject.product._id, type: "addToCart" })
         pageRedirects();
       } else {
         const cart = {
