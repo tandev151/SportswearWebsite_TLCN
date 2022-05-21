@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const api = "http://ec2-52-91-60-221.compute-1.amazonaws.com/api";
-const api = "http://localhost:5000/api";
+const api = "http://52.237.80.95/api";
+// const api = "http://localhost:5000/api";
 
 const axiosInstance = axios.create({
   baseURL: api,
@@ -52,12 +52,18 @@ const refreshToken = async () => {
   if (!refreshToken) {
     return false
   }
-  const res = await axiosInstance.post(`${api}/auth/refreshToken`, {
-    refreshToken,
-  })
-  const data = res.data
-  const { newAccessToken } = data
-  return newAccessToken
+  try {
+    const res = await axiosInstance.post(`${api}/auth/refreshToken`, {
+      refreshToken,
+    })
+    const data = res.data
+    const { newAccessToken } = data
+    return newAccessToken
+  }catch (err) {
+    await window.localStorage.clear()
+    return null;
+  }
+  
 }
 
 export default axiosInstance;

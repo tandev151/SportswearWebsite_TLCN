@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { resetCartSlice } from "../cart/cartSlice";
 import { resetOrderSlice } from "../order/orderSlice";
 import { resetDeliveryInfoSlice } from "../deliveryInfo/deliveryInfoSlice";
+import { resetRecommendSlice } from "../recommend/recommendSlice";
+
 import authAPI from "../../api/authAPI";
 
 export const login = createAsyncThunk("auth/login", async (user) => {
@@ -19,6 +21,7 @@ export const logout = createAsyncThunk(
     await thunkAPI.dispatch(resetDeliveryInfoSlice());
     await thunkAPI.dispatch(resetOrderSlice());
     await thunkAPI.dispatch(resetCartSlice());
+    await thunkAPI.dispatch(resetRecommendSlice());
     return response;
   }
 );

@@ -5,14 +5,16 @@ import Layout from "../components/layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductBySlug } from "../features/product/productSlice";
 import { addToCart } from "../features/cart/cartSlice";
+import { getRecommendRelateProduct } from "../features/recommend/recommendSlice";
 import { confirmAlert } from "react-confirm-alert";
 import Comments from "../components/layout/comments/Comments";
 import behaviorAPI from "../api/behaviorAPI";
+import ProductItem from "../components/layout/product/ProductItem";
+import Loading from "../components/layout/loading/Loading";
+import { Stack } from "@material-ui/core";
 
-import axios from "axios";
 const ProductDetails = () => {
-  //GET https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/294?
-  // input={itemId}&key=cwOn1PX5cDqPtNcauxEUFphUxGvHLUdAAvrOL7hJ1IklgdkeZ6xTEzMe6rTEFJIKy1kvCv21OmjSxdnd8Cw6SVGTSZAJUrJlZ1cH
+
   let match = useRouteMatch();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -31,7 +33,8 @@ const ProductDetails = () => {
   const [openDescription, setOpenDescription] = useState(true);
   const { cartItems } = useSelector((state) => state.cart);
   const [isAddedComment, setIsAddedComment] = useState(false);
-
+  const [recommendList,setRecommendList] = useState([]);
+  const [isLoading,setLoading] = useState(false)
   // useHistory be used to redirect page
   const routeChange = (url) => {
     history.push(url);
@@ -43,21 +46,25 @@ const ProductDetails = () => {
     quantity: 1,
   });
 
-  let data =  axios
-    .get(
-      `https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/294?input=${product._id}&key=cwOn1PX5cDqPtNcauxEUFphUxGvHLUdAAvrOL7hJ1IklgdkeZ6xTEzMe6rTEFJIKy1kvCv21OmjSxdnd8Cw6SVGTSZAJUrJlZ1cH`
-    )
-    .then((res) => console.log(res));
-  console.log(data)
+  
   useEffect(() => {
     const fetchProductBySlug = async () => {
+      setLoading(true);
       const { slug } = match.params;
       const res = await dispatch(getProductBySlug(slug)).unwrap();
       setProduct(res.data.product);
       behaviorAPI.addBehavior({ product: res.data.product._id, type: "view" })
+      let reqBody = {
+        id: res.data.product._id
+      }
+      const resp =  await dispatch(getRecommendRelateProduct(reqBody)).unwrap();
+      if(resp.status === 200){
+        await setRecommendList(resp.data.products)
+      }
+      setLoading(false);
     };
     fetchProductBySlug();
-  }, [isAddedComment]);
+  }, [isAddedComment,match.params.slug]);
 
   const photoSettings = {
     arrows: false,
@@ -78,6 +85,16 @@ const ProductDetails = () => {
     focusOnSelect: true,
     vertical: true,
   };
+
+  const slide = {
+    arrows: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    adapterHeight: true,
+    focusOnSelect: true,
+  }
   const pageRedirects = () => {
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -220,9 +237,22 @@ const ProductDetails = () => {
   if (Object.keys(product).length === 0) {
     return null;
   }
-
+ 
   return (
+    
     <Layout>
+      {
+      isLoading ? 
+      <Stack
+        sx={{
+          width: "100%",
+          height: "3000px",
+          backgroundColor: "#74737361",
+          position: "absolute",
+          zIndex: 5,
+        }}>
+        <Loading />
+      </Stack> :
       <div className="detail mgb-45">
         <div className="container">
           <div className="row mgt-20 ">
@@ -385,8 +415,21 @@ const ProductDetails = () => {
               />
             </div>
           </div>
+          <div className="hot-product mgb-45">
+            <h3 className="hot-product__heading ">SẢN PHẨM LIÊN QUAN</h3>
+            <Slider {...slide}>
+              {recommendList.map((product) => {
+                return (
+                  <div className="col-2-4">
+                    <ProductItem product={product} />
+                  </div>
+                );
+              })}
+            </Slider>
+          </div>
         </div>
       </div>
+    }
     </Layout>
   );
 };
